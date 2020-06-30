@@ -1,0 +1,19 @@
+.piece {
+  width: calc(100px - 1.5em);
+  height: calc(100px - 1.5em);
+  padding: 0.75em;
+
+  &:nth-child(even) {
+    background: #a3524e;
+  }
+
+  &:nth-child(odd) {
+    background: #d7dae2;
+  }
+}
+
+.board {
+  display: flex;
+  flex-wrap: wrap;
+  max-width: 800px;
+}

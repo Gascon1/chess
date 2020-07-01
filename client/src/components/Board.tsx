@@ -9,7 +9,7 @@ export default function Board() {
   for (let i = 0; i < size; i++) {
     const rows = [];
     for (let j = 0; j < size; j++) {
-      var spotColor;
+      let spotColor;
       if ((isEven(i) && isEven(j)) || (!isEven(i) && !isEven(j))) {
         spotColor = 'red';
       } else {

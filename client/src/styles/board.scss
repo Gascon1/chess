@@ -1,0 +1,26 @@
+.boardSpace {
+  display: flex;
+  flex-direction: column;
+}
+
+.board-row {
+  display: block;
+}
+
+.square {
+  background: transparent;
+  border: 1px solid transparent;
+  float: left;
+  line-height: 34px;
+  height: 70px;
+  padding: 0;
+  width: 70px;
+}
+
+.red {
+  background-color: #a3524e;
+}
+
+.grey {
+  background-color: #d7dae2;
+}

@@ -6,6 +6,7 @@ interface Position {
   x: number;
   y: number;
   isOccupied?: boolean;
+  isFriendly?: boolean;
 }
 
 interface Props {
@@ -31,7 +32,12 @@ export default function Pawn(props: Props) {
 
   const isMoveLegal = (currentPosition: Position, destination: Position) => {
     if (state.isWhite) {
-      if (!state.hasUsedFirstMoved && destination.x - currentPosition.x === 0 && destination.y - currentPosition.y === 2) {
+      if (
+        !state.hasUsedFirstMoved &&
+        !destination.isOccupied &&
+        destination.x - currentPosition.x === 0 &&
+        destination.y - currentPosition.y === 2
+      ) {
         setState({ ...state, hasUsedFirstMoved: true });
         return true;
       } else {
@@ -40,25 +46,49 @@ export default function Pawn(props: Props) {
         // if the pawn is going for a kill, which needs the destination
         // to be occuped, and both x and y increment by 1.
         return (
-          (destination.x - currentPosition.x !== 0 && destination.y - currentPosition.y !== 1) ||
-          (destination.isOccupied && destination.x - currentPosition.x !== 1 && destination.y - currentPosition.y !== 1)
+          (!destination.isOccupied && destination.x - currentPosition.x !== 0 && destination.y - currentPosition.y !== 1) ||
+          (destination.isOccupied &&
+            !destination.isFriendly &&
+            destination.x - currentPosition.x !== 1 &&
+            destination.y - currentPosition.y !== 1)
         );
       }
     } else {
-      if (!state.hasUsedFirstMoved && destination.x - currentPosition.x === 0 && destination.y - currentPosition.y === -2) {
+      if (
+        !state.hasUsedFirstMoved &&
+        !destination.isOccupied &&
+        destination.x - currentPosition.x === 0 &&
+        destination.y - currentPosition.y === -2
+      ) {
         setState({ ...state, hasUsedFirstMoved: true });
         return true;
       } else {
         return (
-          (destination.x - currentPosition.x !== 0 && destination.y - currentPosition.y !== -1) ||
-          (destination.isOccupied && destination.x - currentPosition.x !== -1 && destination.y - currentPosition.y !== -1)
+          (!destination.isOccupied && destination.x - currentPosition.x !== 0 && destination.y - currentPosition.y !== -1) ||
+          (destination.isOccupied &&
+            !destination.isFriendly &&
+            destination.x - currentPosition.x !== -1 &&
+            destination.y - currentPosition.y !== -1)
         );
       }
     }
   };
 
+  const availableMoves = (currentPosition: Position) => {
+    if (state.isWhite) {
+      return [
+        { x: currentPosition.x - 1, y: currentPosition.y + 1 },
+        { x: currentPosition.x, y: currentPosition.y + 1 },
+        { x: currentPosition.x, y: currentPosition.y + 2 },
+        { x: currentPosition.x + 1, y: currentPosition.y + 1 },
+      ];
+    } else {
+    }
+  };
+
   const onMoveStart = (currentPosition: Position) => {
-    console.log(currentPosition);
+    console.log('currentPosition', currentPosition);
+    console.log('availableMoves', availableMoves(currentPosition));
   };
 
   return <PawnImage className={`piece ${props.white ? 'white' : 'black'}`} onClick={() => onMoveStart(state.currentPosition)} />;

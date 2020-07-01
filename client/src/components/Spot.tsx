@@ -8,13 +8,6 @@ interface Props {
   y: number;
 }
 
-interface Position {
-  tile: string;
-  x: number;
-  y: number;
-  isOccupied?: boolean;
-}
-
 export default function Spot(props: Props) {
   const { tile, x, y } = props;
   const [state, setState] = useState({
@@ -28,6 +21,11 @@ export default function Spot(props: Props) {
 
   useEffect(() => {
     setState((prev) => ({ ...prev, tileInfo: { tile, x, y } }));
+    if (tile.includes('2')) {
+      setState((prev) => ({ ...prev, activePiece: 'pawn' }));
+    } else if (tile.includes('7')) {
+      setState((prev) => ({ ...prev, activePiece: 'pawn' }));
+    }
   }, [tile, x, y]);
 
   return (

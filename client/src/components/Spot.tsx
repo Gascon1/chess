@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import Pawn from 'components/pieces/Pawn';
-
 interface Props {
   color: string;
   tile: string;
   x: number;
   y: number;
 }
+const brown = '#874626';
+const beige = '#e5c59b';
 
 export default function Spot(props: Props) {
   const { tile, x, y } = props;
@@ -18,6 +19,15 @@ export default function Spot(props: Props) {
       y: 0,
     },
   });
+
+  let labelColor = '';
+  switch (props.color) {
+    case 'brown':
+      labelColor = beige;
+      break;
+    case 'beige':
+      labelColor = brown;
+  }
 
   useEffect(() => {
     setState((prev) => ({ ...prev, tileInfo: { tile, x, y } }));
@@ -32,7 +42,9 @@ export default function Spot(props: Props) {
     <div className={'square ' + props.color}>
       {state.tileInfo && props.tile.includes('7') && <Pawn tileInfo={state.tileInfo} white={false} />}
       {props.tile.includes('2') && <Pawn tileInfo={state.tileInfo} white={true} />}
-      <span className="square-position">{props.tile}</span>
+      <span className="square-position" style={{ color: labelColor }}>
+        {props.tile}
+      </span>
     </div>
   );
 }

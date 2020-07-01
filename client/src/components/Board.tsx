@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import isEven from 'helpers/isEven';
-import Spot from 'components/Spot';
+import generateBoard from 'helpers/generateBoard';
 
 export default function Board() {
   // Todo: integrate pieces into each square created in board;
@@ -9,21 +8,7 @@ export default function Board() {
   });
 
   useEffect(() => {
-    const board: any = [];
-    const alphaPosition = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
-    const numericPosition = 0;
-    for (let j = 8; j > numericPosition; j--) {
-      alphaPosition.forEach((value, i) => {
-        let spotColor;
-        if ((isEven(i) && isEven(j)) || (!isEven(i) && !isEven(j))) {
-          spotColor = 'beige';
-        } else {
-          spotColor = 'brown';
-        }
-        board.push(<Spot key={value + j} color={spotColor} position={value + j} />);
-      });
-    }
-
+    const board = generateBoard();
     setState((prev) => ({ ...prev, board }));
   }, []);
 

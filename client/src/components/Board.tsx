@@ -1,29 +1,31 @@
-import React from 'react';
-import Spot from './Spot';
+import React, { useEffect, useState } from 'react';
+import isEven from 'helpers/isEven';
+import Spot from 'components/Spot';
 
 export default function Board() {
   // Todo: integrate pieces into each square created in board;
+  const [state, setState] = useState({
+    board: [],
+  });
 
-  const board = [];
-  const size = 8;
-  for (let i = 0; i < size; i++) {
-    const rows = [];
-    for (let j = 0; j < size; j++) {
-      var spotColor;
-      if ((isEven(i) && isEven(j)) || (!isEven(i) && !isEven(j))) {
-        spotColor = 'red';
-      } else {
-        spotColor = 'grey';
-      }
-      rows.push(<Spot color={spotColor} />);
+  useEffect(() => {
+    const board: any = [];
+    const alphaPosition = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
+    const numericPosition = 0;
+    for (let j = 8; j > numericPosition; j--) {
+      alphaPosition.forEach((value, i) => {
+        let spotColor;
+        if ((isEven(i) && isEven(j)) || (!isEven(i) && !isEven(j))) {
+          spotColor = 'beige';
+        } else {
+          spotColor = 'brown';
+        }
+        board.push(<Spot color={spotColor} key={value + j} position={value + j} />);
+      });
     }
-    board.push(<div className="board-row">{rows}</div>);
-  }
 
-  function isEven(n: number) {
-    return n % 2 === 0;
-  }
+    setState((prev) => ({ ...prev, board }));
+  }, []);
 
-  //need to figure out why className board fucks up chess pieces above
-  return <div className="board">{board}</div>;
+  return <div className="board">{state.board}</div>;
 }

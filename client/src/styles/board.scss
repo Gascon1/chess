@@ -1,26 +1,36 @@
+@import 'styles/colors.scss';
+
 .board {
-  display: flex;
-  flex-direction: column;
-}
+  display: grid;
+  grid-template-columns: repeat(8, 12.5%);
+  grid-template-rows: repeat(8, 12.5%);
+  width: 100vmin;
+  height: 100vmin;
+  max-width: 800px;
+  max-height: 800px;
 
-.board-row {
-  display: block;
-}
+  .square {
+    width: 12.5vmin;
+    height: 12.5vmin;
+    max-width: 100px;
+    max-height: 100px;
+    cursor: pointer;
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-end;
+    &.brown {
+      background: $brown;
+    }
 
-.square {
-  background: transparent;
-  border: 1px solid transparent;
-  float: left;
-  line-height: 34px;
-  height: 70px;
-  padding: 0;
-  width: 70px;
-}
+    &.beige {
+      background: $beige;
+    }
 
-.red {
-  background-color: #a3524e;
-}
-
-.grey {
-  background-color: #d7dae2;
+    .square-position {
+      margin-bottom: 0.25em;
+      margin-right: 0.25em;
+      color: $black;
+      opacity: 0.75;
+    }
+  }
 }

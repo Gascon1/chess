@@ -6,6 +6,8 @@ interface Props {
   x: number;
   y: number;
 }
+const brown = '#874626';
+const beige = '#e5c59b';
 
 export default function Spot(props: Props) {
   const { tile, x, y } = props;
@@ -21,10 +23,10 @@ export default function Spot(props: Props) {
   let labelColor = '';
   switch (props.color) {
     case 'brown':
-      labelColor = 'beige';
+      labelColor = beige;
       break;
     case 'beige':
-      labelColor = 'brown';
+      labelColor = brown;
   }
 
   useEffect(() => {

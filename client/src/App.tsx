@@ -10,15 +10,6 @@ import Board from 'components/Board';
 function App() {
   return (
     <div>
-      <Rook />
-      <Knight />
-      <Bishop />
-      <Queen />
-      <King />
-      <Bishop />
-      <Knight />
-      <Rook />
-      <Pawn />
       <Board />
     </div>
   );

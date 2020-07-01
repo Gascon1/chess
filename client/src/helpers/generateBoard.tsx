@@ -14,7 +14,7 @@ export default function generateBoard() {
       } else {
         spotColor = 'brown';
       }
-      board.push(<Spot key={value + j} color={spotColor} position={value + j} x={i + 1} y={j} />);
+      board.push(<Spot key={value + j} color={spotColor} tile={value + j} x={i + 1} y={j} />);
     });
   }
 

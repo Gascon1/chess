@@ -6,16 +6,29 @@ export default function Board() {
 
   const board = [];
   const size = 8;
-  for (let i = 0; i < size; i++) {
+
+  let spotColor;
+  let labelRow = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
+
+  let labelColumn = [1, 2, 3, 4, 5, 6, 7, 8];
+  labelColumn = labelColumn.reverse();
+
+  for (let rowCounter = 0; rowCounter < size; rowCounter++) {
     const rows = [];
-    for (let j = 0; j < size; j++) {
-      var spotColor;
-      if ((isEven(i) && isEven(j)) || (!isEven(i) && !isEven(j))) {
+    for (let columnCounter = 0; columnCounter < size; columnCounter++) {
+      if ((isEven(rowCounter) && isEven(columnCounter)) || (!isEven(rowCounter) && !isEven(columnCounter))) {
         spotColor = 'red';
       } else {
         spotColor = 'grey';
       }
-      rows.push(<Spot color={spotColor} />);
+
+      if (rowCounter === size - 1) {
+        rows.push(<Spot color={spotColor} label={labelRow[columnCounter]} direction="row" />);
+      } else if (columnCounter === size - 1) {
+        rows.push(<Spot color={spotColor} label={labelColumn[rowCounter]} direction="column" />);
+      } else {
+        rows.push(<Spot color={spotColor} />);
+      }
     }
     board.push(<div className="board-row">{rows}</div>);
   }

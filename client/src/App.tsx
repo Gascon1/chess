@@ -9,7 +9,7 @@ import Board from 'components/Board';
 
 function App() {
   return (
-    <div className="board">
+    <div>
       <Rook />
       <Knight />
       <Bishop />

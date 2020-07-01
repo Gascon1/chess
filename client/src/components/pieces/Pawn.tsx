@@ -12,10 +12,11 @@ interface Position {
 interface Props {
   white: boolean;
   tileInfo: Position;
+  isOccupied: boolean;
 }
 
 export default function Pawn(props: Props) {
-  const { tileInfo, white } = props;
+  const { tileInfo, white, isOccupied } = props;
   const [state, setState] = useState({
     hasUsedFirstMoved: false,
     isWhite: true,
@@ -24,10 +25,11 @@ export default function Pawn(props: Props) {
       x: 0,
       y: 0,
     },
+    isOccupied: false,
   });
 
   useEffect(() => {
-    setState((prev) => ({ ...prev, isWhite: white, currentPosition: tileInfo }));
+    setState((prev) => ({ ...prev, isWhite: white, currentPosition: tileInfo, isOccupied: isOccupied }));
   }, [tileInfo, white]);
 
   const isMoveLegal = (currentPosition: Position, destination: Position) => {

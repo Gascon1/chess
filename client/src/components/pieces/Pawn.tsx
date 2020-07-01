@@ -50,6 +50,10 @@ export default function Pawn(props: Props) {
           (destination.isOccupied &&
             !destination.isFriendly &&
             destination.x - currentPosition.x !== 1 &&
+            destination.y - currentPosition.y !== 1) ||
+          (destination.isOccupied &&
+            !destination.isFriendly &&
+            destination.x - currentPosition.x !== -1 &&
             destination.y - currentPosition.y !== 1)
         );
       }
@@ -68,7 +72,11 @@ export default function Pawn(props: Props) {
           (destination.isOccupied &&
             !destination.isFriendly &&
             destination.x - currentPosition.x !== -1 &&
-            destination.y - currentPosition.y !== -1)
+            destination.y - currentPosition.y !== -1) ||
+          (destination.isOccupied &&
+            !destination.isFriendly &&
+            destination.x - currentPosition.x !== -1 &&
+            destination.y - currentPosition.y !== 1)
         );
       }
     }

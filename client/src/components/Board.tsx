@@ -20,7 +20,7 @@ export default function Board() {
         } else {
           spotColor = 'brown';
         }
-        board.push(<Spot color={spotColor} key={value + j} position={value + j} />);
+        board.push(<Spot key={value + j} color={spotColor} position={value + j} />);
       });
     }
 

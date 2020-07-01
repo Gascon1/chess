@@ -3,6 +3,8 @@ import React from 'react';
 interface Props {
   color: string;
   position: string;
+  x: number;
+  y: number;
 }
 
 export default function Spot(props: Props) {

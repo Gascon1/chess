@@ -25,5 +25,5 @@ export default function Board() {
   }
 
   //need to figure out why className board fucks up chess pieces above
-  return <div className="boardSpace">{board}</div>;
+  return <div className="board">{board}</div>;
 }

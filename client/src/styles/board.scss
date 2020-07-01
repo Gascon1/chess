@@ -8,16 +8,18 @@
   height: 100vmin;
   max-width: 800px;
   max-height: 800px;
+  margin: 0 auto;
 
   .square {
+    position: relative;
     width: 12.5vmin;
     height: 12.5vmin;
     max-width: 100px;
     max-height: 100px;
     cursor: pointer;
     display: flex;
-    justify-content: flex-end;
-    align-items: flex-end;
+    justify-content: center;
+    align-items: center;
 
     &.brown {
       background: $brown;
@@ -32,6 +34,11 @@
       margin-right: 0.25em;
       color: $black;
       opacity: 0.75;
+      font-size: 0.75em;
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      user-select: none;
     }
   }
 }

@@ -11,7 +11,7 @@ interface Props {
 }
 
 export default function Spot(props: Props) {
-  const { tile, x, y, destination } = props;
+  const { tile, x, y, destination, setDestination } = props;
   const [state, setState] = useState({
     activePiece: '',
     tileInfo: {
@@ -33,7 +33,7 @@ export default function Spot(props: Props) {
   }, [tile, x, y, destination]);
 
   return (
-    <div className={'square ' + props.color} onClick={() => props.setDestination(state.tileInfo)}>
+    <div className={'square ' + props.color} onClick={() => setDestination(state.tileInfo)}>
       {state.tileInfo && props.tile.includes('7') && (
         <Pawn tileInfo={state.tileInfo} white={false} isOccupied={state.isOccupied} destination={state.destination} />
       )}

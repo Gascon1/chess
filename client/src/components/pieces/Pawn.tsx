@@ -13,10 +13,11 @@ interface Props {
   white: boolean;
   tileInfo: Position;
   isOccupied: boolean;
+  destination: Object;
 }
 
 export default function Pawn(props: Props) {
-  const { tileInfo, white, isOccupied } = props;
+  const { tileInfo, white, isOccupied, destination } = props;
   const [state, setState] = useState({
     hasUsedFirstMoved: false,
     isWhite: true,
@@ -99,6 +100,7 @@ export default function Pawn(props: Props) {
   const onMoveStart = (currentPosition: Position) => {
     console.log('currentPosition', currentPosition);
     console.log('availableMoves', availableMoves(currentPosition));
+    console.log(destination);
   };
 
   return <PawnImage className={`piece ${props.white ? 'white' : 'black'}`} onClick={() => onMoveStart(state.currentPosition)} />;

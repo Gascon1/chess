@@ -52,7 +52,7 @@ export default function Board() {
       });
     }
     setState((prev) => ({ ...prev, board }));
-  }, []);
+  }, [state.destination]);
 
   return <div className="board">{state.board}</div>;
 }

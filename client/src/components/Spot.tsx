@@ -139,7 +139,8 @@ export default function Spot(props: Props) {
         setAvailableMoves([]);
       }}
     >
-      {state.tileInfo && props.tile.includes('7') && (
+      {/* Pawn START */}
+      {props.tile.includes('7') && (
         <Pawn
           tileInfo={state.tileInfo}
           white={false}
@@ -188,7 +189,9 @@ export default function Spot(props: Props) {
       {props.tile.includes('e1') && <King tileInfo={state.tileInfo} white={true} />}
       {/* King END */}
 
-      <span className='square-position' style={{ color: labelColor }}></span>
+      <span className='square-position' style={{ color: labelColor }}>
+        {props.tile}
+      </span>
       <span
         className='available-moves-circle'
         style={displayCircle() ? { display: 'block' } : { display: 'none' }}

@@ -198,10 +198,24 @@ export default function Spot(props: Props) {
 
       {/* Bishop START */}
       {state.activePiece.pieceType === 'bishop' && state.activePiece.color === 'black' && (
-        <Bishop tileInfo={state.tileInfo} white={false} />
+        <Bishop
+          tileInfo={state.tileInfo}
+          white={false}
+          isOccupied={state.isOccupied}
+          setStartPosition={setStartPosition}
+          setAvailableMoves={setAvailableMoves}
+          setTileFocus={setTileFocus}
+        />
       )}
       {state.activePiece.pieceType === 'bishop' && state.activePiece.color === 'white' && (
-        <Bishop tileInfo={state.tileInfo} white={true} />
+        <Bishop
+          tileInfo={state.tileInfo}
+          white={true}
+          isOccupied={state.isOccupied}
+          setStartPosition={setStartPosition}
+          setAvailableMoves={setAvailableMoves}
+          setTileFocus={setTileFocus}
+        />
       )}
       {/* Bishop END */}
 

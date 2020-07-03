@@ -24,6 +24,10 @@ export default function Board() {
       y: 0,
     },
     destination: {
+      activePiece: {
+        pieceType: '',
+        color: '',
+      },
       tile: '',
       x: 0,
       y: 0,
@@ -38,18 +42,28 @@ export default function Board() {
     killPosition: '',
   });
 
-  function setDestination(tileInfo: Position) {
-    setState((prev) => ({ ...prev, destination: tileInfo }));
+  function setDestination(tileInfo: Position, pieceType: string, color: string) {
+    setState((prev) => ({ ...prev, destination: { activePiece: { pieceType, color }, ...tileInfo } }));
+    // if (state.tileFocus !== tileInfo.tile) {
+    //   setState((prev) => ({ ...prev, killPosition: state.tileFocus }));
+    // }
+  }
+
+  const setKillPosition = (tileInfo: Position) => {
     if (state.tileFocus !== tileInfo.tile) {
       setState((prev) => ({ ...prev, killPosition: state.tileFocus }));
     }
-  }
+  };
 
   function setStartPosition(tileInfo: Position, pieceType: string, color: string) {
     setState((prev) => ({
       ...prev,
       startPosition: { activePiece: { pieceType, color }, ...tileInfo },
       destination: {
+        activePiece: {
+          pieceType: '',
+          color: '',
+        },
         tile: '',
         x: 0,
         y: 0,
@@ -94,6 +108,7 @@ export default function Board() {
             availableMoves={state.availableMoves}
             setAvailableMoves={setAvailableMoves}
             killPosition={state.killPosition}
+            setKillPosition={setKillPosition}
           />,
         );
       });

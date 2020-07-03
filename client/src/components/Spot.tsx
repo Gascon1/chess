@@ -27,7 +27,7 @@ interface Props {
   x: number;
   y: number;
   setDestination: Function;
-  destination: Position;
+  destination: StartPosition;
   setStartPosition: Function;
   startPosition: StartPosition;
   tileFocus: string;
@@ -38,6 +38,7 @@ interface Props {
   }[];
   setAvailableMoves: Function;
   killPosition: string;
+  setKillPosition: Function;
 }
 const brown = '#8a604a';
 const beige = '#e5d3ba';
@@ -56,7 +57,9 @@ export default function Spot(props: Props) {
     availableMoves,
     setAvailableMoves,
     killPosition,
+    setKillPosition,
   } = props;
+
   const [state, setState] = useState({
     activePiece: {
       pieceType: '',
@@ -159,16 +162,19 @@ export default function Spot(props: Props) {
       onClick={() => {
         if (startPosition.tile) {
           setDestination(state.tileInfo);
-          if (!destination.isFriendly) {
+          console.log(state.activePiece.color);
+          console.log(startPosition.activePiece.color);
+          if (state.activePiece.color !== startPosition.activePiece.color) {
+            setKillPosition(state.tileInfo);
             setState({
               ...state,
               activePiece: { pieceType: startPosition.activePiece.pieceType, color: startPosition.activePiece.color },
             });
-          }
 
-          setTileFocus();
-          setAvailableMoves([]);
-          setStartPosition({ x: 0, y: 0 }, '', '');
+            setTileFocus();
+            setAvailableMoves([]);
+            setStartPosition({ x: 0, y: 0 }, '', '');
+          }
         }
       }}
     >

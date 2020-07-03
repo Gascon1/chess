@@ -19,11 +19,24 @@ export default function Board() {
       x: 0,
       y: 0,
     },
+    startPosition: {
+      tile: '',
+      x: 0,
+      y: 0,
+    },
   });
 
   function setDestination(tileInfo: Position) {
     setState((prev) => ({ ...prev, destination: tileInfo }));
   }
+
+  function setStartPosition(tileInfo: Position) {
+    setState((prev) => ({ ...prev, startPosition: tileInfo }));
+  }
+
+  // useEffect(() => {
+  //   console.log('useeffect destination', state.destination);
+  // }, [state.destination]);
 
   useEffect(() => {
     let board: any = [];
@@ -47,12 +60,14 @@ export default function Board() {
             y={j}
             setDestination={setDestination}
             destination={state.destination}
+            setStartPosition={setStartPosition}
+            startPosition={state.startPosition}
           />,
         );
       });
     }
     setState((prev) => ({ ...prev, board }));
-  }, [state.destination]);
+  }, [state.destination, state.startPosition]);
 
   return <div className="board">{state.board}</div>;
 }

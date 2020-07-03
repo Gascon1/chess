@@ -23,6 +23,7 @@ export default function Pawn(props: Props) {
   const { tileInfo, white, isOccupied, setStartPosition, setAvailableMoves, setTileFocus } = props;
   const [state, setState] = useState({
     hasUsedFirstMoved: false,
+    pieceType: 'pawn',
     isWhite: true,
     currentPosition: {
       tile: '',
@@ -113,7 +114,7 @@ export default function Pawn(props: Props) {
     e.stopPropagation();
     let availMoves = availableMoves(currentPosition);
     setAvailableMoves(availMoves);
-    setStartPosition(currentPosition);
+    setStartPosition(currentPosition, state.pieceType, state.isWhite ? 'white' : 'black');
     setTileFocus(currentPosition.tile);
   };
 

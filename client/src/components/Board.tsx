@@ -15,6 +15,10 @@ export default function Board() {
   const [state, setState] = useState({
     board: [],
     startPosition: {
+      activePiece: {
+        pieceType: '',
+        color: '',
+      },
       tile: '',
       x: 0,
       y: 0,
@@ -37,10 +41,10 @@ export default function Board() {
     setState((prev) => ({ ...prev, destination: tileInfo }));
   }
 
-  function setStartPosition(tileInfo: Position) {
+  function setStartPosition(tileInfo: Position, pieceType: string, color: string) {
     setState((prev) => ({
       ...prev,
-      startPosition: tileInfo,
+      startPosition: { activePiece: { pieceType, color }, ...tileInfo },
       destination: {
         tile: '',
         x: 0,

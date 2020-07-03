@@ -14,6 +14,13 @@ interface Position {
   isFriendly?: boolean;
 }
 
+interface StartPosition extends Position {
+  activePiece: {
+    pieceType: string;
+    color: string;
+  };
+}
+
 interface Props {
   color: string;
   tile: string;
@@ -22,7 +29,7 @@ interface Props {
   setDestination: Function;
   destination: Position;
   setStartPosition: Function;
-  startPosition: Position;
+  startPosition: StartPosition;
   tileFocus: string;
   setTileFocus: Function;
   availableMoves: {
@@ -49,7 +56,10 @@ export default function Spot(props: Props) {
     setAvailableMoves,
   } = props;
   const [state, setState] = useState({
-    activePiece: '',
+    activePiece: {
+      pieceType: '',
+      color: '',
+    },
     tileInfo: {
       tile: '',
       x: 0,
@@ -72,43 +82,47 @@ export default function Spot(props: Props) {
   useEffect(() => {
     setState((prev) => ({ ...prev, tileInfo: { tile, x, y } }));
     if (tile.includes('2')) {
-      setState((prev) => ({ ...prev, activePiece: 'pawn', isOccupied: true }));
+      setState((prev) => ({ ...prev, activePiece: { pieceType: 'pawn', color: 'white' }, isOccupied: true }));
     } else if (tile.includes('7')) {
-      setState((prev) => ({ ...prev, activePiece: 'pawn', isOccupied: true }));
+      setState((prev) => ({ ...prev, activePiece: { pieceType: 'pawn', color: 'black' }, isOccupied: true }));
     }
     // Rook START
     else if (tile.includes('a8') || tile.includes('h8')) {
-      setState((prev) => ({ ...prev, activePiece: 'rook', isOccupied: true }));
+      setState((prev) => ({ ...prev, activePiece: { pieceType: 'rook', color: 'black' }, isOccupied: true }));
     } else if (tile.includes('a1') || tile.includes('h1')) {
-      setState((prev) => ({ ...prev, activePiece: 'rook', isOccupied: true }));
+      setState((prev) => ({ ...prev, activePiece: { pieceType: 'rook', color: 'white' }, isOccupied: true }));
     }
     // Rook END
+
     // Knight START
     else if (tile.includes('b8') || tile.includes('g8')) {
-      setState((prev) => ({ ...prev, activePiece: 'knight', isOccupied: true }));
+      setState((prev) => ({ ...prev, activePiece: { pieceType: 'knight', color: 'black' }, isOccupied: true }));
     } else if (tile.includes('b1') || tile.includes('g1')) {
-      setState((prev) => ({ ...prev, activePiece: 'knight', isOccupied: true }));
+      setState((prev) => ({ ...prev, activePiece: { pieceType: 'knight', color: 'white' }, isOccupied: true }));
     }
     // Knight END
+
     // Bishop START
     else if (tile.includes('c8') || tile.includes('f8')) {
-      setState((prev) => ({ ...prev, activePiece: 'bishop', isOccupied: true }));
+      setState((prev) => ({ ...prev, activePiece: { pieceType: 'bishop', color: 'black' }, isOccupied: true }));
     } else if (tile.includes('c1') || tile.includes('f1')) {
-      setState((prev) => ({ ...prev, activePiece: 'bishop', isOccupied: true }));
+      setState((prev) => ({ ...prev, activePiece: { pieceType: 'bishop', color: 'white' }, isOccupied: true }));
     }
     // Bishop END
+
     // Queen START
     else if (tile.includes('d8')) {
-      setState((prev) => ({ ...prev, activePiece: 'queen', isOccupied: true }));
+      setState((prev) => ({ ...prev, activePiece: { pieceType: 'queen', color: 'black' }, isOccupied: true }));
     } else if (tile.includes('d1')) {
-      setState((prev) => ({ ...prev, activePiece: 'queen', isOccupied: true }));
+      setState((prev) => ({ ...prev, activePiece: { pieceType: 'queen', color: 'white' }, isOccupied: true }));
     }
     // Queen END
+
     // King START
     else if (tile.includes('e8')) {
-      setState((prev) => ({ ...prev, activePiece: 'king', isOccupied: true }));
+      setState((prev) => ({ ...prev, activePiece: { pieceType: 'king', color: 'black' }, isOccupied: true }));
     } else if (tile.includes('e1')) {
-      setState((prev) => ({ ...prev, activePiece: 'king', isOccupied: true }));
+      setState((prev) => ({ ...prev, activePiece: { pieceType: 'king', color: 'white' }, isOccupied: true }));
     }
   }, [tile, x, y, destination, availableMoves]);
 
@@ -131,12 +145,16 @@ export default function Spot(props: Props) {
       className={`square ${props.color} ${props.tileFocus === state.tileInfo.tile ? 'focus' : ''}`}
       onClick={() => {
         setDestination(state.tileInfo);
+        setState({
+          ...state,
+          activePiece: { pieceType: startPosition.activePiece.pieceType, color: startPosition.activePiece.color },
+        });
         setTileFocus();
         setAvailableMoves([]);
       }}
     >
       {/* Pawn START */}
-      {props.tile.includes('7') && (
+      {state.activePiece.pieceType === 'pawn' && state.activePiece.color === 'black' && (
         <Pawn
           tileInfo={state.tileInfo}
           white={false}
@@ -146,7 +164,8 @@ export default function Spot(props: Props) {
           setTileFocus={setTileFocus}
         />
       )}
-      {props.tile.includes('2') && (
+
+      {state.activePiece.pieceType === 'pawn' && state.activePiece.color === 'white' && (
         <Pawn
           tileInfo={state.tileInfo}
           white={true}
@@ -156,31 +175,52 @@ export default function Spot(props: Props) {
           setTileFocus={setTileFocus}
         />
       )}
+
       {/* Pawn END */}
 
       {/* Rook START*/}
-      {(props.tile.includes('a8') || props.tile.includes('h8')) && <Rook tileInfo={state.tileInfo} white={false} />}
-      {(props.tile.includes('a1') || props.tile.includes('h1')) && <Rook tileInfo={state.tileInfo} white={true} />}
+      {state.activePiece.pieceType === 'rook' && state.activePiece.color === 'black' && (
+        <Rook tileInfo={state.tileInfo} white={false} />
+      )}
+      {state.activePiece.pieceType === 'rook' && state.activePiece.color === 'white' && (
+        <Rook tileInfo={state.tileInfo} white={true} />
+      )}
       {/* Rook END */}
 
       {/* Knight START */}
-      {(props.tile.includes('b8') || props.tile.includes('g8')) && <Knight tileInfo={state.tileInfo} white={false} />}
-      {(props.tile.includes('b1') || props.tile.includes('g1')) && <Knight tileInfo={state.tileInfo} white={true} />}
+      {state.activePiece.pieceType === 'knight' && state.activePiece.color === 'black' && (
+        <Knight tileInfo={state.tileInfo} white={false} />
+      )}
+      {state.activePiece.pieceType === 'knight' && state.activePiece.color === 'white' && (
+        <Knight tileInfo={state.tileInfo} white={true} />
+      )}
       {/* Knight END */}
 
       {/* Bishop START */}
-      {(props.tile.includes('c8') || props.tile.includes('f8')) && <Bishop tileInfo={state.tileInfo} white={false} />}
-      {(props.tile.includes('c1') || props.tile.includes('f1')) && <Bishop tileInfo={state.tileInfo} white={true} />}
+      {state.activePiece.pieceType === 'bishop' && state.activePiece.color === 'black' && (
+        <Bishop tileInfo={state.tileInfo} white={false} />
+      )}
+      {state.activePiece.pieceType === 'bishop' && state.activePiece.color === 'white' && (
+        <Bishop tileInfo={state.tileInfo} white={true} />
+      )}
       {/* Bishop END */}
 
       {/* Queen START */}
-      {props.tile.includes('d8') && <Queen tileInfo={state.tileInfo} white={false} />}
-      {props.tile.includes('d1') && <Queen tileInfo={state.tileInfo} white={true} />}
+      {state.activePiece.pieceType === 'queen' && state.activePiece.color === 'black' && (
+        <Queen tileInfo={state.tileInfo} white={false} />
+      )}
+      {state.activePiece.pieceType === 'queen' && state.activePiece.color === 'white' && (
+        <Queen tileInfo={state.tileInfo} white={true} />
+      )}
       {/* Queen END */}
 
       {/* King START */}
-      {props.tile.includes('e8') && <King tileInfo={state.tileInfo} white={false} />}
-      {props.tile.includes('e1') && <King tileInfo={state.tileInfo} white={true} />}
+      {state.activePiece.pieceType === 'king' && state.activePiece.color === 'black' && (
+        <King tileInfo={state.tileInfo} white={false} />
+      )}
+      {state.activePiece.pieceType === 'king' && state.activePiece.color === 'white' && (
+        <King tileInfo={state.tileInfo} white={true} />
+      )}
       {/* King END */}
 
       <span className='square-position' style={{ color: labelColor }}>

@@ -23,7 +23,7 @@ interface Props {
 }
 
 export default function Queen(props: Props) {
-  const { tileInfo, white, isOccupied, setStartPosition, setAvailableMoves, setTileFocus } = props;
+  const { tileInfo, white, setStartPosition, setAvailableMoves, setTileFocus } = props;
   const [state, setState] = useState({
     hasUsedFirstMoved: false,
     isWhite: true,

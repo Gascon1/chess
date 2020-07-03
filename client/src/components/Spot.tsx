@@ -162,19 +162,28 @@ export default function Spot(props: Props) {
       onClick={() => {
         if (startPosition.tile) {
           setDestination(state.tileInfo);
-          console.log(state.activePiece.color);
-          console.log(startPosition.activePiece.color);
-          if (state.activePiece.color !== startPosition.activePiece.color) {
-            setKillPosition(state.tileInfo);
-            setState({
-              ...state,
-              activePiece: { pieceType: startPosition.activePiece.pieceType, color: startPosition.activePiece.color },
-            });
-
-            setTileFocus();
-            setAvailableMoves([]);
-            setStartPosition({ x: 0, y: 0 }, '', '');
+          if (!destination.isFriendly) {
+            for (let availableCounter = 0; availableCounter < availableMoves.length; availableCounter++) {
+              if (
+                state.activePiece.color !== startPosition.activePiece.color &&
+                state.tileInfo.x === availableMoves[availableCounter].x &&
+                state.tileInfo.y === availableMoves[availableCounter].y
+              ) {
+                setKillPosition(state.tileInfo);
+                setState({
+                  ...state,
+                  activePiece: {
+                    pieceType: startPosition.activePiece.pieceType,
+                    color: startPosition.activePiece.color,
+                  },
+                });
+              }
+            }
           }
+
+          setTileFocus();
+          setAvailableMoves([]);
+          setStartPosition({ x: 0, y: 0 }, '', '');
         }
       }}
     >

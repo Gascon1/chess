@@ -135,9 +135,8 @@ export default function Spot(props: Props) {
       className={`square ${props.color} ${props.tileFocus === state.tileInfo.tile ? 'focus' : ''}`}
       onClick={(e) => {
         onMoveDestination(state.tileInfo, e);
-        setTileFocus(state.tileInfo.tile);
-        if (!state.isOccupied) {
-        }
+        setTileFocus();
+        setAvailableMoves([]);
       }}
     >
       {state.tileInfo && props.tile.includes('7') && (
@@ -148,6 +147,7 @@ export default function Spot(props: Props) {
           destination={state.destination}
           setStartPosition={setStartPosition}
           setAvailableMoves={setAvailableMoves}
+          setTileFocus={setTileFocus}
         />
       )}
       {props.tile.includes('2') && (
@@ -158,6 +158,7 @@ export default function Spot(props: Props) {
           destination={state.destination}
           setStartPosition={setStartPosition}
           setAvailableMoves={setAvailableMoves}
+          setTileFocus={setTileFocus}
         />
       )}
       {/* Pawn END */}

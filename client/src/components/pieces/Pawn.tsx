@@ -17,10 +17,11 @@ interface Props {
   destination: Position;
   setStartPosition: Function;
   setAvailableMoves: Function;
+  setTileFocus: Function;
 }
 
 export default function Pawn(props: Props) {
-  const { tileInfo, white, isOccupied, destination, setStartPosition, setAvailableMoves } = props;
+  const { tileInfo, white, isOccupied, destination, setStartPosition, setAvailableMoves, setTileFocus } = props;
   const [state, setState] = useState({
     hasUsedFirstMoved: false,
     isWhite: true,
@@ -110,10 +111,11 @@ export default function Pawn(props: Props) {
   };
 
   const onMoveStart = (currentPosition: Position, e: React.MouseEvent<SVGSVGElement, MouseEvent>) => {
+    e.stopPropagation();
     let availMoves = availableMoves(currentPosition);
     setAvailableMoves(availMoves);
-    console.log(availMoves);
     setStartPosition(currentPosition);
+    setTileFocus(currentPosition.tile);
   };
 
   return (

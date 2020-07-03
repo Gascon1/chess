@@ -160,10 +160,20 @@ export default function Spot(props: Props) {
         if (startPosition.tile) {
           setDestination(state.tileInfo);
           if (!destination.isFriendly) {
-            setState({
-              ...state,
-              activePiece: { pieceType: startPosition.activePiece.pieceType, color: startPosition.activePiece.color },
-            });
+            for (let availableCounter = 0; availableCounter < availableMoves.length; availableCounter++) {
+              if (
+                state.tileInfo.x === availableMoves[availableCounter].x &&
+                state.tileInfo.y === availableMoves[availableCounter].y
+              ) {
+                setState({
+                  ...state,
+                  activePiece: {
+                    pieceType: startPosition.activePiece.pieceType,
+                    color: startPosition.activePiece.color,
+                  },
+                });
+              }
+            }
           }
 
           setTileFocus();

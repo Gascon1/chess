@@ -8,5 +8,6 @@
   "tabWidth": 2,
   "endOfLine": "lf",
   "jsxBracketSameLine": false,
-  "quoteProps": "consistent"
+  "quoteProps": "consistent",
+  "jsxSingleQuote": true
 }

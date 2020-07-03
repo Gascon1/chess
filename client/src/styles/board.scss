@@ -30,7 +30,7 @@
     }
 
     &.focus {
-      box-shadow: inset 0px 0px 0px 3px #a0e74481;
+      box-shadow: inset 0px 0px 0px 3px #6b9b2b81;
     }
 
     .square-position {
@@ -44,5 +44,22 @@
       right: 0;
       user-select: none;
     }
+
+    .available-moves-circle {
+      display: none;
+      position: absolute;
+      width: 25px;
+      height: 25px;
+      border-radius: 50%;
+      background: #6b9b2b81;
+    }
+  }
+
+  .show {
+    display: block;
+  }
+
+  .hide {
+    display: none;
   }
 }

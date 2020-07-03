@@ -21,10 +21,27 @@ interface Props {
   startPosition: Position;
   tileFocus: string;
   setTileFocus: Function;
+  availableMoves: {
+    x: number;
+    y: number;
+  }[];
+  setAvailableMoves: Function;
 }
 
 export default function Spot(props: Props) {
-  const { tile, x, y, destination, setDestination, setStartPosition, startPosition, tileFocus, setTileFocus } = props;
+  const {
+    tile,
+    x,
+    y,
+    destination,
+    setDestination,
+    setStartPosition,
+    startPosition,
+    tileFocus,
+    setTileFocus,
+    availableMoves,
+    setAvailableMoves,
+  } = props;
   const [state, setState] = useState({
     activePiece: '',
     tileInfo: {
@@ -43,11 +60,25 @@ export default function Spot(props: Props) {
     } else if (tile.includes('7')) {
       setState((prev) => ({ ...prev, activePiece: 'pawn', isOccupied: true }));
     }
-  }, [tile, x, y, destination]);
+  }, [tile, x, y, destination, availableMoves]);
 
   const onMoveDestination = (currentPosition: Position, e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     e.stopPropagation();
     setDestination(currentPosition);
+  };
+
+  const getTileXY = () => {
+    return {
+      x: state.tileInfo.x,
+      y: state.tileInfo.y,
+    };
+  };
+
+  const displayCircle = () => {
+    if (JSON.stringify(availableMoves).includes(JSON.stringify(getTileXY()))) {
+      return true;
+    }
+    return false;
   };
 
   return (
@@ -56,6 +87,8 @@ export default function Spot(props: Props) {
       onClick={(e) => {
         onMoveDestination(state.tileInfo, e);
         setTileFocus(state.tileInfo.tile);
+        if (!state.isOccupied) {
+        }
       }}
     >
       {state.tileInfo && props.tile.includes('7') && (
@@ -65,6 +98,7 @@ export default function Spot(props: Props) {
           isOccupied={state.isOccupied}
           destination={state.destination}
           setStartPosition={setStartPosition}
+          setAvailableMoves={setAvailableMoves}
         />
       )}
       {props.tile.includes('2') && (
@@ -74,9 +108,14 @@ export default function Spot(props: Props) {
           isOccupied={state.isOccupied}
           destination={state.destination}
           setStartPosition={setStartPosition}
+          setAvailableMoves={setAvailableMoves}
         />
       )}
-      <span className="square-position">{props.tile}</span>
+      <span className='square-position'>{props.tile}</span>
+      <span
+        className='available-moves-circle'
+        style={displayCircle() ? { display: 'block' } : { display: 'none' }}
+      ></span>
     </div>
   );
 }

@@ -16,10 +16,11 @@ interface Props {
   isOccupied: boolean;
   destination: Position;
   setStartPosition: Function;
+  setAvailableMoves: Function;
 }
 
 export default function Pawn(props: Props) {
-  const { tileInfo, white, isOccupied, destination, setStartPosition } = props;
+  const { tileInfo, white, isOccupied, destination, setStartPosition, setAvailableMoves } = props;
   const [state, setState] = useState({
     hasUsedFirstMoved: false,
     isWhite: true,
@@ -110,6 +111,7 @@ export default function Pawn(props: Props) {
 
   const onMoveStart = (currentPosition: Position, e: React.MouseEvent<SVGSVGElement, MouseEvent>) => {
     let availMoves = availableMoves(currentPosition);
+    setAvailableMoves(availMoves);
     console.log(availMoves);
     setStartPosition(currentPosition);
   };

@@ -16,12 +16,17 @@ interface Position {
 interface Props {
   white: boolean;
   tileInfo: Position;
+  isOccupied: boolean;
+  setStartPosition: Function;
+  setAvailableMoves: Function;
+  setTileFocus: Function;
 }
 
 export default function Bishop(props: Props) {
-  const { tileInfo, white } = props;
+  const { tileInfo, white, isOccupied, setStartPosition, setAvailableMoves, setTileFocus } = props;
   const [state, setState] = useState({
     hasUsedFirstMoved: false,
+    pieceType: 'bishop',
     isWhite: true,
     currentPosition: {
       tile: '',
@@ -33,5 +38,52 @@ export default function Bishop(props: Props) {
   useEffect(() => {
     setState((prev) => ({ ...prev, isWhite: white, currentPosition: tileInfo }));
   }, [tileInfo, white]);
-  return <BishopImage className={`piece ${props.white ? 'white' : 'black'}`} />;
+
+  const availableMoves = (currentPosition: Position) => {
+    //code can be optimized perhaps
+    let diagonal = [];
+    let i: number = currentPosition.x;
+    let k: number = currentPosition.x;
+    let b: number = currentPosition.y;
+    let c: number = currentPosition.y;
+    let d: number = currentPosition.y;
+    let e: number = currentPosition.y;
+
+    for (i; i < 9; i++) {
+      let possibleMove1 = { x: i, y: b-- };
+      let possibleMove2 = { x: i, y: c++ };
+      if (i === currentPosition.x) {
+        continue;
+      }
+      diagonal.push(possibleMove1);
+      diagonal.push(possibleMove2);
+    }
+    for (k; k > 0; k--) {
+      let possibleMove1 = { x: k, y: d-- };
+      let possibleMove2 = { x: k, y: e++ };
+      if (k === currentPosition.x) {
+        continue;
+      }
+      diagonal.push(possibleMove1);
+      diagonal.push(possibleMove2);
+    }
+
+    return diagonal;
+  };
+
+  const onMoveStart = (currentPosition: Position, e: React.MouseEvent<SVGSVGElement, MouseEvent>) => {
+    e.stopPropagation();
+    console.log(currentPosition);
+    let availMoves = availableMoves(currentPosition);
+    setAvailableMoves(availMoves);
+    setStartPosition(currentPosition, state.pieceType, state.isWhite ? 'white' : 'black');
+    setTileFocus(currentPosition.tile);
+  };
+
+  return (
+    <BishopImage
+      className={`piece ${props.white ? 'white' : 'black'}`}
+      onClick={(e) => onMoveStart(state.currentPosition, e)}
+    />
+  );
 }

@@ -199,10 +199,24 @@ export default function Spot(props: Props) {
 
       {/* Rook START*/}
       {state.activePiece.pieceType === 'rook' && state.activePiece.color === 'black' && (
-        <Rook tileInfo={state.tileInfo} white={false} />
+        <Rook
+          tileInfo={state.tileInfo}
+          white={false}
+          isOccupied={state.isOccupied}
+          setStartPosition={setStartPosition}
+          setAvailableMoves={setAvailableMoves}
+          setTileFocus={setTileFocus}
+        />
       )}
       {state.activePiece.pieceType === 'rook' && state.activePiece.color === 'white' && (
-        <Rook tileInfo={state.tileInfo} white={true} />
+        <Rook
+          tileInfo={state.tileInfo}
+          white={true}
+          isOccupied={state.isOccupied}
+          setStartPosition={setStartPosition}
+          setAvailableMoves={setAvailableMoves}
+          setTileFocus={setTileFocus}
+        />
       )}
       {/* Rook END */}
 
@@ -217,19 +231,47 @@ export default function Spot(props: Props) {
 
       {/* Bishop START */}
       {state.activePiece.pieceType === 'bishop' && state.activePiece.color === 'black' && (
-        <Bishop tileInfo={state.tileInfo} white={false} />
+        <Bishop
+          tileInfo={state.tileInfo}
+          white={false}
+          isOccupied={state.isOccupied}
+          setStartPosition={setStartPosition}
+          setAvailableMoves={setAvailableMoves}
+          setTileFocus={setTileFocus}
+        />
       )}
       {state.activePiece.pieceType === 'bishop' && state.activePiece.color === 'white' && (
-        <Bishop tileInfo={state.tileInfo} white={true} />
+        <Bishop
+          tileInfo={state.tileInfo}
+          white={true}
+          isOccupied={state.isOccupied}
+          setStartPosition={setStartPosition}
+          setAvailableMoves={setAvailableMoves}
+          setTileFocus={setTileFocus}
+        />
       )}
       {/* Bishop END */}
 
       {/* Queen START */}
       {state.activePiece.pieceType === 'queen' && state.activePiece.color === 'black' && (
-        <Queen tileInfo={state.tileInfo} white={false} />
+        <Queen
+          tileInfo={state.tileInfo}
+          white={false}
+          isOccupied={state.isOccupied}
+          setStartPosition={setStartPosition}
+          setAvailableMoves={setAvailableMoves}
+          setTileFocus={setTileFocus}
+        />
       )}
       {state.activePiece.pieceType === 'queen' && state.activePiece.color === 'white' && (
-        <Queen tileInfo={state.tileInfo} white={true} />
+        <Queen
+          tileInfo={state.tileInfo}
+          white={true}
+          isOccupied={state.isOccupied}
+          setStartPosition={setStartPosition}
+          setAvailableMoves={setAvailableMoves}
+          setTileFocus={setTileFocus}
+        />
       )}
       {/* Queen END */}
 

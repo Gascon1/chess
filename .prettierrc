@@ -1,6 +1,6 @@
 {
   "singleQuote": true,
-  "printWidth": 140,
+  "printWidth": 120,
   "trailingComma": "all",
   "useTabs": false,
   "semi": true,
@@ -8,5 +8,6 @@
   "tabWidth": 2,
   "endOfLine": "lf",
   "jsxBracketSameLine": false,
-  "quoteProps": "consistent"
+  "quoteProps": "consistent",
+  "jsxSingleQuote": true
 }

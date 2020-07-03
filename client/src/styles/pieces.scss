@@ -9,10 +9,32 @@
   position: absolute;
 
   &.white {
-    fill: $white;
+    .shadow {
+      fill: #dfa996;
+    }
+    .body {
+      fill: #efd6ba;
+    }
+    .light {
+      fill: #ffffff;
+    }
+    .outline {
+      fill: #44220e;
+    }
   }
 
   &.black {
-    fill: $black;
+    .shadow {
+      fill: #55453c;
+    }
+    .body {
+      fill: #6e645b;
+    }
+    .light {
+      fill: #ffffff;
+    }
+    .outline {
+      fill: #44220e;
+    }
   }
 }

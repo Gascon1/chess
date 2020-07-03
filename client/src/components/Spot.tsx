@@ -31,8 +31,8 @@ interface Props {
   }[];
   setAvailableMoves: Function;
 }
-const brown = '#874626';
-const beige = '#e5c59b';
+const brown = '#8a604a';
+const beige = '#e5d3ba';
 
 export default function Spot(props: Props) {
   const {
@@ -57,6 +57,7 @@ export default function Spot(props: Props) {
     },
     isOccupied: false,
     destination: destination,
+    isCircleVisible: false,
   });
 
   let labelColor = '';
@@ -111,20 +112,15 @@ export default function Spot(props: Props) {
     }
   }, [tile, x, y, destination, availableMoves]);
 
-  const onMoveDestination = (currentPosition: Position, e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-    e.stopPropagation();
-    setDestination(currentPosition);
-  };
-
-  const getTileXY = () => {
+  const getTileXY = (tileInfo: Position) => {
     return {
-      x: state.tileInfo.x,
-      y: state.tileInfo.y,
+      x: tileInfo.x,
+      y: tileInfo.y,
     };
   };
 
   const displayCircle = () => {
-    if (JSON.stringify(availableMoves).includes(JSON.stringify(getTileXY()))) {
+    if (JSON.stringify(availableMoves).includes(JSON.stringify(getTileXY(state.tileInfo)))) {
       return true;
     }
     return false;
@@ -133,8 +129,8 @@ export default function Spot(props: Props) {
   return (
     <div
       className={`square ${props.color} ${props.tileFocus === state.tileInfo.tile ? 'focus' : ''}`}
-      onClick={(e) => {
-        onMoveDestination(state.tileInfo, e);
+      onClick={() => {
+        setDestination(state.tileInfo);
         setTileFocus();
         setAvailableMoves([]);
       }}
@@ -145,7 +141,6 @@ export default function Spot(props: Props) {
           tileInfo={state.tileInfo}
           white={false}
           isOccupied={state.isOccupied}
-          destination={state.destination}
           setStartPosition={setStartPosition}
           setAvailableMoves={setAvailableMoves}
           setTileFocus={setTileFocus}
@@ -156,7 +151,6 @@ export default function Spot(props: Props) {
           tileInfo={state.tileInfo}
           white={true}
           isOccupied={state.isOccupied}
-          destination={state.destination}
           setStartPosition={setStartPosition}
           setAvailableMoves={setAvailableMoves}
           setTileFocus={setTileFocus}

@@ -14,12 +14,12 @@ export default function Board() {
   // Todo: integrate pieces into each square created in board;
   const [state, setState] = useState({
     board: [],
-    destination: {
+    startPosition: {
       tile: '',
       x: 0,
       y: 0,
     },
-    startPosition: {
+    destination: {
       tile: '',
       x: 0,
       y: 0,
@@ -38,7 +38,15 @@ export default function Board() {
   }
 
   function setStartPosition(tileInfo: Position) {
-    setState((prev) => ({ ...prev, startPosition: tileInfo }));
+    setState((prev) => ({
+      ...prev,
+      startPosition: tileInfo,
+      destination: {
+        tile: '',
+        x: 0,
+        y: 0,
+      },
+    }));
   }
 
   const setTileFocus = (tilePosition: string) => {

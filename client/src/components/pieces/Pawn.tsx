@@ -14,14 +14,13 @@ interface Props {
   white: boolean;
   tileInfo: Position;
   isOccupied: boolean;
-  destination: Position;
   setStartPosition: Function;
   setAvailableMoves: Function;
   setTileFocus: Function;
 }
 
 export default function Pawn(props: Props) {
-  const { tileInfo, white, isOccupied, destination, setStartPosition, setAvailableMoves, setTileFocus } = props;
+  const { tileInfo, white, isOccupied, setStartPosition, setAvailableMoves, setTileFocus } = props;
   const [state, setState] = useState({
     hasUsedFirstMoved: false,
     isWhite: true,
@@ -118,10 +117,12 @@ export default function Pawn(props: Props) {
     setTileFocus(currentPosition.tile);
   };
 
-  return (
+  return JSON.stringify(tileInfo) === JSON.stringify(state.currentPosition) ? (
     <PawnImage
       className={`piece ${props.white ? 'white' : 'black'}`}
       onClick={(e) => onMoveStart(state.currentPosition, e)}
     />
+  ) : (
+    <div></div>
   );
 }

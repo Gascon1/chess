@@ -42,19 +42,24 @@ export default function Bishop(props: Props) {
   const availableMoves = (currentPosition: Position) => {
     let diagonal = [];
     let i: number = currentPosition.x;
+    let k: number = currentPosition.x;
+    let b: number = currentPosition.y;
+    let c: number = currentPosition.y;
+    let d: number = currentPosition.y;
+    let e: number = currentPosition.y;
 
     console.log('x is', i);
     for (i; i < 9; i++) {
-      let possibleMove1 = { x: i, y: currentPosition.y++ };
-      let possibleMove2 = { x: i, y: currentPosition.y-- };
+      let possibleMove1 = { x: i, y: b-- };
+      let possibleMove2 = { x: i, y: c++ };
       diagonal.push(possibleMove1);
       diagonal.push(possibleMove2);
     }
-    for (i; i > 0; i--) {
-      let possibleMove1 = { x: i, y: currentPosition.y-- };
-      // let possibleMove2 = { x: i, y: currentPosition.y++ };
+    for (k; k > 0; k--) {
+      let possibleMove1 = { x: k, y: d-- };
+      let possibleMove2 = { x: k, y: e++ };
       diagonal.push(possibleMove1);
-      // diagonal.push(possibleMove2);
+      diagonal.push(possibleMove2);
     }
     // for (i; i < 9; i++) {
     //   let possibleMove = { x: i, y: currentPosition.y++ };

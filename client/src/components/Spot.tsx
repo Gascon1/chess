@@ -19,10 +19,12 @@ interface Props {
   destination: Position;
   setStartPosition: Function;
   startPosition: Position;
+  tileFocus: string;
+  setTileFocus: Function;
 }
 
 export default function Spot(props: Props) {
-  const { tile, x, y, destination, setDestination, setStartPosition, startPosition } = props;
+  const { tile, x, y, destination, setDestination, setStartPosition, startPosition, tileFocus, setTileFocus } = props;
   const [state, setState] = useState({
     activePiece: '',
     tileInfo: {
@@ -43,34 +45,19 @@ export default function Spot(props: Props) {
     }
   }, [tile, x, y, destination]);
 
-  const availableMoves = (currentPosition: Position) => {
-    // only valid for white pieces
-    return [
-      { x: currentPosition.x - 1, y: currentPosition.y + 1 },
-      { x: currentPosition.x, y: currentPosition.y + 1 },
-      { x: currentPosition.x, y: currentPosition.y + 2 },
-      { x: currentPosition.x + 1, y: currentPosition.y + 1 },
-    ];
-  };
-
-  const onMoveDestination = () => {
-    // state is rerendering an entirely new component and console logs after setting state won't have updated state
-    setDestination(state.tileInfo);
-
-    // console.log('destination', destination);
-    // console.log('startPosition', startPosition);
-
-    let result = availableMoves(startPosition);
-    let test: boolean;
-    if (result.some((e) => e.x === destination.x && e.y === destination.y)) {
-      test = true;
-    } else {
-      test = false;
-    }
+  const onMoveDestination = (currentPosition: Position, e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    e.stopPropagation();
+    setDestination(currentPosition);
   };
 
   return (
-    <div className={'square ' + props.color} onClick={() => onMoveDestination()}>
+    <div
+      className={`square ${props.color} ${props.tileFocus === state.tileInfo.tile ? 'focus' : ''}`}
+      onClick={(e) => {
+        onMoveDestination(state.tileInfo, e);
+        setTileFocus(state.tileInfo.tile);
+      }}
+    >
       {state.tileInfo && props.tile.includes('7') && (
         <Pawn
           tileInfo={state.tileInfo}
@@ -78,7 +65,6 @@ export default function Spot(props: Props) {
           isOccupied={state.isOccupied}
           destination={state.destination}
           setStartPosition={setStartPosition}
-          startPosition={startPosition}
         />
       )}
       {props.tile.includes('2') && (
@@ -88,7 +74,6 @@ export default function Spot(props: Props) {
           isOccupied={state.isOccupied}
           destination={state.destination}
           setStartPosition={setStartPosition}
-          startPosition={startPosition}
         />
       )}
       <span className="square-position">{props.tile}</span>

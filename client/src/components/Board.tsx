@@ -24,6 +24,7 @@ export default function Board() {
       x: 0,
       y: 0,
     },
+    tileFocus: '',
   });
 
   function setDestination(tileInfo: Position) {
@@ -34,9 +35,9 @@ export default function Board() {
     setState((prev) => ({ ...prev, startPosition: tileInfo }));
   }
 
-  // useEffect(() => {
-  //   console.log('useeffect destination', state.destination);
-  // }, [state.destination]);
+  const setTileFocus = (tilePosition: string) => {
+    setState((prev) => ({ ...prev, tileFocus: tilePosition }));
+  };
 
   useEffect(() => {
     let board: any = [];
@@ -62,6 +63,8 @@ export default function Board() {
             destination={state.destination}
             setStartPosition={setStartPosition}
             startPosition={state.startPosition}
+            tileFocus={state.tileFocus}
+            setTileFocus={setTileFocus}
           />,
         );
       });

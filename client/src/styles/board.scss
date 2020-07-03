@@ -29,6 +29,10 @@
       background: $beige;
     }
 
+    &.focus {
+      box-shadow: inset 0px 0px 0px 3px #a0e74481;
+    }
+
     .square-position {
       margin-bottom: 0.25em;
       margin-right: 0.25em;

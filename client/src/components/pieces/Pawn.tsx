@@ -16,11 +16,10 @@ interface Props {
   isOccupied: boolean;
   destination: Position;
   setStartPosition: Function;
-  startPosition: Position;
 }
 
 export default function Pawn(props: Props) {
-  const { tileInfo, white, isOccupied, destination, setStartPosition, startPosition } = props;
+  const { tileInfo, white, isOccupied, destination, setStartPosition } = props;
   const [state, setState] = useState({
     hasUsedFirstMoved: false,
     isWhite: true,
@@ -29,12 +28,11 @@ export default function Pawn(props: Props) {
       x: 0,
       y: 0,
     },
-    startPosition: startPosition,
   });
 
   useEffect(() => {
-    setState((prev) => ({ ...prev, isWhite: white, currentPosition: tileInfo, startPosition: startPosition }));
-  }, [tileInfo, white, startPosition]);
+    setState((prev) => ({ ...prev, isWhite: white, currentPosition: tileInfo }));
+  }, [tileInfo, white]);
 
   const isMoveLegal = (currentPosition: Position, destination: Position) => {
     if (state.isWhite) {
@@ -52,7 +50,9 @@ export default function Pawn(props: Props) {
         // if the pawn is going for a kill, which needs the destination
         // to be occuped, and both x and y increment by 1.
         return (
-          (!destination.isOccupied && destination.x - currentPosition.x !== 0 && destination.y - currentPosition.y !== 1) ||
+          (!destination.isOccupied &&
+            destination.x - currentPosition.x !== 0 &&
+            destination.y - currentPosition.y !== 1) ||
           (destination.isOccupied &&
             !destination.isFriendly &&
             destination.x - currentPosition.x !== 1 &&
@@ -74,7 +74,9 @@ export default function Pawn(props: Props) {
         return true;
       } else {
         return (
-          (!destination.isOccupied && destination.x - currentPosition.x !== 0 && destination.y - currentPosition.y !== -1) ||
+          (!destination.isOccupied &&
+            destination.x - currentPosition.x !== 0 &&
+            destination.y - currentPosition.y !== -1) ||
           (destination.isOccupied &&
             !destination.isFriendly &&
             destination.x - currentPosition.x !== -1 &&
@@ -106,41 +108,16 @@ export default function Pawn(props: Props) {
     }
   };
 
-  const onMoveStart = (event: SyntheticEvent, currentPosition: Position) => {
-    setStartPosition(tileInfo);
-    // console.log('currentPosition', currentPosition);
-    // console.log('availableMoves', availableMoves(currentPosition));
-    // console.log('destination', destination);
-
-    // event.stopPropagation();
-    // document.onclick = onMoveDestination(currentPosition);
-    // let result = availableMoves(currentPosition);
-    // var test: boolean;
-    // if (result.some((e) => e.x === destination.x && e.y === destination.y)) {
-    //   test = true;
-    // } else {
-    //   test = false;
-    // }
-
-    // console.log('is destination valid?', test);
+  const onMoveStart = (currentPosition: Position, e: React.MouseEvent<SVGSVGElement, MouseEvent>) => {
+    let availMoves = availableMoves(currentPosition);
+    console.log(availMoves);
+    setStartPosition(currentPosition);
   };
 
-  // how tf does this work bruhhhhhh
-  // https://stackoverflow.com/questions/51977823/type-void-is-not-assignable-to-type-event-mouseeventhtmlinputelement
-  const onMoveDestination = (currentPosition: Position) => (event: any) => {
-    // let destinationCoord = {
-    //   x: destination.x,
-    //   y: destination.y,
-    // };
-    let result = availableMoves(startPosition);
-    var test: boolean;
-    if (result.some((e) => e.x === destination.x && e.y === destination.y)) {
-      test = true;
-    } else {
-      test = false;
-    }
-    console.log('is destination valid?', test);
-  };
-
-  return <PawnImage className={`piece ${props.white ? 'white' : 'black'}`} onClick={(e) => onMoveStart(e, state.currentPosition)} />;
+  return (
+    <PawnImage
+      className={`piece ${props.white ? 'white' : 'black'}`}
+      onClick={(e) => onMoveStart(state.currentPosition, e)}
+    />
+  );
 }

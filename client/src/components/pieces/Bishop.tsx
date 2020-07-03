@@ -40,6 +40,7 @@ export default function Bishop(props: Props) {
   }, [tileInfo, white]);
 
   const availableMoves = (currentPosition: Position) => {
+    //code can be optimized perhaps
     let diagonal = [];
     let i: number = currentPosition.x;
     let k: number = currentPosition.x;
@@ -48,16 +49,21 @@ export default function Bishop(props: Props) {
     let d: number = currentPosition.y;
     let e: number = currentPosition.y;
 
-    console.log('x is', i);
     for (i; i < 9; i++) {
       let possibleMove1 = { x: i, y: b-- };
       let possibleMove2 = { x: i, y: c++ };
+      if (i === currentPosition.x) {
+        continue;
+      }
       diagonal.push(possibleMove1);
       diagonal.push(possibleMove2);
     }
     for (k; k > 0; k--) {
       let possibleMove1 = { x: k, y: d-- };
       let possibleMove2 = { x: k, y: e++ };
+      if (k === currentPosition.x) {
+        continue;
+      }
       diagonal.push(possibleMove1);
       diagonal.push(possibleMove2);
     }

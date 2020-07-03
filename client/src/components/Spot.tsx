@@ -180,10 +180,24 @@ export default function Spot(props: Props) {
 
       {/* Rook START*/}
       {state.activePiece.pieceType === 'rook' && state.activePiece.color === 'black' && (
-        <Rook tileInfo={state.tileInfo} white={false} />
+        <Rook
+          tileInfo={state.tileInfo}
+          white={false}
+          isOccupied={state.isOccupied}
+          setStartPosition={setStartPosition}
+          setAvailableMoves={setAvailableMoves}
+          setTileFocus={setTileFocus}
+        />
       )}
       {state.activePiece.pieceType === 'rook' && state.activePiece.color === 'white' && (
-        <Rook tileInfo={state.tileInfo} white={true} />
+        <Rook
+          tileInfo={state.tileInfo}
+          white={true}
+          isOccupied={state.isOccupied}
+          setStartPosition={setStartPosition}
+          setAvailableMoves={setAvailableMoves}
+          setTileFocus={setTileFocus}
+        />
       )}
       {/* Rook END */}
 

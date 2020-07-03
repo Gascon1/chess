@@ -232,10 +232,24 @@ export default function Spot(props: Props) {
 
       {/* Knight START */}
       {state.activePiece.pieceType === 'knight' && state.activePiece.color === 'black' && (
-        <Knight tileInfo={state.tileInfo} white={false} />
+        <Knight
+          tileInfo={state.tileInfo}
+          white={false}
+          isOccupied={state.isOccupied}
+          setStartPosition={setStartPosition}
+          setAvailableMoves={setAvailableMoves}
+          setTileFocus={setTileFocus}
+        />
       )}
       {state.activePiece.pieceType === 'knight' && state.activePiece.color === 'white' && (
-        <Knight tileInfo={state.tileInfo} white={true} />
+        <Knight
+          tileInfo={state.tileInfo}
+          white={true}
+          isOccupied={state.isOccupied}
+          setStartPosition={setStartPosition}
+          setAvailableMoves={setAvailableMoves}
+          setTileFocus={setTileFocus}
+        />
       )}
       {/* Knight END */}
 

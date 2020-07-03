@@ -61,23 +61,8 @@ export default function Bishop(props: Props) {
       diagonal.push(possibleMove1);
       diagonal.push(possibleMove2);
     }
-    // for (i; i < 9; i++) {
-    //   let possibleMove = { x: i, y: currentPosition.y++ };
-    //   diagonal.push(possibleMove);
-    // }
-    // for (i; i < 9; i++) {
-    //   let possibleMove = { x: i, y: currentPosition.y++ };
-    //   diagonal.push(possibleMove);
-    // }
-    // for (i; i > 0; i++) {
-    //   let possibleMove = { x: currentPosition.x - i, y: currentPosition.y - i };
-    //   diagonal.push(possibleMove);
-    // }
-    if (state.isWhite) {
-      return diagonal;
-    } else {
-      return diagonal;
-    }
+
+    return diagonal;
   };
 
   const onMoveStart = (currentPosition: Position, e: React.MouseEvent<SVGSVGElement, MouseEvent>) => {

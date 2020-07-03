@@ -35,10 +35,14 @@ export default function Board() {
         y: 0,
       },
     ],
+    killPosition: '',
   });
 
   function setDestination(tileInfo: Position) {
     setState((prev) => ({ ...prev, destination: tileInfo }));
+    if (state.tileFocus !== tileInfo.tile) {
+      setState((prev) => ({ ...prev, killPosition: state.tileFocus }));
+    }
   }
 
   function setStartPosition(tileInfo: Position, pieceType: string, color: string) {
@@ -89,6 +93,7 @@ export default function Board() {
             setTileFocus={setTileFocus}
             availableMoves={state.availableMoves}
             setAvailableMoves={setAvailableMoves}
+            killPosition={state.killPosition}
           />,
         );
       });

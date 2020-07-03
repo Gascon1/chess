@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useLayoutEffect } from 'react';
 import Pawn from 'components/pieces/Pawn';
 import Rook from 'components/pieces/Rook';
 import Knight from 'components/pieces/Knight';
@@ -37,6 +37,7 @@ interface Props {
     y: number;
   }[];
   setAvailableMoves: Function;
+  killPosition: string;
 }
 const brown = '#8a604a';
 const beige = '#e5d3ba';
@@ -54,6 +55,7 @@ export default function Spot(props: Props) {
     setTileFocus,
     availableMoves,
     setAvailableMoves,
+    killPosition,
   } = props;
   const [state, setState] = useState({
     activePiece: {
@@ -78,6 +80,17 @@ export default function Spot(props: Props) {
     case 'beige':
       labelColor = brown;
   }
+
+  useLayoutEffect(() => {
+    if (state.tileInfo.tile === killPosition) {
+      setState((prev) => ({
+        ...prev,
+        activePiece: { color: '', pieceType: '' },
+        isOccupied: false,
+        isCircleVisible: false,
+      }));
+    }
+  }, [killPosition, state.tileInfo.tile]);
 
   useEffect(() => {
     setState((prev) => ({ ...prev, tileInfo: { tile, x, y } }));
@@ -124,7 +137,7 @@ export default function Spot(props: Props) {
     } else if (tile.includes('e1')) {
       setState((prev) => ({ ...prev, activePiece: { pieceType: 'king', color: 'white' }, isOccupied: true }));
     }
-  }, [tile, x, y, destination, availableMoves]);
+  }, [tile, x, y]);
 
   const getTileXY = (tileInfo: Position) => {
     return {
@@ -144,13 +157,19 @@ export default function Spot(props: Props) {
     <div
       className={`square ${props.color} ${props.tileFocus === state.tileInfo.tile ? 'focus' : ''}`}
       onClick={() => {
-        setDestination(state.tileInfo);
-        setState({
-          ...state,
-          activePiece: { pieceType: startPosition.activePiece.pieceType, color: startPosition.activePiece.color },
-        });
-        setTileFocus();
-        setAvailableMoves([]);
+        if (startPosition.tile) {
+          setDestination(state.tileInfo);
+          if (!destination.isFriendly) {
+            setState({
+              ...state,
+              activePiece: { pieceType: startPosition.activePiece.pieceType, color: startPosition.activePiece.color },
+            });
+          }
+
+          setTileFocus();
+          setAvailableMoves([]);
+          setStartPosition({ x: 0, y: 0 }, '', '');
+        }
       }}
     >
       {/* Pawn START */}

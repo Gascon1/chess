@@ -44,9 +44,6 @@ export default function Board() {
 
   function setDestination(tileInfo: Position, pieceType: string, color: string) {
     setState((prev) => ({ ...prev, destination: { activePiece: { pieceType, color }, ...tileInfo } }));
-    // if (state.tileFocus !== tileInfo.tile) {
-    //   setState((prev) => ({ ...prev, killPosition: state.tileFocus }));
-    // }
   }
 
   const setKillPosition = (tileInfo: Position) => {

@@ -51,6 +51,7 @@ export default function Rook(props: Props) {
       if (i === currentPosition.x) {
         continue;
       }
+
       let possibleMove = { x: i, y: currentPosition.y };
       straightLine.push(possibleMove);
     }

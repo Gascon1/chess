@@ -97,7 +97,7 @@ export default function Spot(props: Props) {
         ...prev,
         activePiece: { color: '', pieceType: '' },
         isOccupied: false,
-        isCircleVisible: false,
+        // isCircleVisible: false,
       }));
     }
   }, [killPosition, state.tileInfo.tile]);
@@ -152,32 +152,32 @@ export default function Spot(props: Props) {
   // NEW CODE HERE
   useEffect(() => {
     //console.log('available moves is', availableMoves);
-    let unoccupiedMoves = availableMoves.filter(
+    let unoccupiedMoves: any = availableMoves.filter(
       (move) => state.isOccupied === false && JSON.stringify(move) === JSON.stringify(getTileXY(state.tileInfo)),
     );
 
     if (unoccupiedMoves.length) {
-      console.log('filtered list is', unoccupiedMoves);
+      // console.log('filtered list is', unoccupiedMoves);
       setLegalMoves(unoccupiedMoves);
     }
-  }, [availableMoves, state.isOccupied]);
+  }, [availableMoves, state.isOccupied, state.tileInfo]);
 
   useEffect(() => {
+    const displayCircle = () => {
+      if (JSON.stringify(legalMoves).includes(JSON.stringify(getTileXY(state.tileInfo)))) {
+        setState((prev) => ({ ...prev, isCircleVisible: true }));
+      } else {
+        setState((prev) => ({ ...prev, isCircleVisible: false }));
+      }
+    };
     displayCircle();
-  }, [legalMoves]);
+  }, [legalMoves, state.tileInfo, state.isCircleVisible]);
 
   const getTileXY = (tileInfo: Position) => {
     return {
       x: tileInfo.x,
       y: tileInfo.y,
     };
-  };
-
-  const displayCircle = () => {
-    if (JSON.stringify(legalMoves).includes(JSON.stringify(getTileXY(state.tileInfo)))) {
-      setState((prev) => ({ ...prev, isCircleVisible: true }));
-    }
-    setState((prev) => ({ ...prev, isCircleVisible: false }));
   };
 
   return (

@@ -39,6 +39,11 @@ interface Props {
   setAvailableMoves: Function;
   killPosition: string;
   setKillPosition: Function;
+  legalMoves: {
+    x: number;
+    y: number;
+  }[];
+  setLegalMoves: Function;
 }
 const brown = '#8a604a';
 const beige = '#e5d3ba';
@@ -58,6 +63,8 @@ export default function Spot(props: Props) {
     setAvailableMoves,
     killPosition,
     setKillPosition,
+    legalMoves,
+    setLegalMoves,
   } = props;
 
   const [state, setState] = useState({
@@ -142,6 +149,23 @@ export default function Spot(props: Props) {
     }
   }, [tile, x, y]);
 
+  // NEW CODE HERE
+  useEffect(() => {
+    //console.log('available moves is', availableMoves);
+    let unoccupiedMoves = availableMoves.filter(
+      (move) => state.isOccupied === false && JSON.stringify(move) === JSON.stringify(getTileXY(state.tileInfo)),
+    );
+
+    if (unoccupiedMoves.length) {
+      console.log('filtered list is', unoccupiedMoves);
+      setLegalMoves(unoccupiedMoves);
+    }
+  }, [availableMoves, state.isOccupied]);
+
+  useEffect(() => {
+    displayCircle();
+  }, [legalMoves]);
+
   const getTileXY = (tileInfo: Position) => {
     return {
       x: tileInfo.x,
@@ -150,10 +174,10 @@ export default function Spot(props: Props) {
   };
 
   const displayCircle = () => {
-    if (JSON.stringify(availableMoves).includes(JSON.stringify(getTileXY(state.tileInfo)))) {
-      return true;
+    if (JSON.stringify(legalMoves).includes(JSON.stringify(getTileXY(state.tileInfo)))) {
+      setState((prev) => ({ ...prev, isCircleVisible: true }));
     }
-    return false;
+    setState((prev) => ({ ...prev, isCircleVisible: false }));
   };
 
   return (
@@ -176,6 +200,7 @@ export default function Spot(props: Props) {
                     pieceType: startPosition.activePiece.pieceType,
                     color: startPosition.activePiece.color,
                   },
+                  isOccupied: true,
                 });
               }
             }
@@ -332,7 +357,7 @@ export default function Spot(props: Props) {
       </span>
       <span
         className='available-moves-circle'
-        style={displayCircle() ? { display: 'block' } : { display: 'none' }}
+        style={state.isCircleVisible ? { display: 'block' } : { display: 'none' }}
       ></span>
     </div>
   );

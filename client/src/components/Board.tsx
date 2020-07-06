@@ -40,6 +40,12 @@ export default function Board() {
       },
     ],
     killPosition: '',
+    legalMoves: [
+      {
+        x: 0,
+        y: 0,
+      },
+    ],
   });
 
   function setDestination(tileInfo: Position, pieceType: string, color: string) {
@@ -76,7 +82,12 @@ export default function Board() {
   };
 
   const setAvailableMoves = (availableMoves: any) => {
-    setState((prev) => ({ ...prev, availableMoves }));
+    setState((prev) => ({ ...prev, availableMoves, legalMoves: [] }));
+  };
+
+  const setLegalMoves = (legalMoves: any) => {
+    //do something
+    setState((prev) => ({ ...prev, legalMoves: [...prev.legalMoves, ...legalMoves] }));
   };
 
   useEffect(() => {
@@ -109,6 +120,8 @@ export default function Board() {
             setAvailableMoves={setAvailableMoves}
             killPosition={state.killPosition}
             setKillPosition={setKillPosition}
+            legalMoves={state.legalMoves}
+            setLegalMoves={setLegalMoves}
           />,
         );
       });

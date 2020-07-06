@@ -82,7 +82,7 @@ export default function Rook(props: Props) {
 
   const onMoveStart = (currentPosition: Position, e: React.MouseEvent<SVGSVGElement, MouseEvent>) => {
     e.stopPropagation();
-    console.log(currentPosition);
+    // console.log(currentPosition);
     let availMoves = availableMoves(currentPosition);
     setAvailableMoves(availMoves);
     setStartPosition(currentPosition, state.pieceType, state.isWhite ? 'white' : 'black');

@@ -5,7 +5,7 @@ import Knight from 'components/pieces/Knight';
 import Bishop from 'components/pieces/Bishop';
 import Queen from 'components/pieces/Queen';
 import King from 'components/pieces/King';
-import { isCompositeComponent } from 'react-dom/test-utils';
+// import { isCompositeComponent } from 'react-dom/test-utils';
 
 interface Position {
   tile: string;
@@ -156,7 +156,7 @@ export default function Spot(props: Props) {
       if (state.isOccupied === true) {
         if (
           JSON.stringify(move) === JSON.stringify(getTileXY(state.tileInfo)) &&
-          startPosition.activePiece.color != state.activePiece.color
+          startPosition.activePiece.color !== state.activePiece.color
         ) {
           unoccupiedMoves.push(move);
         }
@@ -170,7 +170,7 @@ export default function Spot(props: Props) {
     if (unoccupiedMoves.length) {
       setLegalMoves(unoccupiedMoves);
     }
-  }, [availableMoves, state.isOccupied, state.tileInfo, state.activePiece]);
+  }, [availableMoves, state.isOccupied, state.tileInfo, state.activePiece, startPosition.activePiece.color]);
 
   useEffect(() => {
     const displayCircle = () => {
@@ -227,7 +227,7 @@ export default function Spot(props: Props) {
         <Pawn
           tileInfo={state.tileInfo}
           white={false}
-          isOccupied={state.isOccupied}
+          //isOccupied={state.isOccupied}
           setStartPosition={setStartPosition}
           setAvailableMoves={setAvailableMoves}
           setTileFocus={setTileFocus}
@@ -238,7 +238,7 @@ export default function Spot(props: Props) {
         <Pawn
           tileInfo={state.tileInfo}
           white={true}
-          isOccupied={state.isOccupied}
+          //isOccupied={state.isOccupied}
           setStartPosition={setStartPosition}
           setAvailableMoves={setAvailableMoves}
           setTileFocus={setTileFocus}
@@ -252,7 +252,7 @@ export default function Spot(props: Props) {
         <Rook
           tileInfo={state.tileInfo}
           white={false}
-          isOccupied={state.isOccupied}
+          //isOccupied={state.isOccupied}
           setStartPosition={setStartPosition}
           setAvailableMoves={setAvailableMoves}
           setTileFocus={setTileFocus}
@@ -262,7 +262,7 @@ export default function Spot(props: Props) {
         <Rook
           tileInfo={state.tileInfo}
           white={true}
-          isOccupied={state.isOccupied}
+          //isOccupied={state.isOccupied}
           setStartPosition={setStartPosition}
           setAvailableMoves={setAvailableMoves}
           setTileFocus={setTileFocus}
@@ -275,7 +275,7 @@ export default function Spot(props: Props) {
         <Knight
           tileInfo={state.tileInfo}
           white={false}
-          isOccupied={state.isOccupied}
+          //isOccupied={state.isOccupied}
           setStartPosition={setStartPosition}
           setAvailableMoves={setAvailableMoves}
           setTileFocus={setTileFocus}
@@ -285,7 +285,7 @@ export default function Spot(props: Props) {
         <Knight
           tileInfo={state.tileInfo}
           white={true}
-          isOccupied={state.isOccupied}
+          //isOccupied={state.isOccupied}
           setStartPosition={setStartPosition}
           setAvailableMoves={setAvailableMoves}
           setTileFocus={setTileFocus}
@@ -298,7 +298,7 @@ export default function Spot(props: Props) {
         <Bishop
           tileInfo={state.tileInfo}
           white={false}
-          isOccupied={state.isOccupied}
+          //isOccupied={state.isOccupied}
           setStartPosition={setStartPosition}
           setAvailableMoves={setAvailableMoves}
           setTileFocus={setTileFocus}
@@ -308,7 +308,7 @@ export default function Spot(props: Props) {
         <Bishop
           tileInfo={state.tileInfo}
           white={true}
-          isOccupied={state.isOccupied}
+          //isOccupied={state.isOccupied}
           setStartPosition={setStartPosition}
           setAvailableMoves={setAvailableMoves}
           setTileFocus={setTileFocus}
@@ -321,7 +321,7 @@ export default function Spot(props: Props) {
         <Queen
           tileInfo={state.tileInfo}
           white={false}
-          isOccupied={state.isOccupied}
+          //isOccupied={state.isOccupied}
           setStartPosition={setStartPosition}
           setAvailableMoves={setAvailableMoves}
           setTileFocus={setTileFocus}
@@ -331,7 +331,7 @@ export default function Spot(props: Props) {
         <Queen
           tileInfo={state.tileInfo}
           white={true}
-          isOccupied={state.isOccupied}
+          //isOccupied={state.isOccupied}
           setStartPosition={setStartPosition}
           setAvailableMoves={setAvailableMoves}
           setTileFocus={setTileFocus}
@@ -344,7 +344,7 @@ export default function Spot(props: Props) {
         <King
           tileInfo={state.tileInfo}
           white={false}
-          isOccupied={state.isOccupied}
+          //isOccupied={state.isOccupied}
           setStartPosition={setStartPosition}
           setAvailableMoves={setAvailableMoves}
           setTileFocus={setTileFocus}
@@ -354,7 +354,7 @@ export default function Spot(props: Props) {
         <King
           tileInfo={state.tileInfo}
           white={true}
-          isOccupied={state.isOccupied}
+          //isOccupied={state.isOccupied}
           setStartPosition={setStartPosition}
           setAvailableMoves={setAvailableMoves}
           setTileFocus={setTileFocus}

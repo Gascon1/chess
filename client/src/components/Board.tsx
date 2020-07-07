@@ -126,7 +126,14 @@ export default function Board() {
       });
     }
     setState((prev) => ({ ...prev, board }));
-  }, [state.destination, state.startPosition, state.legalMoves]);
+  }, [
+    state.destination,
+    state.startPosition,
+    state.legalMoves,
+    state.availableMoves,
+    state.killPosition,
+    state.tileFocus,
+  ]);
 
   return <div className='board'>{state.board}</div>;
 }

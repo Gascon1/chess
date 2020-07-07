@@ -16,14 +16,14 @@ interface Position {
 interface Props {
   white: boolean;
   tileInfo: Position;
-  isOccupied: boolean;
+  //isOccupied: boolean;
   setStartPosition: Function;
   setAvailableMoves: Function;
   setTileFocus: Function;
 }
 
 export default function Bishop(props: Props) {
-  const { tileInfo, white, isOccupied, setStartPosition, setAvailableMoves, setTileFocus } = props;
+  const { tileInfo, white, /*isOccupied,*/ setStartPosition, setAvailableMoves, setTileFocus } = props;
   const [state, setState] = useState({
     hasUsedFirstMoved: false,
     pieceType: 'bishop',

@@ -16,7 +16,7 @@ interface Position {
 interface Props {
   white: boolean;
   tileInfo: Position;
-  isOccupied: boolean;
+  //isOccupied: boolean;
   setStartPosition: Function;
   setAvailableMoves: Function;
   setTileFocus: Function;

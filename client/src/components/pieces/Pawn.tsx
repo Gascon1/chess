@@ -1,4 +1,4 @@
-import React, { useState, useEffect, SyntheticEvent } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ReactComponent as PawnImage } from 'images/pawn.svg';
 // import Spot from "../Spot";
 
@@ -13,14 +13,14 @@ interface Position {
 interface Props {
   white: boolean;
   tileInfo: Position;
-  isOccupied: boolean;
+  //isOccupied: boolean;
   setStartPosition: Function;
   setAvailableMoves: Function;
   setTileFocus: Function;
 }
 
 export default function Pawn(props: Props) {
-  const { tileInfo, white, isOccupied, setStartPosition, setAvailableMoves, setTileFocus } = props;
+  const { tileInfo, white, /*isOccupied,*/ setStartPosition, setAvailableMoves, setTileFocus } = props;
   const [state, setState] = useState({
     hasUsedFirstMoved: false,
     pieceType: 'pawn',

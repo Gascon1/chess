@@ -5,6 +5,7 @@ import Knight from 'components/pieces/Knight';
 import Bishop from 'components/pieces/Bishop';
 import Queen from 'components/pieces/Queen';
 import King from 'components/pieces/King';
+import { isCompositeComponent } from 'react-dom/test-utils';
 
 interface Position {
   tile: string;
@@ -97,7 +98,7 @@ export default function Spot(props: Props) {
         ...prev,
         activePiece: { color: '', pieceType: '' },
         isOccupied: false,
-        // isCircleVisible: false,
+        isCircleVisible: false,
       }));
     }
   }, [killPosition, state.tileInfo.tile]);
@@ -149,18 +150,27 @@ export default function Spot(props: Props) {
     }
   }, [tile, x, y]);
 
-  // NEW CODE HERE
   useEffect(() => {
-    //console.log('available moves is', availableMoves);
-    let unoccupiedMoves: any = availableMoves.filter(
-      (move) => state.isOccupied === false && JSON.stringify(move) === JSON.stringify(getTileXY(state.tileInfo)),
-    );
+    let unoccupiedMoves = [];
+    for (let move of availableMoves) {
+      if (state.isOccupied === true) {
+        if (
+          JSON.stringify(move) === JSON.stringify(getTileXY(state.tileInfo)) &&
+          startPosition.activePiece.color != state.activePiece.color
+        ) {
+          unoccupiedMoves.push(move);
+        }
+      } else {
+        if (JSON.stringify(move) === JSON.stringify(getTileXY(state.tileInfo))) {
+          unoccupiedMoves.push(move);
+        }
+      }
+    }
 
     if (unoccupiedMoves.length) {
-      // console.log('filtered list is', unoccupiedMoves);
       setLegalMoves(unoccupiedMoves);
     }
-  }, [availableMoves, state.isOccupied, state.tileInfo]);
+  }, [availableMoves, state.isOccupied, state.tileInfo, state.activePiece]);
 
   useEffect(() => {
     const displayCircle = () => {

@@ -86,7 +86,6 @@ export default function Board() {
   };
 
   const setLegalMoves = (legalMoves: any) => {
-    //do something
     setState((prev) => ({ ...prev, legalMoves: [...prev.legalMoves, ...legalMoves] }));
   };
 

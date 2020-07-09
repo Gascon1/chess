@@ -45,6 +45,11 @@ interface Props {
     y: number;
   }[];
   setLegalMoves: Function;
+  occupiedChecker: {
+    x: number;
+    y: number;
+  }[];
+  setOccupiedChecker: Function;
 }
 const brown = '#8a604a';
 const beige = '#e5d3ba';
@@ -66,6 +71,8 @@ export default function Spot(props: Props) {
     setKillPosition,
     legalMoves,
     setLegalMoves,
+    occupiedChecker,
+    setOccupiedChecker,
   } = props;
 
   const [state, setState] = useState({
@@ -190,6 +197,21 @@ export default function Spot(props: Props) {
     };
   };
 
+  // create state that updates for each possible move and verify check if it is it occupied, if it is then we put it into available moves
+
+  // createuseEffect, check if every square if its occupied and matches the possibleMove, if it returns true ,
+  // send it back down to piece file and stop the
+  // recursion.
+
+  // figure out how to send down information to the piece level. perhaps create spot level state and send it down?
+
+  useEffect(() => {
+    const occupiedCheck = (possibleMove: any) => {
+      return state.isOccupied && JSON.stringify(possibleMove).includes(JSON.stringify(getTileXY(state.tileInfo)));
+    };
+    occupiedCheck(occupiedChecker);
+  }, [state.tileInfo, state.isOccupied]);
+
   return (
     <div
       className={`square ${props.color} ${props.tileFocus === state.tileInfo.tile ? 'focus' : ''}`}
@@ -298,20 +320,22 @@ export default function Spot(props: Props) {
         <Bishop
           tileInfo={state.tileInfo}
           white={false}
-          //isOccupied={state.isOccupied}
+          isOccupied={state.isOccupied}
           setStartPosition={setStartPosition}
           setAvailableMoves={setAvailableMoves}
           setTileFocus={setTileFocus}
+          setOccupiedChecker={setOccupiedChecker}
         />
       )}
       {state.activePiece.pieceType === 'bishop' && state.activePiece.color === 'white' && (
         <Bishop
           tileInfo={state.tileInfo}
           white={true}
-          //isOccupied={state.isOccupied}
+          isOccupied={state.isOccupied}
           setStartPosition={setStartPosition}
           setAvailableMoves={setAvailableMoves}
           setTileFocus={setTileFocus}
+          setOccupiedChecker={setOccupiedChecker}
         />
       )}
       {/* Bishop END */}

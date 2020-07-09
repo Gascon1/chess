@@ -16,14 +16,15 @@ interface Position {
 interface Props {
   white: boolean;
   tileInfo: Position;
-  //isOccupied: boolean;
+  isOccupied: boolean;
   setStartPosition: Function;
   setAvailableMoves: Function;
   setTileFocus: Function;
+  setOccupiedChecker: Function;
 }
 
 export default function Bishop(props: Props) {
-  const { tileInfo, white, /*isOccupied,*/ setStartPosition, setAvailableMoves, setTileFocus } = props;
+  const { tileInfo, white, isOccupied, setStartPosition, setAvailableMoves, setTileFocus, setOccupiedChecker } = props;
   const [state, setState] = useState({
     hasUsedFirstMoved: false,
     pieceType: 'bishop',
@@ -40,6 +41,8 @@ export default function Bishop(props: Props) {
   }, [tileInfo, white]);
 
   const availableMoves = (currentPosition: Position) => {
+    //occupied spot or nah
+
     //code can be optimized perhaps
     let diagonal = [];
     let i: number = currentPosition.x;
@@ -55,6 +58,10 @@ export default function Bishop(props: Props) {
       if (i === currentPosition.x) {
         continue;
       }
+      setOccupiedChecker(possibleMove1);
+      if (!isOccupied) {
+      }
+
       diagonal.push(possibleMove1);
       diagonal.push(possibleMove2);
     }
@@ -64,6 +71,7 @@ export default function Bishop(props: Props) {
       if (k === currentPosition.x) {
         continue;
       }
+
       diagonal.push(possibleMove1);
       diagonal.push(possibleMove2);
     }
@@ -73,7 +81,6 @@ export default function Bishop(props: Props) {
 
   const onMoveStart = (currentPosition: Position, e: React.MouseEvent<SVGSVGElement, MouseEvent>) => {
     e.stopPropagation();
-    console.log(currentPosition);
     let availMoves = availableMoves(currentPosition);
     setAvailableMoves(availMoves);
     setStartPosition(currentPosition, state.pieceType, state.isWhite ? 'white' : 'black');

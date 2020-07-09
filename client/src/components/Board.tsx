@@ -39,6 +39,12 @@ export default function Board() {
         y: 0,
       },
     ],
+    occupiedChecker: [
+      {
+        x: 0,
+        y: 0,
+      },
+    ],
     killPosition: '',
     legalMoves: [
       {
@@ -85,6 +91,10 @@ export default function Board() {
     setState((prev) => ({ ...prev, availableMoves, legalMoves: [] }));
   };
 
+  const setOccupiedChecker = (occupiedChecker: any) => {
+    setState((prev) => ({ ...prev, occupiedChecker }));
+  };
+
   const setLegalMoves = (legalMoves: any) => {
     setState((prev) => ({ ...prev, legalMoves: [...prev.legalMoves, ...legalMoves] }));
   };
@@ -121,6 +131,8 @@ export default function Board() {
             setKillPosition={setKillPosition}
             legalMoves={state.legalMoves}
             setLegalMoves={setLegalMoves}
+            occupiedChecker={state.occupiedChecker}
+            setOccupiedChecker={setOccupiedChecker}
           />,
         );
       });
@@ -133,6 +145,7 @@ export default function Board() {
     state.availableMoves,
     state.killPosition,
     state.tileFocus,
+    state.occupiedChecker,
   ]);
 
   return <div className='board'>{state.board}</div>;

@@ -206,11 +206,14 @@ export default function Spot(props: Props) {
   // figure out how to send down information to the piece level. perhaps create spot level state and send it down?
 
   useEffect(() => {
-    const occupiedCheck = (possibleMove: any) => {
-      return state.isOccupied && JSON.stringify(possibleMove).includes(JSON.stringify(getTileXY(state.tileInfo)));
+    // console.log(occupiedChecker);
+    const isSquareOccupied = () => {
+      return state.isOccupied && JSON.stringify(occupiedChecker).includes(JSON.stringify(getTileXY(state.tileInfo)));
     };
-    occupiedCheck(occupiedChecker);
-  }, [state.tileInfo, state.isOccupied]);
+    if (isSquareOccupied()) {
+      console.log('tile', occupiedChecker);
+    }
+  }, [state.tileInfo, state.isOccupied, occupiedChecker]);
 
   return (
     <div
@@ -325,6 +328,7 @@ export default function Spot(props: Props) {
           setAvailableMoves={setAvailableMoves}
           setTileFocus={setTileFocus}
           setOccupiedChecker={setOccupiedChecker}
+          occupiedChecker={occupiedChecker}
         />
       )}
       {state.activePiece.pieceType === 'bishop' && state.activePiece.color === 'white' && (
@@ -336,6 +340,7 @@ export default function Spot(props: Props) {
           setAvailableMoves={setAvailableMoves}
           setTileFocus={setTileFocus}
           setOccupiedChecker={setOccupiedChecker}
+          occupiedChecker={occupiedChecker}
         />
       )}
       {/* Bishop END */}

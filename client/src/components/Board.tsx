@@ -94,6 +94,10 @@ export default function Board() {
   const setOccupiedChecker = (occupiedChecker: any) => {
     setState((prev) => ({ ...prev, occupiedChecker }));
   };
+  //  promise version:
+  // const setOccupiedChecker = (occupiedChecker: any) => {
+  //   new Promise((resolve) => setState((prev) => ({ ...prev, occupiedChecker })));
+  // };
 
   const setLegalMoves = (legalMoves: any) => {
     setState((prev) => ({ ...prev, legalMoves: [...prev.legalMoves, ...legalMoves] }));

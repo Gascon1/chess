@@ -21,6 +21,10 @@ interface Props {
   setAvailableMoves: Function;
   setTileFocus: Function;
   setOccupiedChecker: Function;
+  occupiedChecker: {
+    x: number;
+    y: number;
+  }[];
 }
 
 export default function Bishop(props: Props) {
@@ -32,6 +36,7 @@ export default function Bishop(props: Props) {
     setAvailableMoves,
     setTileFocus,
     setOccupiedChecker,
+    occupiedChecker,
   } = props;
 
   const [state, setState] = useState({
@@ -67,8 +72,16 @@ export default function Bishop(props: Props) {
       if (i === currentPosition.x) {
         continue;
       }
-      setOccupiedChecker(possibleMove1);
-      if (!isOccupied) {
+
+      setOccupiedChecker(occupiedChecker);
+      // console.log(occupiedChecker);
+      // promise version:
+      // setOccupiedChecker(possibleMove1).then(() => {
+      //   console.log(occupiedChecker);
+      // });
+      if (isOccupied) {
+        console.log('isOccupied', isOccupied);
+        console.log(possibleMove1);
       }
 
       diagonal.push(possibleMove1);

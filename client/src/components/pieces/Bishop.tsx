@@ -24,7 +24,16 @@ interface Props {
 }
 
 export default function Bishop(props: Props) {
-  const { tileInfo, white, isOccupied, setStartPosition, setAvailableMoves, setTileFocus, setOccupiedChecker } = props;
+  const {
+    tileInfo,
+    white,
+    isOccupied,
+    setStartPosition,
+    setAvailableMoves,
+    setTileFocus,
+    setOccupiedChecker,
+  } = props;
+
   const [state, setState] = useState({
     hasUsedFirstMoved: false,
     pieceType: 'bishop',
@@ -79,7 +88,10 @@ export default function Bishop(props: Props) {
     return diagonal;
   };
 
-  const onMoveStart = (currentPosition: Position, e: React.MouseEvent<SVGSVGElement, MouseEvent>) => {
+  const onMoveStart = (
+    currentPosition: Position,
+    e: React.MouseEvent<SVGSVGElement, MouseEvent>,
+  ) => {
     e.stopPropagation();
     let availMoves = availableMoves(currentPosition);
     setAvailableMoves(availMoves);

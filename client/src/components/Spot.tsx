@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useLayoutEffect, useContext, useMemo } from 'react';
+import React, { useState, useEffect, useLayoutEffect, useContext } from 'react';
 import Pawn from 'components/pieces/Pawn';
 import Rook from 'components/pieces/Rook';
 import Knight from 'components/pieces/Knight';
@@ -6,7 +6,7 @@ import Bishop from 'components/pieces/Bishop';
 import Queen from 'components/pieces/Queen';
 import King from 'components/pieces/King';
 import { SpotsContext } from 'context/SpotsContext';
-
+import { useGenerateBoard } from 'hooks/useGenerateBoard';
 interface Position {
   tile: string;
   x: number;
@@ -55,7 +55,7 @@ const brown = '#8a604a';
 const beige = '#e5d3ba';
 
 export default function Spot(props: Props) {
-  const { setSpotsContext, initSpotsContext, getSpotDetails } = useContext(SpotsContext);
+  const { setSpotsContext, initSpotsContext } = useContext(SpotsContext);
 
   const {
     tile,
@@ -65,7 +65,6 @@ export default function Spot(props: Props) {
     setDestination,
     setStartPosition,
     startPosition,
-    tileFocus,
     setTileFocus,
     availableMoves,
     setAvailableMoves,
@@ -101,6 +100,12 @@ export default function Spot(props: Props) {
       labelColor = brown;
   }
 
+  const initBoard = useGenerateBoard(tile, x, y);
+
+  useEffect(() => {
+    setState((prev) => ({...prev, ...initBoard}))
+  }, [initBoard])
+
   useLayoutEffect(() => {
     if (state.tileInfo.tile === killPosition) {
       setState((prev) => ({
@@ -111,104 +116,6 @@ export default function Spot(props: Props) {
       }));
     }
   }, [killPosition, state.tileInfo.tile]);
-
-  useEffect(() => {
-    setState((prev) => ({ ...prev, tileInfo: { tile, x, y } }));
-    if (tile.includes('2')) {
-      setState((prev) => ({
-        ...prev,
-        activePiece: { pieceType: 'pawn', color: 'white' },
-        isOccupied: true,
-      }));
-    } else if (tile.includes('7')) {
-      setState((prev) => ({
-        ...prev,
-        activePiece: { pieceType: 'pawn', color: 'black' },
-        isOccupied: true,
-      }));
-    }
-    // Rook START
-    else if (tile.includes('a8') || tile.includes('h8')) {
-      setState((prev) => ({
-        ...prev,
-        activePiece: { pieceType: 'rook', color: 'black' },
-        isOccupied: true,
-      }));
-    } else if (tile.includes('a1') || tile.includes('h1')) {
-      setState((prev) => ({
-        ...prev,
-        activePiece: { pieceType: 'rook', color: 'white' },
-        isOccupied: true,
-      }));
-    }
-    // Rook END
-
-    // Knight START
-    else if (tile.includes('b8') || tile.includes('g8')) {
-      setState((prev) => ({
-        ...prev,
-        activePiece: { pieceType: 'knight', color: 'black' },
-        isOccupied: true,
-      }));
-    } else if (tile.includes('b1') || tile.includes('g1')) {
-      setState((prev) => ({
-        ...prev,
-        activePiece: { pieceType: 'knight', color: 'white' },
-        isOccupied: true,
-      }));
-    }
-    // Knight END
-
-    // Bishop START
-    else if (tile.includes('c8') || tile.includes('f8')) {
-      setState((prev) => ({
-        ...prev,
-        activePiece: { pieceType: 'bishop', color: 'black' },
-        isOccupied: true,
-      }));
-    } else if (tile.includes('c1') || tile.includes('f1')) {
-      setState((prev) => ({
-        ...prev,
-        activePiece: { pieceType: 'bishop', color: 'white' },
-        isOccupied: true,
-      }));
-    }
-    // Bishop END
-
-    // Queen START
-    else if (tile.includes('d8')) {
-      setState((prev) => ({
-        ...prev,
-        activePiece: { pieceType: 'queen', color: 'black' },
-        isOccupied: true,
-      }));
-    } else if (tile.includes('d1')) {
-      setState((prev) => ({
-        ...prev,
-        activePiece: { pieceType: 'queen', color: 'white' },
-        isOccupied: true,
-      }));
-    }
-    // Queen END
-
-    // King START
-    else if (tile.includes('e8')) {
-      setState((prev) => ({
-        ...prev,
-        activePiece: { pieceType: 'king', color: 'black' },
-        isOccupied: true,
-      }));
-    } else if (tile.includes('e1')) {
-      setState((prev) => ({
-        ...prev,
-        activePiece: { pieceType: 'king', color: 'white' },
-        isOccupied: true,
-      }));
-    }
-
-    // Very important for the global state of the spots
-    setState((prev) => ({ ...prev, hasUpdated: true }));
-  }, [tile, x, y]);
 
   useEffect(() => {
     let unoccupiedMoves = [];
@@ -239,11 +146,11 @@ export default function Spot(props: Props) {
   ]);
 
   useEffect(() => {
-      if (JSON.stringify(legalMoves).includes(JSON.stringify(getTileXY(state.tileInfo)))) {
-        setState((prev) => ({ ...prev, isCircleVisible: true }));
-      } else {
-        setState((prev) => ({ ...prev, isCircleVisible: false }));
-      }
+    if (JSON.stringify(legalMoves).includes(JSON.stringify(getTileXY(state.tileInfo)))) {
+      setState((prev) => ({ ...prev, isCircleVisible: true }));
+    } else {
+      setState((prev) => ({ ...prev, isCircleVisible: false }));
+    }
   }, [legalMoves, state.tileInfo]);
 
   const getTileXY = (tileInfo: Position) => {
@@ -252,27 +159,6 @@ export default function Spot(props: Props) {
       y: tileInfo.y,
     };
   };
-
-  // create state that updates for each possible move and verify check if it is it occupied, if it is then we put it into available moves
-
-  // createuseEffect, check if every square if its occupied and matches the possibleMove, if it returns true ,
-  // send it back down to piece file and stop the
-  // recursion.
-
-  // figure out how to send down information to the piece level. perhaps create spot level state and send it down?
-
-  useEffect(() => {
-    // console.log(occupiedChecker);
-    const isSquareOccupied = () => {
-      return (
-        state.isOccupied &&
-        JSON.stringify(occupiedChecker).includes(JSON.stringify(getTileXY(state.tileInfo)))
-      );
-    };
-    if (isSquareOccupied()) {
-      console.log('tile', occupiedChecker);
-    }
-  }, [state.tileInfo, state.isOccupied, occupiedChecker]);
 
   useEffect(() => {
     if (state.hasUpdated) {

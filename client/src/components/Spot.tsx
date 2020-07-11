@@ -1,11 +1,11 @@
-import React, { useState, useEffect, useLayoutEffect } from 'react';
+import React, { useState, useEffect, useLayoutEffect, useContext, useMemo } from 'react';
 import Pawn from 'components/pieces/Pawn';
 import Rook from 'components/pieces/Rook';
 import Knight from 'components/pieces/Knight';
 import Bishop from 'components/pieces/Bishop';
 import Queen from 'components/pieces/Queen';
 import King from 'components/pieces/King';
-// import { isCompositeComponent } from 'react-dom/test-utils';
+import { SpotsContext } from 'context/SpotsContext';
 
 interface Position {
   tile: string;
@@ -55,6 +55,8 @@ const brown = '#8a604a';
 const beige = '#e5d3ba';
 
 export default function Spot(props: Props) {
+  const { setSpotsContext, initSpotsContext } = useContext(SpotsContext);
+
   const {
     tile,
     x,
@@ -86,8 +88,8 @@ export default function Spot(props: Props) {
       y: 0,
     },
     isOccupied: false,
-    destination: destination,
     isCircleVisible: false,
+    hasUpdated: false,
   });
 
   let labelColor = '';
@@ -113,48 +115,98 @@ export default function Spot(props: Props) {
   useEffect(() => {
     setState((prev) => ({ ...prev, tileInfo: { tile, x, y } }));
     if (tile.includes('2')) {
-      setState((prev) => ({ ...prev, activePiece: { pieceType: 'pawn', color: 'white' }, isOccupied: true }));
+      setState((prev) => ({
+        ...prev,
+        activePiece: { pieceType: 'pawn', color: 'white' },
+        isOccupied: true,
+      }));
     } else if (tile.includes('7')) {
-      setState((prev) => ({ ...prev, activePiece: { pieceType: 'pawn', color: 'black' }, isOccupied: true }));
+      setState((prev) => ({
+        ...prev,
+        activePiece: { pieceType: 'pawn', color: 'black' },
+        isOccupied: true,
+      }));
     }
     // Rook START
     else if (tile.includes('a8') || tile.includes('h8')) {
-      setState((prev) => ({ ...prev, activePiece: { pieceType: 'rook', color: 'black' }, isOccupied: true }));
+      setState((prev) => ({
+        ...prev,
+        activePiece: { pieceType: 'rook', color: 'black' },
+        isOccupied: true,
+      }));
     } else if (tile.includes('a1') || tile.includes('h1')) {
-      setState((prev) => ({ ...prev, activePiece: { pieceType: 'rook', color: 'white' }, isOccupied: true }));
+      setState((prev) => ({
+        ...prev,
+        activePiece: { pieceType: 'rook', color: 'white' },
+        isOccupied: true,
+      }));
     }
     // Rook END
 
     // Knight START
     else if (tile.includes('b8') || tile.includes('g8')) {
-      setState((prev) => ({ ...prev, activePiece: { pieceType: 'knight', color: 'black' }, isOccupied: true }));
+      setState((prev) => ({
+        ...prev,
+        activePiece: { pieceType: 'knight', color: 'black' },
+        isOccupied: true,
+      }));
     } else if (tile.includes('b1') || tile.includes('g1')) {
-      setState((prev) => ({ ...prev, activePiece: { pieceType: 'knight', color: 'white' }, isOccupied: true }));
+      setState((prev) => ({
+        ...prev,
+        activePiece: { pieceType: 'knight', color: 'white' },
+        isOccupied: true,
+      }));
     }
     // Knight END
 
     // Bishop START
     else if (tile.includes('c8') || tile.includes('f8')) {
-      setState((prev) => ({ ...prev, activePiece: { pieceType: 'bishop', color: 'black' }, isOccupied: true }));
+      setState((prev) => ({
+        ...prev,
+        activePiece: { pieceType: 'bishop', color: 'black' },
+        isOccupied: true,
+      }));
     } else if (tile.includes('c1') || tile.includes('f1')) {
-      setState((prev) => ({ ...prev, activePiece: { pieceType: 'bishop', color: 'white' }, isOccupied: true }));
+      setState((prev) => ({
+        ...prev,
+        activePiece: { pieceType: 'bishop', color: 'white' },
+        isOccupied: true,
+      }));
     }
     // Bishop END
 
     // Queen START
     else if (tile.includes('d8')) {
-      setState((prev) => ({ ...prev, activePiece: { pieceType: 'queen', color: 'black' }, isOccupied: true }));
+      setState((prev) => ({
+        ...prev,
+        activePiece: { pieceType: 'queen', color: 'black' },
+        isOccupied: true,
+      }));
     } else if (tile.includes('d1')) {
-      setState((prev) => ({ ...prev, activePiece: { pieceType: 'queen', color: 'white' }, isOccupied: true }));
+      setState((prev) => ({
+        ...prev,
+        activePiece: { pieceType: 'queen', color: 'white' },
+        isOccupied: true,
+      }));
     }
     // Queen END
 
     // King START
     else if (tile.includes('e8')) {
-      setState((prev) => ({ ...prev, activePiece: { pieceType: 'king', color: 'black' }, isOccupied: true }));
+      setState((prev) => ({
+        ...prev,
+        activePiece: { pieceType: 'king', color: 'black' },
+        isOccupied: true,
+      }));
     } else if (tile.includes('e1')) {
-      setState((prev) => ({ ...prev, activePiece: { pieceType: 'king', color: 'white' }, isOccupied: true }));
+      setState((prev) => ({
+        ...prev,
+        activePiece: { pieceType: 'king', color: 'white' },
+        isOccupied: true,
+      }));
     }
+
+    setState((prev) => ({ ...prev, hasUpdated: true }));
   }, [tile, x, y]);
 
   useEffect(() => {
@@ -177,12 +229,19 @@ export default function Spot(props: Props) {
     if (unoccupiedMoves.length) {
       setLegalMoves(unoccupiedMoves);
     }
-  }, [availableMoves, state.isOccupied, state.tileInfo, state.activePiece, startPosition.activePiece.color]);
+  }, [
+    availableMoves,
+    state.isOccupied,
+    state.tileInfo,
+    state.activePiece,
+    startPosition.activePiece.color,
+  ]);
 
   useEffect(() => {
     const displayCircle = () => {
       if (JSON.stringify(legalMoves).includes(JSON.stringify(getTileXY(state.tileInfo)))) {
-        setState((prev) => ({ ...prev, isCircleVisible: true }));
+        // green circle currently disabled because of bug with useSpots
+        setState((prev) => ({ ...prev, isCircleVisible: false }));
       } else {
         setState((prev) => ({ ...prev, isCircleVisible: false }));
       }
@@ -208,12 +267,25 @@ export default function Spot(props: Props) {
   useEffect(() => {
     // console.log(occupiedChecker);
     const isSquareOccupied = () => {
-      return state.isOccupied && JSON.stringify(occupiedChecker).includes(JSON.stringify(getTileXY(state.tileInfo)));
+      return (
+        state.isOccupied &&
+        JSON.stringify(occupiedChecker).includes(JSON.stringify(getTileXY(state.tileInfo)))
+      );
     };
     if (isSquareOccupied()) {
       console.log('tile', occupiedChecker);
     }
   }, [state.tileInfo, state.isOccupied, occupiedChecker]);
+
+  useEffect(() => {
+    if (state.hasUpdated) {
+      initSpotsContext(state);
+    }
+  }, [state.hasUpdated, initSpotsContext]);
+
+  useEffect(() => {
+    setSpotsContext(state);
+  }, [setSpotsContext, state]);
 
   return (
     <div
@@ -222,7 +294,11 @@ export default function Spot(props: Props) {
         if (startPosition.tile) {
           setDestination(state.tileInfo);
           if (!destination.isFriendly) {
-            for (let availableCounter = 0; availableCounter < availableMoves.length; availableCounter++) {
+            for (
+              let availableCounter = 0;
+              availableCounter < availableMoves.length;
+              availableCounter++
+            ) {
               if (
                 state.activePiece.color !== startPosition.activePiece.color &&
                 state.tileInfo.x === availableMoves[availableCounter].x &&

@@ -6,15 +6,15 @@ export const useSpots = () => {
     spotsContainer: [
       {
         activePiece: {
-          pieceType: '',
-          color: '',
+          pieceType: 'rook',
+          color: 'black',
         },
         tileInfo: {
-          tile: '',
-          x: 0,
-          y: 0,
+          tile: 'a8',
+          x: 1,
+          y: 8,
         },
-        isOccupied: false,
+        isOccupied: true,
         isCircleVisible: false,
       },
     ],
@@ -35,6 +35,8 @@ export const useSpots = () => {
 
             // at the index where we've found that something has changed,
             // apply said change and set the state with this change.
+            // Note: this shallow copy contains the WHOLE state, we are 
+            // only changing the state at the specified index.
             stateShallowCopy[index] = newSpot;
             setState(() => ({ spotsContainer: stateShallowCopy }));
           }

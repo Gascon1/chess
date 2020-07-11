@@ -55,7 +55,7 @@ const brown = '#8a604a';
 const beige = '#e5d3ba';
 
 export default function Spot(props: Props) {
-  const { setSpotsContext, initSpotsContext } = useContext(SpotsContext);
+  const { setSpotsContext, initSpotsContext, getSpotDetails } = useContext(SpotsContext);
 
   const {
     tile,

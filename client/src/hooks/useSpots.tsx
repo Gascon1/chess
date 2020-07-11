@@ -35,7 +35,7 @@ export const useSpots = () => {
 
             // at the index where we've found that something has changed,
             // apply said change and set the state with this change.
-            // Note: this shallow copy contains the WHOLE state, we are 
+            // Note: this shallow copy contains the WHOLE state, we are
             // only changing the state at the specified index.
             stateShallowCopy[index] = newSpot;
             setState(() => ({ spotsContainer: stateShallowCopy }));
@@ -50,11 +50,20 @@ export const useSpots = () => {
     setState((prev) => ({ ...prev, spotsContainer: [...prev.spotsContainer, newSpot] }));
   }, []);
 
+  const getSpotDetails = (x: number, y: number) => {
+    for (const spot of state.spotsContainer) {
+      if (spot.tileInfo.x === x && spot.tileInfo.y === y) {
+        return spot;
+      }
+    }
+  };
+
   const spots = state.spotsContainer;
 
   return {
     spots,
     setSpotsContext,
     initSpotsContext,
+    getSpotDetails,
   };
 };

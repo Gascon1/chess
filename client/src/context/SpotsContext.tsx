@@ -17,6 +17,7 @@ export interface SpotsContext {
 
   setSpotsContext: (spots: any) => void;
   initSpotsContext: (spots: any) => void;
+  getSpotDetails: (x: number, y: number) => SpotsContext | undefined;
 }
 
 export const spotsDefaultValue = {
@@ -38,6 +39,7 @@ export const spotsDefaultValue = {
   // setSpotsContext: ({ pieceType, color, tile, x, y, isOccupied, isCircleVisible }: any) => {},
   setSpotsContext: (spots: any) => {},
   initSpotsContext: (spots: any) => {},
+  getSpotDetails: (x: number, y: number) => {},
 };
 
 export const SpotsContext = createContext(spotsDefaultValue);

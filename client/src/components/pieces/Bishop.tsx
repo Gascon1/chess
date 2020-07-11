@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { ReactComponent as BishopImage } from 'images/bishop.svg';
+import { SpotsContext } from 'context/SpotsContext';
 
 // export default function Bishop() {
 //   return <BishopImage className="piece" />;
@@ -28,6 +29,7 @@ interface Props {
 }
 
 export default function Bishop(props: Props) {
+  const { getSpotDetails } = useContext(SpotsContext);
   const {
     tileInfo,
     white,
@@ -115,7 +117,11 @@ export default function Bishop(props: Props) {
   return (
     <BishopImage
       className={`piece ${props.white ? 'white' : 'black'}`}
-      onClick={(e) => onMoveStart(state.currentPosition, e)}
+      onClick={(e) => {
+        onMoveStart(state.currentPosition, e);
+        // Example of how to use getSpotDetails
+        console.log(getSpotDetails(state.currentPosition.x, state.currentPosition.y));
+      }}
     />
   );
 }

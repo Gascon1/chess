@@ -206,6 +206,7 @@ export default function Spot(props: Props) {
       }));
     }
 
+    // Very important for the global state of the spots
     setState((prev) => ({ ...prev, hasUpdated: true }));
   }, [tile, x, y]);
 
@@ -238,16 +239,12 @@ export default function Spot(props: Props) {
   ]);
 
   useEffect(() => {
-    const displayCircle = () => {
       if (JSON.stringify(legalMoves).includes(JSON.stringify(getTileXY(state.tileInfo)))) {
-        // green circle currently disabled because of bug with useSpots
-        setState((prev) => ({ ...prev, isCircleVisible: false }));
+        setState((prev) => ({ ...prev, isCircleVisible: true }));
       } else {
         setState((prev) => ({ ...prev, isCircleVisible: false }));
       }
-    };
-    displayCircle();
-  }, [legalMoves, state.tileInfo, state.isCircleVisible]);
+  }, [legalMoves, state.tileInfo]);
 
   const getTileXY = (tileInfo: Position) => {
     return {

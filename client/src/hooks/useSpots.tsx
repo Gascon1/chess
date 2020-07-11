@@ -33,8 +33,8 @@ export const useSpots = () => {
             // to set the state after a modification
             let stateShallowCopy = state.spotsContainer.slice();
 
-            // at the index that we've found that something has changed,
-            // applied said change and set the state with this change.
+            // at the index where we've found that something has changed,
+            // apply said change and set the state with this change.
             stateShallowCopy[index] = newSpot;
             setState(() => ({ spotsContainer: stateShallowCopy }));
           }

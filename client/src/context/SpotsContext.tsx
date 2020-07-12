@@ -53,7 +53,7 @@ export const spotsDefaultValue = {
   ],
   setSpotsContext: (spots: any) => {},
   initSpotsContext: (spots: any) => {},
-  getSpotDetails: (x: number, y: number): Spots => ({
+  getSpotDetails: (x: number, y: number): Spots | undefined => ({
     activePiece: { pieceType: '', color: '' },
     tileInfo: { tile: '', x: 0, y: 0 },
     isOccupied: false,

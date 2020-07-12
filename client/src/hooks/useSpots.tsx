@@ -50,25 +50,25 @@ export const useSpots = () => {
     setState((prev) => ({ ...prev, spotsContainer: [...prev.spotsContainer, newSpot] }));
   }, []);
 
-  const getSpotDetails = (x: number, y: number): Spots => {
+  const getSpotDetails = (x: number, y: number): Spots | undefined => {
     for (const spot of state.spotsContainer) {
       if (spot.tileInfo.x === x && spot.tileInfo.y === y) {
         return spot;
       }
     }
-    return {
-      activePiece: {
-        pieceType: '',
-        color: '',
-      },
-      tileInfo: {
-        tile: '',
-        x: 0,
-        y: 0,
-      },
-      isOccupied: false,
-      isCircleVisible: false,
-    };
+    // return {
+    //   activePiece: {
+    //     pieceType: '',
+    //     color: '',
+    //   },
+    //   tileInfo: {
+    //     tile: '',
+    //     x: 0,
+    //     y: 0,
+    //   },
+    //   isOccupied: false,
+    //   isCircleVisible: false,
+    // };
   };
 
   const spots = state.spotsContainer;

@@ -55,7 +55,7 @@ export default function Bishop(props: Props) {
     let d: number = currentPosition.y;
     let e: number = currentPosition.y;
 
-    const currentSpot: Spots = getSpotDetails(currentPosition.x, currentPosition.y);
+    const currentSpot: Spots | undefined = getSpotDetails(currentPosition.x, currentPosition.y);
 
     for (i; i < 9; i++) {
       let downRight = { x: i, y: b-- };
@@ -64,10 +64,10 @@ export default function Bishop(props: Props) {
         continue;
       }
 
-      let downRightSquare: Spots = getSpotDetails(downRight.x, downRight.y);
+      let downRightSquare: Spots | undefined = getSpotDetails(downRight.x, downRight.y);
 
-      if (downRightSquare.isOccupied) {
-        if (currentSpot.activePiece.color !== downRightSquare.activePiece.color) {
+      if (downRightSquare?.isOccupied) {
+        if (currentSpot?.activePiece.color !== downRightSquare.activePiece.color) {
           diagonal.push(downRight);
           break;
         } else {
@@ -83,9 +83,9 @@ export default function Bishop(props: Props) {
       if (j === currentPosition.x) {
         continue;
       }
-      let upRightSquare: Spots = getSpotDetails(upRight.x, upRight.y);
-      if (upRightSquare.isOccupied) {
-        if (currentSpot.activePiece.color !== upRightSquare.activePiece.color) {
+      let upRightSquare: Spots | undefined = getSpotDetails(upRight.x, upRight.y);
+      if (upRightSquare?.isOccupied) {
+        if (currentSpot?.activePiece.color !== upRightSquare.activePiece.color) {
           diagonal.push(upRight);
           break;
         } else {
@@ -101,9 +101,9 @@ export default function Bishop(props: Props) {
       if (k === currentPosition.x) {
         continue;
       }
-      let downLeftSquare: Spots = getSpotDetails(downLeft.x, downLeft.y);
-      if (downLeftSquare.isOccupied) {
-        if (currentSpot.activePiece.color !== downLeftSquare.activePiece.color) {
+      let downLeftSquare: Spots | undefined = getSpotDetails(downLeft.x, downLeft.y);
+      if (downLeftSquare?.isOccupied) {
+        if (currentSpot?.activePiece.color !== downLeftSquare.activePiece.color) {
           diagonal.push(downLeft);
           break;
         } else {
@@ -119,9 +119,9 @@ export default function Bishop(props: Props) {
       if (l === currentPosition.x) {
         continue;
       }
-      let upLeftSquare: Spots = getSpotDetails(upLeft.x, upLeft.y);
-      if (upLeftSquare.isOccupied) {
-        if (currentSpot.activePiece.color !== upLeftSquare.activePiece.color) {
+      let upLeftSquare: Spots | undefined = getSpotDetails(upLeft.x, upLeft.y);
+      if (upLeftSquare?.isOccupied) {
+        if (currentSpot?.activePiece.color !== upLeftSquare.activePiece.color) {
           diagonal.push(upLeft);
           break;
         } else {

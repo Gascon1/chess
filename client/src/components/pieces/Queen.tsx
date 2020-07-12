@@ -2,10 +2,6 @@ import React, { useState, useEffect, useContext } from 'react';
 import { ReactComponent as QueenImage } from 'images/queen.svg';
 import { SpotsContext, Spots } from 'context/SpotsContext';
 
-// export default function Queen() {
-//   return <QueenImage className="piece" />;
-// }
-
 interface Position {
   tile: string;
   x: number;
@@ -17,7 +13,6 @@ interface Position {
 interface Props {
   white: boolean;
   tileInfo: Position;
-  //isOccupied: boolean;
   setStartPosition: Function;
   setAvailableMoves: Function;
   setTileFocus: Function;
@@ -58,7 +53,7 @@ export default function Queen(props: Props) {
     let f: number = currentPosition.y;
     let g: number = currentPosition.y;
 
-    const currentSpot: Spots = getSpotDetails(currentPosition.x, currentPosition.y);
+    const currentSpot: Spots | undefined = getSpotDetails(currentPosition.x, currentPosition.y);
 
     for (i; i < 9; i++) {
       let downRight = { x: i, y: b-- };
@@ -67,10 +62,10 @@ export default function Queen(props: Props) {
         continue;
       }
 
-      let downRightSquare: Spots = getSpotDetails(downRight.x, downRight.y);
+      let downRightSquare: Spots | undefined = getSpotDetails(downRight.x, downRight.y);
 
-      if (downRightSquare.isOccupied) {
-        if (currentSpot.activePiece.color !== downRightSquare.activePiece.color) {
+      if (downRightSquare?.isOccupied) {
+        if (currentSpot?.activePiece.color !== downRightSquare.activePiece.color) {
           diagonal.push(downRight);
           break;
         } else {
@@ -86,9 +81,9 @@ export default function Queen(props: Props) {
       if (j === currentPosition.x) {
         continue;
       }
-      let upRightSquare: Spots = getSpotDetails(upRight.x, upRight.y);
-      if (upRightSquare.isOccupied) {
-        if (currentSpot.activePiece.color !== upRightSquare.activePiece.color) {
+      let upRightSquare: Spots | undefined = getSpotDetails(upRight.x, upRight.y);
+      if (upRightSquare?.isOccupied) {
+        if (currentSpot?.activePiece.color !== upRightSquare.activePiece.color) {
           diagonal.push(upRight);
           break;
         } else {
@@ -104,9 +99,9 @@ export default function Queen(props: Props) {
       if (k === currentPosition.x) {
         continue;
       }
-      let downLeftSquare: Spots = getSpotDetails(downLeft.x, downLeft.y);
-      if (downLeftSquare.isOccupied) {
-        if (currentSpot.activePiece.color !== downLeftSquare.activePiece.color) {
+      let downLeftSquare: Spots | undefined = getSpotDetails(downLeft.x, downLeft.y);
+      if (downLeftSquare?.isOccupied) {
+        if (currentSpot?.activePiece.color !== downLeftSquare.activePiece.color) {
           diagonal.push(downLeft);
           break;
         } else {
@@ -122,9 +117,9 @@ export default function Queen(props: Props) {
       if (l === currentPosition.x) {
         continue;
       }
-      let upLeftSquare: Spots = getSpotDetails(upLeft.x, upLeft.y);
-      if (upLeftSquare.isOccupied) {
-        if (currentSpot.activePiece.color !== upLeftSquare.activePiece.color) {
+      let upLeftSquare: Spots | undefined = getSpotDetails(upLeft.x, upLeft.y);
+      if (upLeftSquare?.isOccupied) {
+        if (currentSpot?.activePiece.color !== upLeftSquare.activePiece.color) {
           diagonal.push(upLeft);
           break;
         } else {
@@ -144,10 +139,10 @@ export default function Queen(props: Props) {
         continue;
       }
 
-      let rightSquare: Spots = getSpotDetails(rightRow.x, rightRow.y);
+      let rightSquare: Spots | undefined = getSpotDetails(rightRow.x, rightRow.y);
 
-      if (rightSquare.isOccupied) {
-        if (currentSpot.activePiece.color !== rightSquare.activePiece.color) {
+      if (rightSquare?.isOccupied) {
+        if (currentSpot?.activePiece.color !== rightSquare.activePiece.color) {
           diagonal.push(rightRow);
           break;
         } else {
@@ -164,10 +159,10 @@ export default function Queen(props: Props) {
         continue;
       }
 
-      let leftSquare: Spots = getSpotDetails(leftRow.x, leftRow.y);
+      let leftSquare: Spots | undefined = getSpotDetails(leftRow.x, leftRow.y);
 
-      if (leftSquare.isOccupied) {
-        if (currentSpot.activePiece.color !== leftSquare.activePiece.color) {
+      if (leftSquare?.isOccupied) {
+        if (currentSpot?.activePiece.color !== leftSquare.activePiece.color) {
           diagonal.push(leftRow);
           break;
         } else {
@@ -184,10 +179,10 @@ export default function Queen(props: Props) {
         continue;
       }
 
-      let upSquare: Spots = getSpotDetails(upRow.x, upRow.y);
+      let upSquare: Spots | undefined = getSpotDetails(upRow.x, upRow.y);
 
-      if (upSquare.isOccupied) {
-        if (currentSpot.activePiece.color !== upSquare.activePiece.color) {
+      if (upSquare?.isOccupied) {
+        if (currentSpot?.activePiece.color !== upSquare.activePiece.color) {
           diagonal.push(upRow);
           break;
         } else {
@@ -204,10 +199,10 @@ export default function Queen(props: Props) {
         continue;
       }
 
-      let downSquare: Spots = getSpotDetails(downRow.x, downRow.y);
+      let downSquare: Spots | undefined = getSpotDetails(downRow.x, downRow.y);
 
-      if (downSquare.isOccupied) {
-        if (currentSpot.activePiece.color !== downSquare.activePiece.color) {
+      if (downSquare?.isOccupied) {
+        if (currentSpot?.activePiece.color !== downSquare.activePiece.color) {
           diagonal.push(downRow);
           break;
         } else {

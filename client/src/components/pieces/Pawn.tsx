@@ -1,6 +1,6 @@
-import React, { useState, useEffect, SyntheticEvent } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { ReactComponent as PawnImage } from 'images/pawn.svg';
-// import Spot from "../Spot";
+import { SpotsContext } from 'context/SpotsContext';
 
 interface Position {
   tile: string;
@@ -13,14 +13,21 @@ interface Position {
 interface Props {
   white: boolean;
   tileInfo: Position;
-  isOccupied: boolean;
+  //isOccupied: boolean;
   setStartPosition: Function;
   setAvailableMoves: Function;
   setTileFocus: Function;
 }
 
 export default function Pawn(props: Props) {
-  const { tileInfo, white, isOccupied, setStartPosition, setAvailableMoves, setTileFocus } = props;
+  const { getSpotDetails } = useContext(SpotsContext);
+  const {
+    tileInfo,
+    white,
+    /*isOccupied,*/ setStartPosition,
+    setAvailableMoves,
+    setTileFocus,
+  } = props;
   const [state, setState] = useState({
     hasUsedFirstMoved: false,
     pieceType: 'pawn',
@@ -110,7 +117,10 @@ export default function Pawn(props: Props) {
     }
   };
 
-  const onMoveStart = (currentPosition: Position, e: React.MouseEvent<SVGSVGElement, MouseEvent>) => {
+  const onMoveStart = (
+    currentPosition: Position,
+    e: React.MouseEvent<SVGSVGElement, MouseEvent>,
+  ) => {
     e.stopPropagation();
     let availMoves = availableMoves(currentPosition);
     setAvailableMoves(availMoves);
@@ -118,12 +128,14 @@ export default function Pawn(props: Props) {
     setTileFocus(currentPosition.tile);
   };
 
-  return JSON.stringify(tileInfo) === JSON.stringify(state.currentPosition) ? (
+  return (
     <PawnImage
       className={`piece ${props.white ? 'white' : 'black'}`}
-      onClick={(e) => onMoveStart(state.currentPosition, e)}
+      onClick={(e) => {
+        onMoveStart(state.currentPosition, e);
+        // Example of how to use getSpotDetails
+        console.log(getSpotDetails(state.currentPosition.x, state.currentPosition.y));
+      }}
     />
-  ) : (
-    <div></div>
   );
 }

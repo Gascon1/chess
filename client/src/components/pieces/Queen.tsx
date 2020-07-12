@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { ReactComponent as QueenImage } from 'images/queen.svg';
+import { SpotsContext } from 'context/SpotsContext';
 
 // export default function Queen() {
 //   return <QueenImage className="piece" />;
@@ -16,13 +17,14 @@ interface Position {
 interface Props {
   white: boolean;
   tileInfo: Position;
-  isOccupied: boolean;
+  //isOccupied: boolean;
   setStartPosition: Function;
   setAvailableMoves: Function;
   setTileFocus: Function;
 }
 
 export default function Queen(props: Props) {
+  const { getSpotDetails } = useContext(SpotsContext);
   const { tileInfo, white, setStartPosition, setAvailableMoves, setTileFocus } = props;
   const [state, setState] = useState({
     hasUsedFirstMoved: false,
@@ -103,7 +105,11 @@ export default function Queen(props: Props) {
   return (
     <QueenImage
       className={`piece ${props.white ? 'white' : 'black'}`}
-      onClick={(e) => onMoveStart(state.currentPosition, e)}
+      onClick={(e) => {
+        onMoveStart(state.currentPosition, e);
+        // Example of how to use getSpotDetails
+        console.log(getSpotDetails(state.currentPosition.x, state.currentPosition.y));
+      }}
     />
   );
 }

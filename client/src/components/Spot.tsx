@@ -1,11 +1,12 @@
-import React, { useState, useEffect, useLayoutEffect } from 'react';
+import React, { useState, useEffect, useLayoutEffect, useContext } from 'react';
 import Pawn from 'components/pieces/Pawn';
 import Rook from 'components/pieces/Rook';
 import Knight from 'components/pieces/Knight';
 import Bishop from 'components/pieces/Bishop';
 import Queen from 'components/pieces/Queen';
 import King from 'components/pieces/King';
-
+import { SpotsContext } from 'context/SpotsContext';
+import { useGenerateBoard } from 'hooks/useGenerateBoard';
 interface Position {
   tile: string;
   x: number;
@@ -39,11 +40,23 @@ interface Props {
   setAvailableMoves: Function;
   killPosition: string;
   setKillPosition: Function;
+  legalMoves: {
+    x: number;
+    y: number;
+  }[];
+  setLegalMoves: Function;
+  occupiedChecker: {
+    x: number;
+    y: number;
+  }[];
+  setOccupiedChecker: Function;
 }
 const brown = '#8a604a';
 const beige = '#e5d3ba';
 
 export default function Spot(props: Props) {
+  const { setSpotsContext, initSpotsContext } = useContext(SpotsContext);
+
   const {
     tile,
     x,
@@ -52,12 +65,15 @@ export default function Spot(props: Props) {
     setDestination,
     setStartPosition,
     startPosition,
-    tileFocus,
     setTileFocus,
     availableMoves,
     setAvailableMoves,
     killPosition,
     setKillPosition,
+    legalMoves,
+    setLegalMoves,
+    occupiedChecker,
+    setOccupiedChecker,
   } = props;
 
   const [state, setState] = useState({
@@ -71,8 +87,8 @@ export default function Spot(props: Props) {
       y: 0,
     },
     isOccupied: false,
-    destination: destination,
     isCircleVisible: false,
+    hasUpdated: false,
   });
 
   let labelColor = '';
@@ -83,6 +99,12 @@ export default function Spot(props: Props) {
     case 'beige':
       labelColor = brown;
   }
+
+  const initBoard = useGenerateBoard(tile, x, y);
+
+  useEffect(() => {
+    setState((prev) => ({...prev, ...initBoard}))
+  }, [initBoard])
 
   useLayoutEffect(() => {
     if (state.tileInfo.tile === killPosition) {
@@ -96,51 +118,40 @@ export default function Spot(props: Props) {
   }, [killPosition, state.tileInfo.tile]);
 
   useEffect(() => {
-    setState((prev) => ({ ...prev, tileInfo: { tile, x, y } }));
-    if (tile.includes('2')) {
-      setState((prev) => ({ ...prev, activePiece: { pieceType: 'pawn', color: 'white' }, isOccupied: true }));
-    } else if (tile.includes('7')) {
-      setState((prev) => ({ ...prev, activePiece: { pieceType: 'pawn', color: 'black' }, isOccupied: true }));
+    let unoccupiedMoves = [];
+    for (let move of availableMoves) {
+      if (state.isOccupied === true) {
+        if (
+          JSON.stringify(move) === JSON.stringify(getTileXY(state.tileInfo)) &&
+          startPosition.activePiece.color !== state.activePiece.color
+        ) {
+          unoccupiedMoves.push(move);
+        }
+      } else {
+        if (JSON.stringify(move) === JSON.stringify(getTileXY(state.tileInfo))) {
+          unoccupiedMoves.push(move);
+        }
+      }
     }
-    // Rook START
-    else if (tile.includes('a8') || tile.includes('h8')) {
-      setState((prev) => ({ ...prev, activePiece: { pieceType: 'rook', color: 'black' }, isOccupied: true }));
-    } else if (tile.includes('a1') || tile.includes('h1')) {
-      setState((prev) => ({ ...prev, activePiece: { pieceType: 'rook', color: 'white' }, isOccupied: true }));
-    }
-    // Rook END
 
-    // Knight START
-    else if (tile.includes('b8') || tile.includes('g8')) {
-      setState((prev) => ({ ...prev, activePiece: { pieceType: 'knight', color: 'black' }, isOccupied: true }));
-    } else if (tile.includes('b1') || tile.includes('g1')) {
-      setState((prev) => ({ ...prev, activePiece: { pieceType: 'knight', color: 'white' }, isOccupied: true }));
+    if (unoccupiedMoves.length) {
+      setLegalMoves(unoccupiedMoves);
     }
-    // Knight END
+  }, [
+    availableMoves,
+    state.isOccupied,
+    state.tileInfo,
+    state.activePiece,
+    startPosition.activePiece.color,
+  ]);
 
-    // Bishop START
-    else if (tile.includes('c8') || tile.includes('f8')) {
-      setState((prev) => ({ ...prev, activePiece: { pieceType: 'bishop', color: 'black' }, isOccupied: true }));
-    } else if (tile.includes('c1') || tile.includes('f1')) {
-      setState((prev) => ({ ...prev, activePiece: { pieceType: 'bishop', color: 'white' }, isOccupied: true }));
+  useEffect(() => {
+    if (JSON.stringify(legalMoves).includes(JSON.stringify(getTileXY(state.tileInfo)))) {
+      setState((prev) => ({ ...prev, isCircleVisible: true }));
+    } else {
+      setState((prev) => ({ ...prev, isCircleVisible: false }));
     }
-    // Bishop END
-
-    // Queen START
-    else if (tile.includes('d8')) {
-      setState((prev) => ({ ...prev, activePiece: { pieceType: 'queen', color: 'black' }, isOccupied: true }));
-    } else if (tile.includes('d1')) {
-      setState((prev) => ({ ...prev, activePiece: { pieceType: 'queen', color: 'white' }, isOccupied: true }));
-    }
-    // Queen END
-
-    // King START
-    else if (tile.includes('e8')) {
-      setState((prev) => ({ ...prev, activePiece: { pieceType: 'king', color: 'black' }, isOccupied: true }));
-    } else if (tile.includes('e1')) {
-      setState((prev) => ({ ...prev, activePiece: { pieceType: 'king', color: 'white' }, isOccupied: true }));
-    }
-  }, [tile, x, y]);
+  }, [legalMoves, state.tileInfo]);
 
   const getTileXY = (tileInfo: Position) => {
     return {
@@ -149,12 +160,15 @@ export default function Spot(props: Props) {
     };
   };
 
-  const displayCircle = () => {
-    if (JSON.stringify(availableMoves).includes(JSON.stringify(getTileXY(state.tileInfo)))) {
-      return true;
+  useEffect(() => {
+    if (state.hasUpdated) {
+      initSpotsContext(state);
     }
-    return false;
-  };
+  }, [state.hasUpdated, initSpotsContext]);
+
+  useEffect(() => {
+    setSpotsContext(state);
+  }, [setSpotsContext, state]);
 
   return (
     <div
@@ -163,7 +177,11 @@ export default function Spot(props: Props) {
         if (startPosition.tile) {
           setDestination(state.tileInfo);
           if (!destination.isFriendly) {
-            for (let availableCounter = 0; availableCounter < availableMoves.length; availableCounter++) {
+            for (
+              let availableCounter = 0;
+              availableCounter < availableMoves.length;
+              availableCounter++
+            ) {
               if (
                 state.activePiece.color !== startPosition.activePiece.color &&
                 state.tileInfo.x === availableMoves[availableCounter].x &&
@@ -176,6 +194,7 @@ export default function Spot(props: Props) {
                     pieceType: startPosition.activePiece.pieceType,
                     color: startPosition.activePiece.color,
                   },
+                  isOccupied: true,
                 });
               }
             }
@@ -192,7 +211,6 @@ export default function Spot(props: Props) {
         <Pawn
           tileInfo={state.tileInfo}
           white={false}
-          isOccupied={state.isOccupied}
           setStartPosition={setStartPosition}
           setAvailableMoves={setAvailableMoves}
           setTileFocus={setTileFocus}
@@ -203,7 +221,6 @@ export default function Spot(props: Props) {
         <Pawn
           tileInfo={state.tileInfo}
           white={true}
-          isOccupied={state.isOccupied}
           setStartPosition={setStartPosition}
           setAvailableMoves={setAvailableMoves}
           setTileFocus={setTileFocus}
@@ -217,7 +234,6 @@ export default function Spot(props: Props) {
         <Rook
           tileInfo={state.tileInfo}
           white={false}
-          isOccupied={state.isOccupied}
           setStartPosition={setStartPosition}
           setAvailableMoves={setAvailableMoves}
           setTileFocus={setTileFocus}
@@ -227,7 +243,6 @@ export default function Spot(props: Props) {
         <Rook
           tileInfo={state.tileInfo}
           white={true}
-          isOccupied={state.isOccupied}
           setStartPosition={setStartPosition}
           setAvailableMoves={setAvailableMoves}
           setTileFocus={setTileFocus}
@@ -240,7 +255,6 @@ export default function Spot(props: Props) {
         <Knight
           tileInfo={state.tileInfo}
           white={false}
-          isOccupied={state.isOccupied}
           setStartPosition={setStartPosition}
           setAvailableMoves={setAvailableMoves}
           setTileFocus={setTileFocus}
@@ -250,7 +264,6 @@ export default function Spot(props: Props) {
         <Knight
           tileInfo={state.tileInfo}
           white={true}
-          isOccupied={state.isOccupied}
           setStartPosition={setStartPosition}
           setAvailableMoves={setAvailableMoves}
           setTileFocus={setTileFocus}
@@ -263,20 +276,22 @@ export default function Spot(props: Props) {
         <Bishop
           tileInfo={state.tileInfo}
           white={false}
-          isOccupied={state.isOccupied}
           setStartPosition={setStartPosition}
           setAvailableMoves={setAvailableMoves}
           setTileFocus={setTileFocus}
+          setOccupiedChecker={setOccupiedChecker}
+          occupiedChecker={occupiedChecker}
         />
       )}
       {state.activePiece.pieceType === 'bishop' && state.activePiece.color === 'white' && (
         <Bishop
           tileInfo={state.tileInfo}
           white={true}
-          isOccupied={state.isOccupied}
           setStartPosition={setStartPosition}
           setAvailableMoves={setAvailableMoves}
           setTileFocus={setTileFocus}
+          setOccupiedChecker={setOccupiedChecker}
+          occupiedChecker={occupiedChecker}
         />
       )}
       {/* Bishop END */}
@@ -286,7 +301,6 @@ export default function Spot(props: Props) {
         <Queen
           tileInfo={state.tileInfo}
           white={false}
-          isOccupied={state.isOccupied}
           setStartPosition={setStartPosition}
           setAvailableMoves={setAvailableMoves}
           setTileFocus={setTileFocus}
@@ -296,7 +310,6 @@ export default function Spot(props: Props) {
         <Queen
           tileInfo={state.tileInfo}
           white={true}
-          isOccupied={state.isOccupied}
           setStartPosition={setStartPosition}
           setAvailableMoves={setAvailableMoves}
           setTileFocus={setTileFocus}
@@ -309,7 +322,6 @@ export default function Spot(props: Props) {
         <King
           tileInfo={state.tileInfo}
           white={false}
-          isOccupied={state.isOccupied}
           setStartPosition={setStartPosition}
           setAvailableMoves={setAvailableMoves}
           setTileFocus={setTileFocus}
@@ -319,7 +331,6 @@ export default function Spot(props: Props) {
         <King
           tileInfo={state.tileInfo}
           white={true}
-          isOccupied={state.isOccupied}
           setStartPosition={setStartPosition}
           setAvailableMoves={setAvailableMoves}
           setTileFocus={setTileFocus}
@@ -332,7 +343,7 @@ export default function Spot(props: Props) {
       </span>
       <span
         className='available-moves-circle'
-        style={displayCircle() ? { display: 'block' } : { display: 'none' }}
+        style={state.isCircleVisible ? { display: 'block' } : { display: 'none' }}
       ></span>
     </div>
   );

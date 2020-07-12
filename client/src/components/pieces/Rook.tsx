@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { ReactComponent as RookImage } from 'images/rook.svg';
+import { SpotsContext } from 'context/SpotsContext';
 
 // export default function Rook() {
 //   return <RookImage className="piece" />;
@@ -16,14 +17,15 @@ interface Position {
 interface Props {
   white: boolean;
   tileInfo: Position;
-  isOccupied: boolean;
+  //isOccupied: boolean;
   setStartPosition: Function;
   setAvailableMoves: Function;
   setTileFocus: Function;
 }
 
 export default function Rook(props: Props) {
-  const { tileInfo, white, isOccupied, setStartPosition, setAvailableMoves, setTileFocus } = props;
+  const { getSpotDetails } = useContext(SpotsContext);
+  const { tileInfo, white, /*isOccupied,*/ setStartPosition, setAvailableMoves, setTileFocus } = props;
   const [state, setState] = useState({
     hasUsedFirstMoved: false,
     pieceType: 'rook',
@@ -82,7 +84,7 @@ export default function Rook(props: Props) {
 
   const onMoveStart = (currentPosition: Position, e: React.MouseEvent<SVGSVGElement, MouseEvent>) => {
     e.stopPropagation();
-    console.log(currentPosition);
+    // console.log(currentPosition);
     let availMoves = availableMoves(currentPosition);
     setAvailableMoves(availMoves);
     setStartPosition(currentPosition, state.pieceType, state.isWhite ? 'white' : 'black');
@@ -92,7 +94,11 @@ export default function Rook(props: Props) {
   return (
     <RookImage
       className={`piece ${props.white ? 'white' : 'black'}`}
-      onClick={(e) => onMoveStart(state.currentPosition, e)}
+      onClick={(e) => {
+        onMoveStart(state.currentPosition, e);
+        // Example of how to use getSpotDetails
+        console.log(getSpotDetails(state.currentPosition.x, state.currentPosition.y));
+      }}
     />
   );
 }

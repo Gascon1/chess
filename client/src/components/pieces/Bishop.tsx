@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { ReactComponent as BishopImage } from 'images/bishop.svg';
+import { SpotsContext } from 'context/SpotsContext';
 
 // export default function Bishop() {
 //   return <BishopImage className="piece" />;
@@ -16,14 +17,28 @@ interface Position {
 interface Props {
   white: boolean;
   tileInfo: Position;
-  isOccupied: boolean;
   setStartPosition: Function;
   setAvailableMoves: Function;
   setTileFocus: Function;
+  setOccupiedChecker: Function;
+  occupiedChecker: {
+    x: number;
+    y: number;
+  }[];
 }
 
 export default function Bishop(props: Props) {
-  const { tileInfo, white, isOccupied, setStartPosition, setAvailableMoves, setTileFocus } = props;
+  const { getSpotDetails } = useContext(SpotsContext);
+  const {
+    tileInfo,
+    white,
+    setStartPosition,
+    setAvailableMoves,
+    setTileFocus,
+    setOccupiedChecker,
+    occupiedChecker,
+  } = props;
+
   const [state, setState] = useState({
     hasUsedFirstMoved: false,
     pieceType: 'bishop',
@@ -40,6 +55,8 @@ export default function Bishop(props: Props) {
   }, [tileInfo, white]);
 
   const availableMoves = (currentPosition: Position) => {
+    //occupied spot or nah
+
     //code can be optimized perhaps
     let diagonal = [];
     let i: number = currentPosition.x;
@@ -64,6 +81,7 @@ export default function Bishop(props: Props) {
       if (k === currentPosition.x) {
         continue;
       }
+
       diagonal.push(possibleMove1);
       diagonal.push(possibleMove2);
     }
@@ -71,9 +89,11 @@ export default function Bishop(props: Props) {
     return diagonal;
   };
 
-  const onMoveStart = (currentPosition: Position, e: React.MouseEvent<SVGSVGElement, MouseEvent>) => {
+  const onMoveStart = (
+    currentPosition: Position,
+    e: React.MouseEvent<SVGSVGElement, MouseEvent>,
+  ) => {
     e.stopPropagation();
-    console.log(currentPosition);
     let availMoves = availableMoves(currentPosition);
     setAvailableMoves(availMoves);
     setStartPosition(currentPosition, state.pieceType, state.isWhite ? 'white' : 'black');
@@ -83,7 +103,11 @@ export default function Bishop(props: Props) {
   return (
     <BishopImage
       className={`piece ${props.white ? 'white' : 'black'}`}
-      onClick={(e) => onMoveStart(state.currentPosition, e)}
+      onClick={(e) => {
+        onMoveStart(state.currentPosition, e);
+        // Example of how to use getSpotDetails
+        console.log(getSpotDetails(state.currentPosition.x, state.currentPosition.y));
+      }}
     />
   );
 }

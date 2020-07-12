@@ -10,6 +10,8 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 }
 
-.piece-shadow {
-  filter: drop-shadow(2px 2px 2px black);
+html, body {
+  min-height: 100vh;
+  height: 100%;
+  background: #252525;
 }

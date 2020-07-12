@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { ReactComponent as KingImage } from 'images/king.svg';
+import { SpotsContext } from 'context/SpotsContext';
 
 // export default function King() {
 //   return <KingImage className="piece" />;
@@ -16,14 +17,15 @@ interface Position {
 interface Props {
   white: boolean;
   tileInfo: Position;
-  isOccupied: boolean;
+  //isOccupied: boolean;
   setStartPosition: Function;
   setAvailableMoves: Function;
   setTileFocus: Function;
 }
 
 export default function King(props: Props) {
-  const { tileInfo, white, isOccupied, setStartPosition, setAvailableMoves, setTileFocus } = props;
+  const { getSpotDetails } = useContext(SpotsContext);
+  const { tileInfo, white, /*isOccupied,*/ setStartPosition, setAvailableMoves, setTileFocus } = props;
   const [state, setState] = useState({
     hasUsedFirstMoved: false,
     isWhite: true,
@@ -66,7 +68,11 @@ export default function King(props: Props) {
   return (
     <KingImage
       className={`piece ${props.white ? 'white' : 'black'}`}
-      onClick={(e) => onMoveStart(state.currentPosition, e)}
+      onClick={(e) => {
+        onMoveStart(state.currentPosition, e);
+        // Example of how to use getSpotDetails
+        console.log(getSpotDetails(state.currentPosition.x, state.currentPosition.y));
+      }}
     />
   );
 }

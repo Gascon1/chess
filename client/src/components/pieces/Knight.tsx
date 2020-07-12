@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { ReactComponent as KnightImage } from 'images/knight.svg';
-import { SpotsContext } from 'context/SpotsContext';
+import { SpotsContext, Spots } from 'context/SpotsContext';
 
 // export default function Knight() {
 //   return <KnightImage className="piece" />;
@@ -17,7 +17,6 @@ interface Position {
 interface Props {
   white: boolean;
   tileInfo: Position;
-  //isOccupied: boolean;
   setStartPosition: Function;
   setAvailableMoves: Function;
   setTileFocus: Function;
@@ -28,7 +27,7 @@ export default function Knight(props: Props) {
   const {
     tileInfo,
     white,
-    /*isOccupied,*/ setStartPosition,
+    setStartPosition,
     setAvailableMoves,
     setTileFocus,
   } = props;
@@ -48,12 +47,12 @@ export default function Knight(props: Props) {
   }, [tileInfo, white]);
 
   const availableMovesChecker = (currentPosition: Position, x: number, y: number) => {
-    const currentSquare = getSpotDetails(currentPosition.x, currentPosition.y);
-    const square = getSpotDetails(currentPosition.x + x, currentPosition.y + y);
-    if (square.isOccupied && square.activePiece.color !== currentSquare.activePiece.color) {
+    const currentSquare: Spots | undefined = getSpotDetails(currentPosition.x, currentPosition.y);
+    const square: Spots | undefined = getSpotDetails(currentPosition.x + x, currentPosition.y + y);
+    if (square?.isOccupied && square.activePiece.color !== currentSquare?.activePiece.color) {
       return { x: square.tileInfo.x, y: square.tileInfo.y };
-    } else if (!square.isOccupied) {
-      return { x: square.tileInfo.x, y: square.tileInfo.y };
+    } else if (!square?.isOccupied) {
+      return { x: square?.tileInfo.x, y: square?.tileInfo.y };
     } else {
       return { x: 0, y: 0 };
     }

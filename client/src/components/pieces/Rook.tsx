@@ -48,7 +48,7 @@ export default function Rook(props: Props) {
     let a: number = currentPosition.y;
     let b: number = currentPosition.y;
 
-    const currentSpot: Spots = getSpotDetails(currentPosition.x, currentPosition.y);
+    const currentSpot: Spots | undefined = getSpotDetails(currentPosition.x, currentPosition.y);
 
     for (i; i < 9; i++) {
       let rightRow = { x: i, y: currentPosition.y };
@@ -57,10 +57,10 @@ export default function Rook(props: Props) {
         continue;
       }
 
-      let rightSquare: Spots = getSpotDetails(rightRow.x, rightRow.y);
+      let rightSquare: Spots | undefined = getSpotDetails(rightRow.x, rightRow.y);
 
-      if (rightSquare.isOccupied) {
-        if (currentSpot.activePiece.color !== rightSquare.activePiece.color) {
+      if (rightSquare?.isOccupied) {
+        if (currentSpot?.activePiece.color !== rightSquare.activePiece.color) {
           straightLine.push(rightRow);
           break;
         } else {
@@ -77,10 +77,10 @@ export default function Rook(props: Props) {
         continue;
       }
 
-      let leftSquare: Spots = getSpotDetails(leftRow.x, leftRow.y);
+      let leftSquare: Spots | undefined = getSpotDetails(leftRow.x, leftRow.y);
 
-      if (leftSquare.isOccupied) {
-        if (currentSpot.activePiece.color !== leftSquare.activePiece.color) {
+      if (leftSquare?.isOccupied) {
+        if (currentSpot?.activePiece.color !== leftSquare.activePiece.color) {
           straightLine.push(leftRow);
           break;
         } else {
@@ -97,10 +97,10 @@ export default function Rook(props: Props) {
         continue;
       }
 
-      let upSquare: Spots = getSpotDetails(upRow.x, upRow.y);
+      let upSquare: Spots | undefined = getSpotDetails(upRow.x, upRow.y);
 
-      if (upSquare.isOccupied) {
-        if (currentSpot.activePiece.color !== upSquare.activePiece.color) {
+      if (upSquare?.isOccupied) {
+        if (currentSpot?.activePiece.color !== upSquare.activePiece.color) {
           straightLine.push(upRow);
           break;
         } else {
@@ -117,10 +117,10 @@ export default function Rook(props: Props) {
         continue;
       }
 
-      let downSquare: Spots = getSpotDetails(downRow.x, downRow.y);
+      let downSquare: Spots | undefined = getSpotDetails(downRow.x, downRow.y);
 
-      if (downSquare.isOccupied) {
-        if (currentSpot.activePiece.color !== downSquare.activePiece.color) {
+      if (downSquare?.isOccupied) {
+        if (currentSpot?.activePiece.color !== downSquare.activePiece.color) {
           straightLine.push(downRow);
           break;
         } else {
@@ -130,29 +130,6 @@ export default function Rook(props: Props) {
         straightLine.push(downRow);
       }
     }
-
-    // for (j; j > 0; j--) {
-    //   if (j === currentPosition.x) {
-    //     continue;
-    //   }
-    //   let possibleMove = { x: j, y: currentPosition.y };
-    //   straightLine.push(possibleMove);
-    // }
-    // for (a; a < 9; a++) {
-    //   if (a === currentPosition.y) {
-    //     continue;
-    //   }
-    //   let possibleMove = { x: currentPosition.x, y: a };
-    //   straightLine.push(possibleMove);
-    // }
-    // for (b; b > 0; b--) {
-    //   if (b === currentPosition.y) {
-    //     continue;
-    //   }
-    //   let possibleMove = { x: currentPosition.x, y: b };
-    //   straightLine.push(possibleMove);
-    // }
-
     return straightLine;
   };
 

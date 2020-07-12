@@ -17,7 +17,6 @@ interface Position {
 interface Props {
   white: boolean;
   tileInfo: Position;
-  isOccupied: boolean;
   setStartPosition: Function;
   setAvailableMoves: Function;
   setTileFocus: Function;
@@ -33,7 +32,6 @@ export default function Bishop(props: Props) {
   const {
     tileInfo,
     white,
-    isOccupied,
     setStartPosition,
     setAvailableMoves,
     setTileFocus,
@@ -74,18 +72,6 @@ export default function Bishop(props: Props) {
       if (i === currentPosition.x) {
         continue;
       }
-
-      setOccupiedChecker(occupiedChecker);
-      // console.log(occupiedChecker);
-      // promise version:
-      // setOccupiedChecker(possibleMove1).then(() => {
-      //   console.log(occupiedChecker);
-      // });
-      if (isOccupied) {
-        console.log('isOccupied', isOccupied);
-        console.log(possibleMove1);
-      }
-
       diagonal.push(possibleMove1);
       diagonal.push(possibleMove2);
     }

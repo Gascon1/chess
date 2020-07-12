@@ -39,23 +39,14 @@ export default function Board() {
         y: 0,
       },
     ],
-    occupiedChecker: [
-      {
-        x: 0,
-        y: 0,
-      },
-    ],
     killPosition: '',
-    legalMoves: [
-      {
-        x: 0,
-        y: 0,
-      },
-    ],
   });
 
   function setDestination(tileInfo: Position, pieceType: string, color: string) {
-    setState((prev) => ({ ...prev, destination: { activePiece: { pieceType, color }, ...tileInfo } }));
+    setState((prev) => ({
+      ...prev,
+      destination: { activePiece: { pieceType, color }, ...tileInfo },
+    }));
     // if (state.tileFocus !== tileInfo.tile) {
     //   setState((prev) => ({ ...prev, killPosition: state.tileFocus }));
     // }
@@ -88,19 +79,7 @@ export default function Board() {
   };
 
   const setAvailableMoves = (availableMoves: any) => {
-    setState((prev) => ({ ...prev, availableMoves, legalMoves: [] }));
-  };
-
-  const setOccupiedChecker = (occupiedChecker: any) => {
-    setState((prev) => ({ ...prev, occupiedChecker }));
-  };
-  //  promise version:
-  // const setOccupiedChecker = (occupiedChecker: any) => {
-  //   new Promise((resolve) => setState((prev) => ({ ...prev, occupiedChecker })));
-  // };
-
-  const setLegalMoves = (legalMoves: any) => {
-    setState((prev) => ({ ...prev, legalMoves: [...prev.legalMoves, ...legalMoves] }));
+    setState((prev) => ({ ...prev, availableMoves }));
   };
 
   useEffect(() => {
@@ -133,10 +112,6 @@ export default function Board() {
             setAvailableMoves={setAvailableMoves}
             killPosition={state.killPosition}
             setKillPosition={setKillPosition}
-            legalMoves={state.legalMoves}
-            setLegalMoves={setLegalMoves}
-            occupiedChecker={state.occupiedChecker}
-            setOccupiedChecker={setOccupiedChecker}
           />,
         );
       });
@@ -145,12 +120,11 @@ export default function Board() {
   }, [
     state.destination,
     state.startPosition,
-    state.legalMoves,
     state.availableMoves,
     state.killPosition,
     state.tileFocus,
-    state.occupiedChecker,
   ]);
 
   return <div className='board'>{state.board}</div>;
 }
+//ss

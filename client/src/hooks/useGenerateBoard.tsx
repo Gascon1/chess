@@ -1,6 +1,4 @@
-import React, { useState, useEffect } from 'react';
-import isEven from 'helpers/isEven';
-import Spot from 'components/Spot';
+import { useState, useEffect } from 'react';
 
 export function useGenerateBoard(tile: string, x: number, y: number) {
   const [state, setState] = useState({

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { ReactComponent as QueenImage } from 'images/queen.svg';
-import { SpotsContext } from 'context/SpotsContext';
+import { SpotsContext, Spots } from 'context/SpotsContext';
 
 // export default function Queen() {
 //   return <QueenImage className="piece" />;
@@ -40,59 +40,192 @@ export default function Queen(props: Props) {
   const availableMoves = (currentPosition: Position) => {
     //code can be optimized perhaps
     let diagonal = [];
+
+    // BISHOP DIRECTIONS
     let i: number = currentPosition.x;
+    let j: number = currentPosition.x;
     let k: number = currentPosition.x;
-    let a: number = currentPosition.y;
+    let l: number = currentPosition.x;
+
     let b: number = currentPosition.y;
     let c: number = currentPosition.y;
     let d: number = currentPosition.y;
     let e: number = currentPosition.y;
+
+    //ROOK DIRECTIONS
+    let m: number = currentPosition.x;
+    let n: number = currentPosition.x;
     let f: number = currentPosition.y;
+    let g: number = currentPosition.y;
+
+    const currentSpot: Spots = getSpotDetails(currentPosition.x, currentPosition.y);
 
     for (i; i < 9; i++) {
-      let possibleMove1 = { x: i, y: c-- };
-      let possibleMove2 = { x: i, y: d++ };
-      let possibleMove3 = { x: i, y: currentPosition.y };
+      let downRight = { x: i, y: b-- };
+
       if (i === currentPosition.x) {
         continue;
       }
-      diagonal.push(possibleMove1);
-      diagonal.push(possibleMove2);
-      diagonal.push(possibleMove3);
+
+      let downRightSquare: Spots = getSpotDetails(downRight.x, downRight.y);
+
+      if (downRightSquare.isOccupied) {
+        if (currentSpot.activePiece.color !== downRightSquare.activePiece.color) {
+          diagonal.push(downRight);
+          break;
+        } else {
+          break;
+        }
+      } else {
+        diagonal.push(downRight);
+      }
+    }
+
+    for (j; j < 9; j++) {
+      let upRight = { x: j, y: c++ };
+      if (j === currentPosition.x) {
+        continue;
+      }
+      let upRightSquare: Spots = getSpotDetails(upRight.x, upRight.y);
+      if (upRightSquare.isOccupied) {
+        if (currentSpot.activePiece.color !== upRightSquare.activePiece.color) {
+          diagonal.push(upRight);
+          break;
+        } else {
+          break;
+        }
+      } else {
+        diagonal.push(upRight);
+      }
     }
     for (k; k > 0; k--) {
-      let possibleMove1 = { x: k, y: e-- };
-      let possibleMove2 = { x: k, y: f++ };
-      let possibleMove3 = { x: k, y: currentPosition.y };
+      let downLeft = { x: k, y: d-- };
+
       if (k === currentPosition.x) {
         continue;
       }
-      diagonal.push(possibleMove1);
-      diagonal.push(possibleMove2);
-      diagonal.push(possibleMove3);
-    }
-    for (a; a < 9; a++) {
-      if (a === currentPosition.y) {
-        continue;
+      let downLeftSquare: Spots = getSpotDetails(downLeft.x, downLeft.y);
+      if (downLeftSquare.isOccupied) {
+        if (currentSpot.activePiece.color !== downLeftSquare.activePiece.color) {
+          diagonal.push(downLeft);
+          break;
+        } else {
+          break;
+        }
+      } else {
+        diagonal.push(downLeft);
       }
-      let possibleMove = { x: currentPosition.x, y: a };
-      diagonal.push(possibleMove);
     }
 
-    for (b; b > 0; b--) {
-      if (b === currentPosition.y) {
+    for (l; l > 0; l--) {
+      let upLeft = { x: l, y: e++ };
+      if (l === currentPosition.x) {
         continue;
       }
-      let possibleMove = { x: currentPosition.x, y: b };
-      diagonal.push(possibleMove);
+      let upLeftSquare: Spots = getSpotDetails(upLeft.x, upLeft.y);
+      if (upLeftSquare.isOccupied) {
+        if (currentSpot.activePiece.color !== upLeftSquare.activePiece.color) {
+          diagonal.push(upLeft);
+          break;
+        } else {
+          break;
+        }
+      } else {
+        diagonal.push(upLeft);
+      }
+    }
+
+    //--------------------------------- ROOK FOR LOOPS-------------------------
+
+    for (m; m < 9; m++) {
+      let rightRow = { x: m, y: currentPosition.y };
+
+      if (m === currentPosition.x) {
+        continue;
+      }
+
+      let rightSquare: Spots = getSpotDetails(rightRow.x, rightRow.y);
+
+      if (rightSquare.isOccupied) {
+        if (currentSpot.activePiece.color !== rightSquare.activePiece.color) {
+          diagonal.push(rightRow);
+          break;
+        } else {
+          break;
+        }
+      } else {
+        diagonal.push(rightRow);
+      }
+    }
+    for (n; n > 0; n--) {
+      let leftRow = { x: n, y: currentPosition.y };
+
+      if (n === currentPosition.x) {
+        continue;
+      }
+
+      let leftSquare: Spots = getSpotDetails(leftRow.x, leftRow.y);
+
+      if (leftSquare.isOccupied) {
+        if (currentSpot.activePiece.color !== leftSquare.activePiece.color) {
+          diagonal.push(leftRow);
+          break;
+        } else {
+          break;
+        }
+      } else {
+        diagonal.push(leftRow);
+      }
+    }
+    for (f; f < 9; f++) {
+      let upRow = { x: currentPosition.x, y: f };
+
+      if (f === currentPosition.y) {
+        continue;
+      }
+
+      let upSquare: Spots = getSpotDetails(upRow.x, upRow.y);
+
+      if (upSquare.isOccupied) {
+        if (currentSpot.activePiece.color !== upSquare.activePiece.color) {
+          diagonal.push(upRow);
+          break;
+        } else {
+          break;
+        }
+      } else {
+        diagonal.push(upRow);
+      }
+    }
+    for (g; g > 0; g--) {
+      let downRow = { x: currentPosition.x, y: g };
+
+      if (g === currentPosition.y) {
+        continue;
+      }
+
+      let downSquare: Spots = getSpotDetails(downRow.x, downRow.y);
+
+      if (downSquare.isOccupied) {
+        if (currentSpot.activePiece.color !== downSquare.activePiece.color) {
+          diagonal.push(downRow);
+          break;
+        } else {
+          break;
+        }
+      } else {
+        diagonal.push(downRow);
+      }
     }
 
     return diagonal;
   };
 
-  const onMoveStart = (currentPosition: Position, e: React.MouseEvent<SVGSVGElement, MouseEvent>) => {
+  const onMoveStart = (
+    currentPosition: Position,
+    e: React.MouseEvent<SVGSVGElement, MouseEvent>,
+  ) => {
     e.stopPropagation();
-    console.log(currentPosition);
     let availMoves = availableMoves(currentPosition);
     setAvailableMoves(availMoves);
     setStartPosition(currentPosition, state.pieceType, state.isWhite ? 'white' : 'black');
@@ -107,8 +240,6 @@ export default function Queen(props: Props) {
       className={`piece ${props.white ? 'white' : 'black'}`}
       onClick={(e) => {
         onMoveStart(state.currentPosition, e);
-        // Example of how to use getSpotDetails
-        console.log(getSpotDetails(state.currentPosition.x, state.currentPosition.y));
       }}
     />
   );

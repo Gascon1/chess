@@ -11,7 +11,6 @@ interface Position {
 }
 
 export default function Board() {
-  // Todo: integrate pieces into each square created in board;
   const [state, setState] = useState({
     board: [],
     startPosition: {

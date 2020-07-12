@@ -24,13 +24,7 @@ interface Props {
 
 export default function Knight(props: Props) {
   const { getSpotDetails } = useContext(SpotsContext);
-  const {
-    tileInfo,
-    white,
-    setStartPosition,
-    setAvailableMoves,
-    setTileFocus,
-  } = props;
+  const { tileInfo, white, setStartPosition, setAvailableMoves, setTileFocus } = props;
   const [state, setState] = useState({
     hasUsedFirstMoved: false,
     isWhite: true,
@@ -78,7 +72,6 @@ export default function Knight(props: Props) {
     e: React.MouseEvent<SVGSVGElement, MouseEvent>,
   ) => {
     e.stopPropagation();
-    console.log(currentPosition);
     let availMoves = availableMoves(currentPosition);
     setAvailableMoves(availMoves);
     setStartPosition(currentPosition, state.pieceType, state.isWhite ? 'white' : 'black');
@@ -90,8 +83,6 @@ export default function Knight(props: Props) {
       className={`piece ${props.white ? 'white' : 'black'}`}
       onClick={(e) => {
         onMoveStart(state.currentPosition, e);
-        // Example of how to use getSpotDetails
-        console.log(getSpotDetails(state.currentPosition.x, state.currentPosition.y));
       }}
     />
   );

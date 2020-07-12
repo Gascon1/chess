@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react';
-import { SpotsContext, Spots } from '../context/SpotsContext';
+import { /*SpotsContext,*/ Spots } from '../context/SpotsContext';
 
 export const useSpots = () => {
   const [state, setState] = useState({
@@ -16,6 +16,7 @@ export const useSpots = () => {
         },
         isOccupied: true,
         isCircleVisible: false,
+        hasUpdated: false,
       },
     ],
   });

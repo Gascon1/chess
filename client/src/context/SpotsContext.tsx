@@ -1,5 +1,5 @@
 import { createContext } from 'react';
-import { stringify } from 'querystring';
+// import { stringify } from 'querystring';
 
 export interface Spots {
   activePiece: {
@@ -13,6 +13,7 @@ export interface Spots {
   };
   isOccupied: boolean;
   isCircleVisible: boolean;
+  hasUpdated: boolean;
 }
 
 export interface SpotsContext {
@@ -28,6 +29,7 @@ export interface SpotsContext {
     };
     isOccupied: boolean;
     isCircleVisible: boolean;
+    hasUpdated: boolean;
   };
 
   setSpotsContext: (spots: any) => void;
@@ -49,6 +51,7 @@ export const spotsDefaultValue = {
       },
       isOccupied: false,
       isCircleVisible: false,
+      hasUpdated: false,
     },
   ],
   setSpotsContext: (spots: any) => {},
@@ -58,6 +61,7 @@ export const spotsDefaultValue = {
     tileInfo: { tile: '', x: 0, y: 0 },
     isOccupied: false,
     isCircleVisible: false,
+    hasUpdated: false,
   }),
 };
 

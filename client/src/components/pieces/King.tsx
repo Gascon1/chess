@@ -29,13 +29,7 @@ interface Props {
 
 export default function King(props: Props) {
   const { getSpotDetails } = useContext(SpotsContext);
-  const {
-    tileInfo,
-    white,
-    setStartPosition,
-    setAvailableMoves,
-    setTileFocus,
-  } = props;
+  const { tileInfo, white, setStartPosition, setAvailableMoves, setTileFocus } = props;
   const [state, setState] = useState({
     hasUsedFirstMoved: false,
     isWhite: true,
@@ -50,6 +44,35 @@ export default function King(props: Props) {
   useEffect(() => {
     setState((prev) => ({ ...prev, isWhite: white, currentPosition: tileInfo }));
   }, [tileInfo, white]);
+
+  const castlingChecker = (currentPosition: Position) => {
+    const queenSideRookWhite: Spots | undefined = getSpotDetails(1, 1);
+    const currentSquare: Spots | undefined = getSpotDetails(currentPosition.x, currentPosition.y);
+    const kingSideBishopWhite: Spots | undefined = getSpotDetails(6, 1);
+    const kingSideKnightWhite: Spots | undefined = getSpotDetails(7, 1);
+    const kingSideRookWhite: Spots | undefined = getSpotDetails(8, 1);
+
+    if (
+      //king side castling case for white king
+      currentSquare?.activePiece.color === 'white' &&
+      currentSquare?.tileInfo.tile === 'e1' &&
+      // !currentSquare?.hasUpdated &&
+      kingSideRookWhite?.tileInfo.tile === 'h1' &&
+      kingSideRookWhite?.activePiece.pieceType === 'rook' &&
+      kingSideRookWhite?.activePiece.color === 'white' &&
+      // !kingSideRookWhite?.hasUpdated &&
+      !kingSideKnightWhite?.isOccupied &&
+      !kingSideBishopWhite?.isOccupied
+    ) {
+      console.log('success');
+    }
+    console.log(currentSquare);
+    console.log('bishop', kingSideBishopWhite);
+    console.log('knight', kingSideKnightWhite);
+    console.log('rook', kingSideRookWhite);
+
+    console.log('fail');
+  };
 
   const availableMovesChecker = (currentPosition: Position, x: number, y: number) => {
     const currentSquare: Spots | undefined = getSpotDetails(currentPosition.x, currentPosition.y);
@@ -73,6 +96,8 @@ export default function King(props: Props) {
       availableMovesChecker(currentPosition, 1, -1),
       availableMovesChecker(currentPosition, 1, 1),
       availableMovesChecker(currentPosition, -1, -1),
+      castlingChecker(currentPosition),
+      //add castling function call here
     ];
   };
 
@@ -93,8 +118,6 @@ export default function King(props: Props) {
       className={`piece ${props.white ? 'white' : 'black'}`}
       onClick={(e) => {
         onMoveStart(state.currentPosition, e);
-        // Example of how to use getSpotDetails
-        console.log(getSpotDetails(state.currentPosition.x, state.currentPosition.y));
       }}
     />
   );

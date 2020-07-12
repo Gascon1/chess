@@ -55,6 +55,7 @@ export default function Queen(props: Props) {
 
     const currentSpot: Spots | undefined = getSpotDetails(currentPosition.x, currentPosition.y);
 
+    // ------------------------------BISHOP FOR LOOPS-----------------------------------------
     for (i; i < 9; i++) {
       let downRight = { x: i, y: b-- };
 

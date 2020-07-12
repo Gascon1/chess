@@ -36,7 +36,6 @@ export const spotsDefaultValue = {
       isCircleVisible: false,
     },
   ],
-  // setSpotsContext: ({ pieceType, color, tile, x, y, isOccupied, isCircleVisible }: any) => {},
   setSpotsContext: (spots: any) => {},
   initSpotsContext: (spots: any) => {},
   getSpotDetails: (x: number, y: number) => {},

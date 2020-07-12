@@ -1,5 +1,4 @@
 import { useState, useCallback } from 'react';
-import { SpotsContext } from 'context/SpotsContext';
 
 export const useSpots = () => {
   const [state, setState] = useState({

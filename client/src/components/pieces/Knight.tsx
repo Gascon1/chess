@@ -25,7 +25,13 @@ interface Props {
 
 export default function Knight(props: Props) {
   const { getSpotDetails } = useContext(SpotsContext);
-  const { tileInfo, white, /*isOccupied,*/ setStartPosition, setAvailableMoves, setTileFocus } = props;
+  const {
+    tileInfo,
+    white,
+    /*isOccupied,*/ setStartPosition,
+    setAvailableMoves,
+    setTileFocus,
+  } = props;
   const [state, setState] = useState({
     hasUsedFirstMoved: false,
     isWhite: true,
@@ -41,22 +47,37 @@ export default function Knight(props: Props) {
     setState((prev) => ({ ...prev, isWhite: white, currentPosition: tileInfo }));
   }, [tileInfo, white]);
 
+  const availableMovesChecker = (currentPosition: Position, x: number, y: number) => {
+    const currentSquare = getSpotDetails(currentPosition.x, currentPosition.y);
+    const square = getSpotDetails(currentPosition.x + x, currentPosition.y + y);
+    if (square.isOccupied && square.activePiece.color !== currentSquare.activePiece.color) {
+      return { x: square.tileInfo.x, y: square.tileInfo.y };
+    } else if (!square.isOccupied) {
+      return { x: square.tileInfo.x, y: square.tileInfo.y };
+    } else {
+      return { x: 0, y: 0 };
+    }
+  };
+
   const availableMoves = (currentPosition: Position) => {
     //code can be optimized perhaps
 
     return [
-      { x: currentPosition.x + 2, y: currentPosition.y + 1 },
-      { x: currentPosition.x + 2, y: currentPosition.y - 1 },
-      { x: currentPosition.x - 2, y: currentPosition.y - 1 },
-      { x: currentPosition.x - 2, y: currentPosition.y + 1 },
-      { x: currentPosition.x + 1, y: currentPosition.y + 2 },
-      { x: currentPosition.x - 1, y: currentPosition.y + 2 },
-      { x: currentPosition.x + 1, y: currentPosition.y - 2 },
-      { x: currentPosition.x - 1, y: currentPosition.y - 2 },
+      availableMovesChecker(currentPosition, 2, 1),
+      availableMovesChecker(currentPosition, 2, -1),
+      availableMovesChecker(currentPosition, -2, 1),
+      availableMovesChecker(currentPosition, -2, -1),
+      availableMovesChecker(currentPosition, -1, 2),
+      availableMovesChecker(currentPosition, 1, 2),
+      availableMovesChecker(currentPosition, 1, -2),
+      availableMovesChecker(currentPosition, -1, -2),
     ];
   };
 
-  const onMoveStart = (currentPosition: Position, e: React.MouseEvent<SVGSVGElement, MouseEvent>) => {
+  const onMoveStart = (
+    currentPosition: Position,
+    e: React.MouseEvent<SVGSVGElement, MouseEvent>,
+  ) => {
     e.stopPropagation();
     console.log(currentPosition);
     let availMoves = availableMoves(currentPosition);

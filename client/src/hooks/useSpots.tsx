@@ -1,4 +1,5 @@
 import { useState, useCallback } from 'react';
+import { SpotsContext, Spots } from '../context/SpotsContext';
 
 export const useSpots = () => {
   const [state, setState] = useState({
@@ -49,12 +50,25 @@ export const useSpots = () => {
     setState((prev) => ({ ...prev, spotsContainer: [...prev.spotsContainer, newSpot] }));
   }, []);
 
-  const getSpotDetails = (x: number, y: number) => {
+  const getSpotDetails = (x: number, y: number): Spots => {
     for (const spot of state.spotsContainer) {
       if (spot.tileInfo.x === x && spot.tileInfo.y === y) {
         return spot;
       }
     }
+    return {
+      activePiece: {
+        pieceType: '',
+        color: '',
+      },
+      tileInfo: {
+        tile: '',
+        x: 0,
+        y: 0,
+      },
+      isOccupied: false,
+      isCircleVisible: false,
+    };
   };
 
   const spots = state.spotsContainer;

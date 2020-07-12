@@ -40,16 +40,6 @@ interface Props {
   setAvailableMoves: Function;
   killPosition: string;
   setKillPosition: Function;
-  legalMoves: {
-    x: number;
-    y: number;
-  }[];
-  setLegalMoves: Function;
-  occupiedChecker: {
-    x: number;
-    y: number;
-  }[];
-  setOccupiedChecker: Function;
 }
 const brown = '#8a604a';
 const beige = '#e5d3ba';
@@ -70,10 +60,6 @@ export default function Spot(props: Props) {
     setAvailableMoves,
     killPosition,
     setKillPosition,
-    legalMoves,
-    setLegalMoves,
-    occupiedChecker,
-    setOccupiedChecker,
   } = props;
 
   const [state, setState] = useState({
@@ -103,8 +89,8 @@ export default function Spot(props: Props) {
   const initBoard = useGenerateBoard(tile, x, y);
 
   useEffect(() => {
-    setState((prev) => ({...prev, ...initBoard}))
-  }, [initBoard])
+    setState((prev) => ({ ...prev, ...initBoard }));
+  }, [initBoard]);
 
   useLayoutEffect(() => {
     if (state.tileInfo.tile === killPosition) {
@@ -118,40 +104,12 @@ export default function Spot(props: Props) {
   }, [killPosition, state.tileInfo.tile]);
 
   useEffect(() => {
-    let unoccupiedMoves = [];
-    for (let move of availableMoves) {
-      if (state.isOccupied === true) {
-        if (
-          JSON.stringify(move) === JSON.stringify(getTileXY(state.tileInfo)) &&
-          startPosition.activePiece.color !== state.activePiece.color
-        ) {
-          unoccupiedMoves.push(move);
-        }
-      } else {
-        if (JSON.stringify(move) === JSON.stringify(getTileXY(state.tileInfo))) {
-          unoccupiedMoves.push(move);
-        }
-      }
-    }
-
-    if (unoccupiedMoves.length) {
-      setLegalMoves(unoccupiedMoves);
-    }
-  }, [
-    availableMoves,
-    state.isOccupied,
-    state.tileInfo,
-    state.activePiece,
-    startPosition.activePiece.color,
-  ]);
-
-  useEffect(() => {
-    if (JSON.stringify(legalMoves).includes(JSON.stringify(getTileXY(state.tileInfo)))) {
+    if (JSON.stringify(availableMoves).includes(JSON.stringify(getTileXY(state.tileInfo)))) {
       setState((prev) => ({ ...prev, isCircleVisible: true }));
     } else {
       setState((prev) => ({ ...prev, isCircleVisible: false }));
     }
-  }, [legalMoves, state.tileInfo]);
+  }, [availableMoves, state.tileInfo]);
 
   const getTileXY = (tileInfo: Position) => {
     return {
@@ -279,8 +237,6 @@ export default function Spot(props: Props) {
           setStartPosition={setStartPosition}
           setAvailableMoves={setAvailableMoves}
           setTileFocus={setTileFocus}
-          setOccupiedChecker={setOccupiedChecker}
-          occupiedChecker={occupiedChecker}
         />
       )}
       {state.activePiece.pieceType === 'bishop' && state.activePiece.color === 'white' && (
@@ -290,8 +246,6 @@ export default function Spot(props: Props) {
           setStartPosition={setStartPosition}
           setAvailableMoves={setAvailableMoves}
           setTileFocus={setTileFocus}
-          setOccupiedChecker={setOccupiedChecker}
-          occupiedChecker={occupiedChecker}
         />
       )}
       {/* Bishop END */}

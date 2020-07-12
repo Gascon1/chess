@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { ReactComponent as BishopImage } from 'images/bishop.svg';
-import { SpotsContext } from 'context/SpotsContext';
+import { SpotsContext, Spots } from 'context/SpotsContext';
 
 // export default function Bishop() {
 //   return <BishopImage className="piece" />;
@@ -20,24 +20,11 @@ interface Props {
   setStartPosition: Function;
   setAvailableMoves: Function;
   setTileFocus: Function;
-  setOccupiedChecker: Function;
-  occupiedChecker: {
-    x: number;
-    y: number;
-  }[];
 }
 
 export default function Bishop(props: Props) {
   const { getSpotDetails } = useContext(SpotsContext);
-  const {
-    tileInfo,
-    white,
-    setStartPosition,
-    setAvailableMoves,
-    setTileFocus,
-    setOccupiedChecker,
-    occupiedChecker,
-  } = props;
+  const { tileInfo, white, setStartPosition, setAvailableMoves, setTileFocus } = props;
 
   const [state, setState] = useState({
     hasUsedFirstMoved: false,
@@ -55,35 +42,94 @@ export default function Bishop(props: Props) {
   }, [tileInfo, white]);
 
   const availableMoves = (currentPosition: Position) => {
-    //occupied spot or nah
-
     //code can be optimized perhaps
     let diagonal = [];
+
     let i: number = currentPosition.x;
+    let j: number = currentPosition.x;
     let k: number = currentPosition.x;
+    let l: number = currentPosition.x;
+
     let b: number = currentPosition.y;
     let c: number = currentPosition.y;
     let d: number = currentPosition.y;
     let e: number = currentPosition.y;
 
+    const currentSpot: Spots = getSpotDetails(currentPosition.x, currentPosition.y);
+
     for (i; i < 9; i++) {
-      let possibleMove1 = { x: i, y: b-- };
-      let possibleMove2 = { x: i, y: c++ };
+      let downRight = { x: i, y: b-- };
+
       if (i === currentPosition.x) {
         continue;
       }
-      diagonal.push(possibleMove1);
-      diagonal.push(possibleMove2);
+
+      let downRightSquare: Spots = getSpotDetails(downRight.x, downRight.y);
+
+      if (downRightSquare.isOccupied) {
+        if (currentSpot.activePiece.color !== downRightSquare.activePiece.color) {
+          diagonal.push(downRight);
+          break;
+        } else {
+          break;
+        }
+      } else {
+        diagonal.push(downRight);
+      }
+    }
+
+    for (j; j < 9; j++) {
+      let upRight = { x: j, y: c++ };
+      if (j === currentPosition.x) {
+        continue;
+      }
+      let upRightSquare: Spots = getSpotDetails(upRight.x, upRight.y);
+      if (upRightSquare.isOccupied) {
+        if (currentSpot.activePiece.color !== upRightSquare.activePiece.color) {
+          diagonal.push(upRight);
+          break;
+        } else {
+          break;
+        }
+      } else {
+        diagonal.push(upRight);
+      }
     }
     for (k; k > 0; k--) {
-      let possibleMove1 = { x: k, y: d-- };
-      let possibleMove2 = { x: k, y: e++ };
+      let downLeft = { x: k, y: d-- };
+
       if (k === currentPosition.x) {
         continue;
       }
+      let downLeftSquare: Spots = getSpotDetails(downLeft.x, downLeft.y);
+      if (downLeftSquare.isOccupied) {
+        if (currentSpot.activePiece.color !== downLeftSquare.activePiece.color) {
+          diagonal.push(downLeft);
+          break;
+        } else {
+          break;
+        }
+      } else {
+        diagonal.push(downLeft);
+      }
+    }
 
-      diagonal.push(possibleMove1);
-      diagonal.push(possibleMove2);
+    for (l; l > 0; l--) {
+      let upLeft = { x: l, y: e++ };
+      if (l === currentPosition.x) {
+        continue;
+      }
+      let upLeftSquare: Spots = getSpotDetails(upLeft.x, upLeft.y);
+      if (upLeftSquare.isOccupied) {
+        if (currentSpot.activePiece.color !== upLeftSquare.activePiece.color) {
+          diagonal.push(upLeft);
+          break;
+        } else {
+          break;
+        }
+      } else {
+        diagonal.push(upLeft);
+      }
     }
 
     return diagonal;
@@ -105,8 +151,6 @@ export default function Bishop(props: Props) {
       className={`piece ${props.white ? 'white' : 'black'}`}
       onClick={(e) => {
         onMoveStart(state.currentPosition, e);
-        // Example of how to use getSpotDetails
-        console.log(getSpotDetails(state.currentPosition.x, state.currentPosition.y));
       }}
     />
   );

@@ -10,6 +10,11 @@ interface Position {
   isFriendly?: boolean;
 }
 
+// interface Moves {
+//   x: number;
+//   y: number;
+// }
+
 interface Props {
   white: boolean;
   tileInfo: Position;
@@ -100,21 +105,67 @@ export default function Pawn(props: Props) {
   };
 
   const availableMoves = (currentPosition: Position) => {
-    if (state.isWhite) {
-      return [
-        { x: currentPosition.x - 1, y: currentPosition.y + 1 },
-        { x: currentPosition.x, y: currentPosition.y + 1 },
-        { x: currentPosition.x, y: currentPosition.y + 2 },
-        { x: currentPosition.x + 1, y: currentPosition.y + 1 },
-      ];
-    } else {
-      return [
-        { x: currentPosition.x - 1, y: currentPosition.y - 1 },
-        { x: currentPosition.x, y: currentPosition.y - 1 },
-        { x: currentPosition.x, y: currentPosition.y - 2 },
-        { x: currentPosition.x + 1, y: currentPosition.y - 1 },
-      ];
+    const result: Array<any> = [];
+    const currentSquare = getSpotDetails(currentPosition.x, currentPosition.y);
+    //WHITE
+    const forwardOnceWhite = getSpotDetails(currentPosition.x, currentPosition.y + 1);
+    const forwardTwiceWhite = getSpotDetails(currentPosition.x, currentPosition.y + 2);
+    const diagonalLeftWhite = getSpotDetails(currentPosition.x + 1, currentPosition.y + 1);
+    const diagonalRightWhite = getSpotDetails(currentPosition.x - 1, currentPosition.y + 1);
+    //BLACK
+    const forwardOnceBlack = getSpotDetails(currentPosition.x, currentPosition.y - 1);
+    const forwardTwiceBlack = getSpotDetails(currentPosition.x, currentPosition.y - 2);
+    const diagonalLeftBlack = getSpotDetails(currentPosition.x + 1, currentPosition.y - 1);
+    const diagonalRightBlack = getSpotDetails(currentPosition.x - 1, currentPosition.y - 1);
+
+    if (currentSquare.activePiece.color === 'white') {
+      if (currentSquare.tileInfo.y === 2) {
+        if (!forwardTwiceWhite.isOccupied) {
+          result.push({ x: forwardTwiceWhite.tileInfo.x, y: forwardTwiceWhite.tileInfo.y });
+        }
+      }
+      if (!forwardOnceWhite.isOccupied) {
+        result.push({ x: forwardOnceWhite.tileInfo.x, y: forwardOnceWhite.tileInfo.y });
+      }
+      if (
+        diagonalLeftWhite.isOccupied &&
+        diagonalLeftWhite.activePiece.color !== currentSquare.activePiece.color
+      ) {
+        result.push({ x: diagonalLeftWhite.tileInfo.x, y: diagonalLeftWhite.tileInfo.y });
+      }
+      if (
+        diagonalRightWhite.isOccupied &&
+        diagonalRightWhite.activePiece.color !== currentSquare.activePiece.color
+      ) {
+        result.push({ x: diagonalRightWhite.tileInfo.x, y: diagonalRightWhite.tileInfo.y });
+      }
+    } else if (currentSquare.activePiece.color === 'black') {
+      if (currentSquare.tileInfo.y === 7) {
+        if (!forwardTwiceBlack.isOccupied) {
+          result.push({ x: forwardTwiceBlack.tileInfo.x, y: forwardTwiceBlack.tileInfo.y });
+        }
+      }
+      if (!forwardOnceBlack.isOccupied) {
+        result.push({ x: forwardOnceBlack.tileInfo.x, y: forwardOnceBlack.tileInfo.y });
+      }
+      if (
+        diagonalLeftBlack.isOccupied &&
+        diagonalLeftBlack.activePiece.color !== currentSquare.activePiece.color
+      ) {
+        result.push({ x: diagonalLeftBlack.tileInfo.x, y: diagonalLeftBlack.tileInfo.y });
+      }
+      if (
+        diagonalRightBlack.isOccupied &&
+        diagonalRightBlack.activePiece.color !== currentSquare.activePiece.color
+      ) {
+        result.push({ x: diagonalRightBlack.tileInfo.x, y: diagonalRightBlack.tileInfo.y });
+      }
     }
+
+    if (!result.length) {
+      result.push({ x: 0, y: 0 });
+    }
+    return result;
   };
 
   const onMoveStart = (
@@ -123,6 +174,7 @@ export default function Pawn(props: Props) {
   ) => {
     e.stopPropagation();
     let availMoves = availableMoves(currentPosition);
+
     setAvailableMoves(availMoves);
     setStartPosition(currentPosition, state.pieceType, state.isWhite ? 'white' : 'black');
     setTileFocus(currentPosition.tile);
@@ -133,8 +185,6 @@ export default function Pawn(props: Props) {
       className={`piece ${props.white ? 'white' : 'black'}`}
       onClick={(e) => {
         onMoveStart(state.currentPosition, e);
-        // Example of how to use getSpotDetails
-        console.log(getSpotDetails(state.currentPosition.x, state.currentPosition.y));
       }}
     />
   );

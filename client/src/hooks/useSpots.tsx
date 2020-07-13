@@ -16,7 +16,7 @@ export const useSpots = () => {
         },
         isOccupied: true,
         isCircleVisible: false,
-        hasUpdated: false,
+        hasMoved: false,
       },
     ],
   });

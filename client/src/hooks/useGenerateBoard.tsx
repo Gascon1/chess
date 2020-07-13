@@ -14,6 +14,7 @@ export function useGenerateBoard(tile: string, x: number, y: number) {
     isOccupied: false,
     isCircleVisible: false,
     hasUpdated: false,
+    hasMoved: false,
   });
 
   useEffect(() => {

@@ -75,6 +75,7 @@ export default function Spot(props: Props) {
     isOccupied: false,
     isCircleVisible: false,
     hasUpdated: false,
+    hasMoved: false,
   });
 
   let labelColor = '';
@@ -153,6 +154,7 @@ export default function Spot(props: Props) {
                     color: startPosition.activePiece.color,
                   },
                   isOccupied: true,
+                  hasMoved: true,
                 });
               }
             }

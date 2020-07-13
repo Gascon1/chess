@@ -13,7 +13,7 @@ export interface Spots {
   };
   isOccupied: boolean;
   isCircleVisible: boolean;
-  hasUpdated: boolean;
+  hasMoved: boolean;
 }
 
 export interface SpotsContext {
@@ -29,7 +29,7 @@ export interface SpotsContext {
     };
     isOccupied: boolean;
     isCircleVisible: boolean;
-    hasUpdated: boolean;
+    hasMoved: boolean;
   };
 
   setSpotsContext: (spots: any) => void;
@@ -51,7 +51,7 @@ export const spotsDefaultValue = {
       },
       isOccupied: false,
       isCircleVisible: false,
-      hasUpdated: false,
+      hasMoved: false,
     },
   ],
   setSpotsContext: (spots: any) => {},
@@ -61,7 +61,7 @@ export const spotsDefaultValue = {
     tileInfo: { tile: '', x: 0, y: 0 },
     isOccupied: false,
     isCircleVisible: false,
-    hasUpdated: false,
+    hasMoved: false,
   }),
 };
 

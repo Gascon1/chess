@@ -65,7 +65,6 @@ export default function Board() {
     }
     // castling case
     if (castling) {
-      console.log('reached set state for castling case');
       setState((prev) => ({ ...prev, killPosition: tileInfo.tile }));
     }
   };

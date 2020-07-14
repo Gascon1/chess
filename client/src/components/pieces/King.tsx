@@ -21,8 +21,8 @@ interface Props {
   setStartPosition: Function;
   setAvailableMoves: Function;
   setTileFocus: Function;
-  castling: boolean;
   setCastling: Function;
+  setEndPawn: Function;
 }
 
 export default function King(props: Props) {
@@ -33,8 +33,8 @@ export default function King(props: Props) {
     setStartPosition,
     setAvailableMoves,
     setTileFocus,
-    castling,
     setCastling,
+    setEndPawn,
   } = props;
   const [state, setState] = useState({
     hasUsedFirstMoved: false,
@@ -147,6 +147,7 @@ export default function King(props: Props) {
     } else {
       setCastling(true);
     }
+    setEndPawn(false);
     return castlingMoves;
   };
 

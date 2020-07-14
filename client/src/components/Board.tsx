@@ -40,7 +40,15 @@ export default function Board() {
     ],
     killPosition: '',
     castling: false,
+    endPawn: false,
   });
+
+  function setEndPawn(boolean: boolean) {
+    setState((prev) => ({
+      ...prev,
+      endPawn: boolean,
+    }));
+  }
 
   function setCastling(boolean: boolean) {
     setState((prev) => ({
@@ -59,12 +67,12 @@ export default function Board() {
     // }
   }
 
-  const setKillPosition = (tileInfo: Position, castling: boolean) => {
+  const setKillPosition = (tileInfo: Position, specialMove: boolean) => {
     if (state.tileFocus !== tileInfo.tile) {
       setState((prev) => ({ ...prev, killPosition: state.tileFocus }));
     }
-    // castling case
-    if (castling) {
+    // castling case or pawn upgraded
+    if (specialMove) {
       setState((prev) => ({ ...prev, killPosition: tileInfo.tile }));
     }
   };
@@ -125,6 +133,8 @@ export default function Board() {
             setKillPosition={setKillPosition}
             castling={state.castling}
             setCastling={setCastling}
+            endPawn={state.endPawn}
+            setEndPawn={setEndPawn}
           />,
         );
       });
@@ -137,6 +147,7 @@ export default function Board() {
     state.killPosition,
     state.tileFocus,
     state.castling,
+    state.endPawn,
   ]);
 
   return <div className='board'>{state.board}</div>;

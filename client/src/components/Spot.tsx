@@ -37,6 +37,7 @@ interface Props {
   availableMoves: {
     x: number;
     y: number;
+    piece: string;
   }[];
   setAvailableMoves: Function;
   killPosition: string;
@@ -274,6 +275,7 @@ export default function Spot(props: Props) {
       setTileFocus();
       setAvailableMoves([]);
       // setStartPosition({ x: 0, y: 0 }, '', '');
+
     }
   };
 
@@ -430,7 +432,7 @@ export default function Spot(props: Props) {
         {props.tile}
       </span>
       <span
-        className='available-moves-circle'
+        className={state.isOccupied ? 'kill-moves-circle' : 'available-moves-circle'}
         style={state.isCircleVisible ? { display: 'block' } : { display: 'none' }}
       ></span>
     </div>

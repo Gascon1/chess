@@ -54,6 +54,14 @@
       border-radius: 50%;
       background: #6b9b2b81;
     }
+    .kill-moves-circle {
+      display: none;
+      position: absolute;
+      width: 25px;
+      height: 25px;
+      border-radius: 50%;
+      background: red;
+    }
   }
 
   .show {

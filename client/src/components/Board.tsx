@@ -36,6 +36,7 @@ export default function Board() {
       {
         x: 0,
         y: 0,
+        piece: '',
       },
     ],
     killPosition: '',

@@ -96,6 +96,7 @@ export default function Pawn(props: Props) {
   const availableMoves = (currentPosition: Position) => {
     const result: Array<any> = [];
     const currentSquare: Spots | undefined = getSpotDetails(currentPosition.x, currentPosition.y);
+
     //WHITE
     const forwardOnceWhite: Spots | undefined = getSpotDetails(
       currentPosition.x,
@@ -188,7 +189,6 @@ export default function Pawn(props: Props) {
   ) => {
     e.stopPropagation();
     let availMoves = availableMoves(currentPosition);
-
     setAvailableMoves(availMoves);
     setStartPosition(currentPosition, state.pieceType, state.isWhite ? 'white' : 'black');
     setTileFocus(currentPosition.tile);

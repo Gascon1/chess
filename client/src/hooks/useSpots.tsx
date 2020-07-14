@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react';
-import { SpotsContext, Spots } from '../context/SpotsContext';
+import { /*SpotsContext,*/ Spots } from '../context/SpotsContext';
 
 export const useSpots = () => {
   const [state, setState] = useState({
@@ -16,6 +16,7 @@ export const useSpots = () => {
         },
         isOccupied: true,
         isCircleVisible: false,
+        hasMoved: false,
       },
     ],
   });
@@ -56,19 +57,6 @@ export const useSpots = () => {
         return spot;
       }
     }
-    // return {
-    //   activePiece: {
-    //     pieceType: '',
-    //     color: '',
-    //   },
-    //   tileInfo: {
-    //     tile: '',
-    //     x: 0,
-    //     y: 0,
-    //   },
-    //   isOccupied: false,
-    //   isCircleVisible: false,
-    // };
   };
 
   const spots = state.spotsContainer;

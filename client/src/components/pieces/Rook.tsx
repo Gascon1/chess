@@ -20,11 +20,12 @@ interface Props {
   setStartPosition: Function;
   setAvailableMoves: Function;
   setTileFocus: Function;
+  setCastling: Function;
 }
 
 export default function Rook(props: Props) {
   const { getSpotDetails } = useContext(SpotsContext);
-  const { tileInfo, white, setStartPosition, setAvailableMoves, setTileFocus } = props;
+  const { tileInfo, white, setStartPosition, setAvailableMoves, setTileFocus, setCastling } = props;
   const [state, setState] = useState({
     hasUsedFirstMoved: false,
     pieceType: 'rook',
@@ -130,6 +131,7 @@ export default function Rook(props: Props) {
         straightLine.push(downRow);
       }
     }
+    setCastling(false);
     return straightLine;
   };
 
@@ -138,7 +140,6 @@ export default function Rook(props: Props) {
     e: React.MouseEvent<SVGSVGElement, MouseEvent>,
   ) => {
     e.stopPropagation();
-    // console.log(currentPosition);
     let availMoves = availableMoves(currentPosition);
     setAvailableMoves(availMoves);
     setStartPosition(currentPosition, state.pieceType, state.isWhite ? 'white' : 'black');

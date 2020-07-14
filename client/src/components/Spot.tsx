@@ -7,6 +7,7 @@ import Queen from 'components/pieces/Queen';
 import King from 'components/pieces/King';
 import { SpotsContext } from 'context/SpotsContext';
 import { useGenerateBoard } from 'hooks/useGenerateBoard';
+import { start } from 'repl';
 interface Position {
   tile: string;
   x: number;
@@ -40,6 +41,8 @@ interface Props {
   setAvailableMoves: Function;
   killPosition: string;
   setKillPosition: Function;
+  castling: boolean;
+  setCastling: Function;
 }
 const brown = '#8a604a';
 const beige = '#e5d3ba';
@@ -60,6 +63,8 @@ export default function Spot(props: Props) {
     setAvailableMoves,
     killPosition,
     setKillPosition,
+    castling,
+    setCastling,
   } = props;
 
   const [state, setState] = useState({
@@ -75,6 +80,7 @@ export default function Spot(props: Props) {
     isOccupied: false,
     isCircleVisible: false,
     hasUpdated: false,
+    hasMoved: false,
   });
 
   let labelColor = '';
@@ -128,40 +134,154 @@ export default function Spot(props: Props) {
     setSpotsContext(state);
   }, [setSpotsContext, state]);
 
+  useEffect(() => {
+    //WHITE CASTLING -----------------------------------------------------------------------
+
+    if (castling && startPosition.tile === 'e1' && destination.tile === 'g1') {
+      let kingSideRookWhite: Position = {
+        tile: 'h1',
+        x: 8,
+        y: 1,
+      };
+      setKillPosition(kingSideRookWhite, true);
+      if (state.tileInfo.tile === 'f1') {
+        setState({
+          ...state,
+          activePiece: {
+            pieceType: 'rook',
+            color: 'white',
+          },
+          tileInfo: {
+            tile: 'f1',
+            x: 6,
+            y: 1,
+          },
+          isOccupied: true,
+          hasMoved: true,
+        });
+      }
+    }
+    if (castling && startPosition.tile === 'e1' && destination.tile === 'c1') {
+      let queenSideRookWhite: Position = {
+        tile: 'a1',
+        x: 1,
+        y: 1,
+      };
+      setKillPosition(queenSideRookWhite, true);
+      if (state.tileInfo.tile === 'd1') {
+        setState({
+          ...state,
+          activePiece: {
+            pieceType: 'rook',
+            color: 'white',
+          },
+          tileInfo: {
+            tile: 'd1',
+            x: 4,
+            y: 1,
+          },
+          isOccupied: true,
+          hasMoved: true,
+        });
+      }
+    }
+
+    //BLACK CASTLING -----------------------------------------------------------------------
+
+    if (castling && startPosition.tile === 'e8' && destination.tile === 'g8') {
+      let kingSideRookBlack: Position = {
+        tile: 'h8',
+        x: 8,
+        y: 8,
+      };
+      setKillPosition(kingSideRookBlack, true);
+      if (state.tileInfo.tile === 'f8') {
+        setState({
+          ...state,
+          activePiece: {
+            pieceType: 'rook',
+            color: 'black',
+          },
+          tileInfo: {
+            tile: 'f8',
+            x: 6,
+            y: 8,
+          },
+          isOccupied: true,
+          hasMoved: true,
+        });
+      }
+    }
+    if (castling && startPosition.tile === 'e8' && destination.tile === 'c8') {
+      let queenSideRookBlack: Position = {
+        tile: 'a8',
+        x: 1,
+        y: 8,
+      };
+      setKillPosition(queenSideRookBlack, true);
+      if (state.tileInfo.tile === 'd8') {
+        setState({
+          ...state,
+          activePiece: {
+            pieceType: 'rook',
+            color: 'black',
+          },
+          tileInfo: {
+            tile: 'd8',
+            x: 4,
+            y: 8,
+          },
+          isOccupied: true,
+          hasMoved: true,
+        });
+      }
+    }
+  }, [destination, startPosition, castling]);
+
+  const onMoveStart = () => {
+    if (startPosition.tile) {
+      setDestination(
+        state.tileInfo,
+        startPosition.activePiece.pieceType,
+        startPosition.activePiece.color,
+      );
+
+      if (!destination.isFriendly) {
+        for (
+          let availableCounter = 0;
+          availableCounter < availableMoves.length;
+          availableCounter++
+        ) {
+          if (
+            state.activePiece.color !== startPosition.activePiece.color &&
+            state.tileInfo.x === availableMoves[availableCounter].x &&
+            state.tileInfo.y === availableMoves[availableCounter].y
+          ) {
+            setKillPosition(state.tileInfo, false);
+            setState({
+              ...state,
+              activePiece: {
+                pieceType: startPosition.activePiece.pieceType,
+                color: startPosition.activePiece.color,
+              },
+              isOccupied: true,
+              hasMoved: true,
+            });
+          }
+        }
+      }
+
+      setTileFocus();
+      setAvailableMoves([]);
+      // setStartPosition({ x: 0, y: 0 }, '', '');
+    }
+  };
+
   return (
     <div
       className={`square ${props.color} ${props.tileFocus === state.tileInfo.tile ? 'focus' : ''}`}
       onClick={() => {
-        if (startPosition.tile) {
-          setDestination(state.tileInfo);
-          if (!destination.isFriendly) {
-            for (
-              let availableCounter = 0;
-              availableCounter < availableMoves.length;
-              availableCounter++
-            ) {
-              if (
-                state.activePiece.color !== startPosition.activePiece.color &&
-                state.tileInfo.x === availableMoves[availableCounter].x &&
-                state.tileInfo.y === availableMoves[availableCounter].y
-              ) {
-                setKillPosition(state.tileInfo);
-                setState({
-                  ...state,
-                  activePiece: {
-                    pieceType: startPosition.activePiece.pieceType,
-                    color: startPosition.activePiece.color,
-                  },
-                  isOccupied: true,
-                });
-              }
-            }
-          }
-
-          setTileFocus();
-          setAvailableMoves([]);
-          setStartPosition({ x: 0, y: 0 }, '', '');
-        }
+        onMoveStart();
       }}
     >
       {/* Pawn START */}
@@ -172,6 +292,7 @@ export default function Spot(props: Props) {
           setStartPosition={setStartPosition}
           setAvailableMoves={setAvailableMoves}
           setTileFocus={setTileFocus}
+          setCastling={setCastling}
         />
       )}
 
@@ -182,6 +303,7 @@ export default function Spot(props: Props) {
           setStartPosition={setStartPosition}
           setAvailableMoves={setAvailableMoves}
           setTileFocus={setTileFocus}
+          setCastling={setCastling}
         />
       )}
 
@@ -195,6 +317,7 @@ export default function Spot(props: Props) {
           setStartPosition={setStartPosition}
           setAvailableMoves={setAvailableMoves}
           setTileFocus={setTileFocus}
+          setCastling={setCastling}
         />
       )}
       {state.activePiece.pieceType === 'rook' && state.activePiece.color === 'white' && (
@@ -204,6 +327,7 @@ export default function Spot(props: Props) {
           setStartPosition={setStartPosition}
           setAvailableMoves={setAvailableMoves}
           setTileFocus={setTileFocus}
+          setCastling={setCastling}
         />
       )}
       {/* Rook END */}
@@ -216,6 +340,7 @@ export default function Spot(props: Props) {
           setStartPosition={setStartPosition}
           setAvailableMoves={setAvailableMoves}
           setTileFocus={setTileFocus}
+          setCastling={setCastling}
         />
       )}
       {state.activePiece.pieceType === 'knight' && state.activePiece.color === 'white' && (
@@ -225,6 +350,7 @@ export default function Spot(props: Props) {
           setStartPosition={setStartPosition}
           setAvailableMoves={setAvailableMoves}
           setTileFocus={setTileFocus}
+          setCastling={setCastling}
         />
       )}
       {/* Knight END */}
@@ -237,6 +363,7 @@ export default function Spot(props: Props) {
           setStartPosition={setStartPosition}
           setAvailableMoves={setAvailableMoves}
           setTileFocus={setTileFocus}
+          setCastling={setCastling}
         />
       )}
       {state.activePiece.pieceType === 'bishop' && state.activePiece.color === 'white' && (
@@ -246,6 +373,7 @@ export default function Spot(props: Props) {
           setStartPosition={setStartPosition}
           setAvailableMoves={setAvailableMoves}
           setTileFocus={setTileFocus}
+          setCastling={setCastling}
         />
       )}
       {/* Bishop END */}
@@ -258,6 +386,7 @@ export default function Spot(props: Props) {
           setStartPosition={setStartPosition}
           setAvailableMoves={setAvailableMoves}
           setTileFocus={setTileFocus}
+          setCastling={setCastling}
         />
       )}
       {state.activePiece.pieceType === 'queen' && state.activePiece.color === 'white' && (
@@ -267,6 +396,7 @@ export default function Spot(props: Props) {
           setStartPosition={setStartPosition}
           setAvailableMoves={setAvailableMoves}
           setTileFocus={setTileFocus}
+          setCastling={setCastling}
         />
       )}
       {/* Queen END */}
@@ -279,6 +409,8 @@ export default function Spot(props: Props) {
           setStartPosition={setStartPosition}
           setAvailableMoves={setAvailableMoves}
           setTileFocus={setTileFocus}
+          castling={castling}
+          setCastling={setCastling}
         />
       )}
       {state.activePiece.pieceType === 'king' && state.activePiece.color === 'white' && (
@@ -288,6 +420,8 @@ export default function Spot(props: Props) {
           setStartPosition={setStartPosition}
           setAvailableMoves={setAvailableMoves}
           setTileFocus={setTileFocus}
+          castling={castling}
+          setCastling={setCastling}
         />
       )}
       {/* King END */}

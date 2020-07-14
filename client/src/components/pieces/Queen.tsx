@@ -16,11 +16,12 @@ interface Props {
   setStartPosition: Function;
   setAvailableMoves: Function;
   setTileFocus: Function;
+  setCastling: Function;
 }
 
 export default function Queen(props: Props) {
   const { getSpotDetails } = useContext(SpotsContext);
-  const { tileInfo, white, setStartPosition, setAvailableMoves, setTileFocus } = props;
+  const { tileInfo, white, setStartPosition, setAvailableMoves, setTileFocus, setCastling } = props;
   const [state, setState] = useState({
     hasUsedFirstMoved: false,
     isWhite: true,
@@ -55,6 +56,7 @@ export default function Queen(props: Props) {
 
     const currentSpot: Spots | undefined = getSpotDetails(currentPosition.x, currentPosition.y);
 
+    // ------------------------------BISHOP FOR LOOPS-----------------------------------------
     for (i; i < 9; i++) {
       let downRight = { x: i, y: b-- };
 
@@ -212,7 +214,7 @@ export default function Queen(props: Props) {
         diagonal.push(downRow);
       }
     }
-
+    setCastling(false);
     return diagonal;
   };
 

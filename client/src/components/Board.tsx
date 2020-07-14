@@ -11,7 +11,6 @@ interface Position {
 }
 
 export default function Board() {
-  // Todo: integrate pieces into each square created in board;
   const [state, setState] = useState({
     board: [],
     startPosition: {
@@ -40,7 +39,15 @@ export default function Board() {
       },
     ],
     killPosition: '',
+    castling: false,
   });
+
+  function setCastling(boolean: boolean) {
+    setState((prev) => ({
+      ...prev,
+      castling: boolean,
+    }));
+  }
 
   function setDestination(tileInfo: Position, pieceType: string, color: string) {
     setState((prev) => ({
@@ -52,9 +59,14 @@ export default function Board() {
     // }
   }
 
-  const setKillPosition = (tileInfo: Position) => {
+  const setKillPosition = (tileInfo: Position, castling: boolean) => {
     if (state.tileFocus !== tileInfo.tile) {
       setState((prev) => ({ ...prev, killPosition: state.tileFocus }));
+    }
+    // castling case
+    if (castling) {
+      console.log('reached set state for castling case');
+      setState((prev) => ({ ...prev, killPosition: tileInfo.tile }));
     }
   };
 
@@ -62,15 +74,15 @@ export default function Board() {
     setState((prev) => ({
       ...prev,
       startPosition: { activePiece: { pieceType, color }, ...tileInfo },
-      destination: {
-        activePiece: {
-          pieceType: '',
-          color: '',
-        },
-        tile: '',
-        x: 0,
-        y: 0,
-      },
+      // destination: {
+      //   activePiece: {
+      //     pieceType: '',
+      //     color: '',
+      //   },
+      //   tile: '',
+      //   x: 0,
+      //   y: 0,
+      // },
     }));
   }
 
@@ -112,6 +124,8 @@ export default function Board() {
             setAvailableMoves={setAvailableMoves}
             killPosition={state.killPosition}
             setKillPosition={setKillPosition}
+            castling={state.castling}
+            setCastling={setCastling}
           />,
         );
       });
@@ -123,8 +137,8 @@ export default function Board() {
     state.availableMoves,
     state.killPosition,
     state.tileFocus,
+    state.castling,
   ]);
 
   return <div className='board'>{state.board}</div>;
 }
-//ss

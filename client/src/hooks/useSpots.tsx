@@ -57,19 +57,6 @@ export const useSpots = () => {
         return spot;
       }
     }
-    // return {
-    //   activePiece: {
-    //     pieceType: '',
-    //     color: '',
-    //   },
-    //   tileInfo: {
-    //     tile: '',
-    //     x: 0,
-    //     y: 0,
-    //   },
-    //   isOccupied: false,
-    //   isCircleVisible: false,
-    // };
   };
 
   const spots = state.spotsContainer;

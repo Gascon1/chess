@@ -21,11 +21,21 @@ interface Props {
   setStartPosition: Function;
   setAvailableMoves: Function;
   setTileFocus: Function;
+  castling: boolean;
+  setCastling: Function;
 }
 
 export default function King(props: Props) {
   const { getSpotDetails } = useContext(SpotsContext);
-  const { tileInfo, white, setStartPosition, setAvailableMoves, setTileFocus } = props;
+  const {
+    tileInfo,
+    white,
+    setStartPosition,
+    setAvailableMoves,
+    setTileFocus,
+    castling,
+    setCastling,
+  } = props;
   const [state, setState] = useState({
     hasUsedFirstMoved: false,
     isWhite: true,
@@ -133,6 +143,9 @@ export default function King(props: Props) {
     }
     if (!castlingMoves.length) {
       castlingMoves.push({ x: 0, y: 0 });
+      setCastling(false);
+    } else {
+      setCastling(true);
     }
     return castlingMoves;
   };

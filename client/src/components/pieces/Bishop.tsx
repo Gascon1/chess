@@ -20,11 +20,12 @@ interface Props {
   setStartPosition: Function;
   setAvailableMoves: Function;
   setTileFocus: Function;
+  setCastling: Function;
 }
 
 export default function Bishop(props: Props) {
   const { getSpotDetails } = useContext(SpotsContext);
-  const { tileInfo, white, setStartPosition, setAvailableMoves, setTileFocus } = props;
+  const { tileInfo, white, setStartPosition, setAvailableMoves, setTileFocus, setCastling } = props;
 
   const [state, setState] = useState({
     hasUsedFirstMoved: false,
@@ -131,7 +132,7 @@ export default function Bishop(props: Props) {
         diagonal.push(upLeft);
       }
     }
-
+    setCastling(false);
     return diagonal;
   };
 

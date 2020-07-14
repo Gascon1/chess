@@ -135,38 +135,106 @@ export default function Spot(props: Props) {
   }, [setSpotsContext, state]);
 
   useEffect(() => {
-    if (
-      startPosition.tile !== destination.tile &&
-      startPosition.tile &&
-      destination.tile &&
-      castling &&
-      startPosition.tile === 'e1' &&
-      destination.tile === 'g1'
-    ) {
-      let kingSideRook: Position = {
+    //WHITE CASTLING -----------------------------------------------------------------------
+
+    if (castling && startPosition.tile === 'e1' && destination.tile === 'g1') {
+      let kingSideRookWhite: Position = {
         tile: 'h1',
         x: 8,
         y: 1,
       };
-      // console.log('reached useEffect');
-      setKillPosition(kingSideRook, true);
+      setKillPosition(kingSideRookWhite, true);
       if (state.tileInfo.tile === 'f1') {
-        console.log(state.activePiece.pieceType);
+        setState({
+          ...state,
+          activePiece: {
+            pieceType: 'rook',
+            color: 'white',
+          },
+          tileInfo: {
+            tile: 'f1',
+            x: 6,
+            y: 1,
+          },
+          isOccupied: true,
+          hasMoved: true,
+        });
       }
-      //   setState({
-      //     ...state,
-      //     activePiece: {
-      //       pieceType: 'rook',
-      //       color: 'white',
-      //     },
-      //     tileInfo: {
-      //       tile: 'f1',
-      //       x: 6,
-      //       y: 1,
-      //     },
-      //     isOccupied: true,
-      //     hasMoved: true,
-      //   });
+    }
+    if (castling && startPosition.tile === 'e1' && destination.tile === 'c1') {
+      let queenSideRookWhite: Position = {
+        tile: 'a1',
+        x: 1,
+        y: 1,
+      };
+      setKillPosition(queenSideRookWhite, true);
+      if (state.tileInfo.tile === 'd1') {
+        setState({
+          ...state,
+          activePiece: {
+            pieceType: 'rook',
+            color: 'white',
+          },
+          tileInfo: {
+            tile: 'd1',
+            x: 4,
+            y: 1,
+          },
+          isOccupied: true,
+          hasMoved: true,
+        });
+      }
+    }
+
+    //BLACK CASTLING -----------------------------------------------------------------------
+
+    if (castling && startPosition.tile === 'e8' && destination.tile === 'g8') {
+      let kingSideRookBlack: Position = {
+        tile: 'h8',
+        x: 8,
+        y: 8,
+      };
+      setKillPosition(kingSideRookBlack, true);
+      if (state.tileInfo.tile === 'f8') {
+        setState({
+          ...state,
+          activePiece: {
+            pieceType: 'rook',
+            color: 'black',
+          },
+          tileInfo: {
+            tile: 'f8',
+            x: 6,
+            y: 8,
+          },
+          isOccupied: true,
+          hasMoved: true,
+        });
+      }
+    }
+    if (castling && startPosition.tile === 'e8' && destination.tile === 'c8') {
+      let queenSideRookBlack: Position = {
+        tile: 'a8',
+        x: 1,
+        y: 8,
+      };
+      setKillPosition(queenSideRookBlack, true);
+      if (state.tileInfo.tile === 'd8') {
+        setState({
+          ...state,
+          activePiece: {
+            pieceType: 'rook',
+            color: 'black',
+          },
+          tileInfo: {
+            tile: 'd8',
+            x: 4,
+            y: 8,
+          },
+          isOccupied: true,
+          hasMoved: true,
+        });
+      }
     }
   }, [destination, startPosition, castling]);
 
@@ -177,11 +245,6 @@ export default function Spot(props: Props) {
         startPosition.activePiece.pieceType,
         startPosition.activePiece.color,
       );
-
-      // if (startPosition.tile !== destination.tile && startPosition.tile && destination.tile) {
-      //   console.log('startPosition', startPosition);
-      //   console.log('destination', destination);
-      // }
 
       if (!destination.isFriendly) {
         for (
@@ -229,6 +292,7 @@ export default function Spot(props: Props) {
           setStartPosition={setStartPosition}
           setAvailableMoves={setAvailableMoves}
           setTileFocus={setTileFocus}
+          setCastling={setCastling}
         />
       )}
 
@@ -239,6 +303,7 @@ export default function Spot(props: Props) {
           setStartPosition={setStartPosition}
           setAvailableMoves={setAvailableMoves}
           setTileFocus={setTileFocus}
+          setCastling={setCastling}
         />
       )}
 
@@ -252,6 +317,7 @@ export default function Spot(props: Props) {
           setStartPosition={setStartPosition}
           setAvailableMoves={setAvailableMoves}
           setTileFocus={setTileFocus}
+          setCastling={setCastling}
         />
       )}
       {state.activePiece.pieceType === 'rook' && state.activePiece.color === 'white' && (
@@ -261,6 +327,7 @@ export default function Spot(props: Props) {
           setStartPosition={setStartPosition}
           setAvailableMoves={setAvailableMoves}
           setTileFocus={setTileFocus}
+          setCastling={setCastling}
         />
       )}
       {/* Rook END */}
@@ -273,6 +340,7 @@ export default function Spot(props: Props) {
           setStartPosition={setStartPosition}
           setAvailableMoves={setAvailableMoves}
           setTileFocus={setTileFocus}
+          setCastling={setCastling}
         />
       )}
       {state.activePiece.pieceType === 'knight' && state.activePiece.color === 'white' && (
@@ -282,6 +350,7 @@ export default function Spot(props: Props) {
           setStartPosition={setStartPosition}
           setAvailableMoves={setAvailableMoves}
           setTileFocus={setTileFocus}
+          setCastling={setCastling}
         />
       )}
       {/* Knight END */}
@@ -294,6 +363,7 @@ export default function Spot(props: Props) {
           setStartPosition={setStartPosition}
           setAvailableMoves={setAvailableMoves}
           setTileFocus={setTileFocus}
+          setCastling={setCastling}
         />
       )}
       {state.activePiece.pieceType === 'bishop' && state.activePiece.color === 'white' && (
@@ -303,6 +373,7 @@ export default function Spot(props: Props) {
           setStartPosition={setStartPosition}
           setAvailableMoves={setAvailableMoves}
           setTileFocus={setTileFocus}
+          setCastling={setCastling}
         />
       )}
       {/* Bishop END */}
@@ -315,6 +386,7 @@ export default function Spot(props: Props) {
           setStartPosition={setStartPosition}
           setAvailableMoves={setAvailableMoves}
           setTileFocus={setTileFocus}
+          setCastling={setCastling}
         />
       )}
       {state.activePiece.pieceType === 'queen' && state.activePiece.color === 'white' && (
@@ -324,6 +396,7 @@ export default function Spot(props: Props) {
           setStartPosition={setStartPosition}
           setAvailableMoves={setAvailableMoves}
           setTileFocus={setTileFocus}
+          setCastling={setCastling}
         />
       )}
       {/* Queen END */}

@@ -16,17 +16,12 @@ interface Props {
   setStartPosition: Function;
   setAvailableMoves: Function;
   setTileFocus: Function;
+  setCastling: Function;
 }
 
 export default function Pawn(props: Props) {
   const { getSpotDetails } = useContext(SpotsContext);
-  const {
-    tileInfo,
-    white,
-    setStartPosition,
-    setAvailableMoves,
-    setTileFocus,
-  } = props;
+  const { tileInfo, white, setStartPosition, setAvailableMoves, setTileFocus, setCastling } = props;
   const [state, setState] = useState({
     hasUsedFirstMoved: false,
     pieceType: 'pawn',
@@ -102,15 +97,39 @@ export default function Pawn(props: Props) {
     const result: Array<any> = [];
     const currentSquare: Spots | undefined = getSpotDetails(currentPosition.x, currentPosition.y);
     //WHITE
-    const forwardOnceWhite: Spots | undefined = getSpotDetails(currentPosition.x, currentPosition.y + 1);
-    const forwardTwiceWhite: Spots | undefined = getSpotDetails(currentPosition.x, currentPosition.y + 2);
-    const diagonalLeftWhite: Spots | undefined = getSpotDetails(currentPosition.x + 1, currentPosition.y + 1);
-    const diagonalRightWhite: Spots | undefined = getSpotDetails(currentPosition.x - 1, currentPosition.y + 1);
+    const forwardOnceWhite: Spots | undefined = getSpotDetails(
+      currentPosition.x,
+      currentPosition.y + 1,
+    );
+    const forwardTwiceWhite: Spots | undefined = getSpotDetails(
+      currentPosition.x,
+      currentPosition.y + 2,
+    );
+    const diagonalLeftWhite: Spots | undefined = getSpotDetails(
+      currentPosition.x + 1,
+      currentPosition.y + 1,
+    );
+    const diagonalRightWhite: Spots | undefined = getSpotDetails(
+      currentPosition.x - 1,
+      currentPosition.y + 1,
+    );
     //BLACK
-    const forwardOnceBlack: Spots | undefined = getSpotDetails(currentPosition.x, currentPosition.y - 1);
-    const forwardTwiceBlack: Spots | undefined = getSpotDetails(currentPosition.x, currentPosition.y - 2);
-    const diagonalLeftBlack: Spots | undefined = getSpotDetails(currentPosition.x + 1, currentPosition.y - 1);
-    const diagonalRightBlack: Spots | undefined = getSpotDetails(currentPosition.x - 1, currentPosition.y - 1);
+    const forwardOnceBlack: Spots | undefined = getSpotDetails(
+      currentPosition.x,
+      currentPosition.y - 1,
+    );
+    const forwardTwiceBlack: Spots | undefined = getSpotDetails(
+      currentPosition.x,
+      currentPosition.y - 2,
+    );
+    const diagonalLeftBlack: Spots | undefined = getSpotDetails(
+      currentPosition.x + 1,
+      currentPosition.y - 1,
+    );
+    const diagonalRightBlack: Spots | undefined = getSpotDetails(
+      currentPosition.x - 1,
+      currentPosition.y - 1,
+    );
 
     if (currentSquare?.activePiece.color === 'white') {
       if (currentSquare.tileInfo.y === 2) {
@@ -159,6 +178,7 @@ export default function Pawn(props: Props) {
     if (!result.length) {
       result.push({ x: 0, y: 0 });
     }
+    setCastling(false);
     return result;
   };
 

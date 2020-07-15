@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import isEven from 'helpers/isEven';
 import Spot from 'components/Spot';
+import { ReactComponent as BishopImage } from 'images/bishop.svg';
+import { ReactComponent as RookImage } from 'images/rook.svg';
+import { ReactComponent as KnightImage } from 'images/knight.svg';
+import { ReactComponent as QueenImage } from 'images/queen.svg';
 
 interface Position {
   tile: string;
@@ -150,5 +154,54 @@ export default function Board() {
     state.endPawn,
   ]);
 
-  return <div className='board'>{state.board}</div>;
+  // have a state that checks the color of the pawn
+  // have state that triggers when pawn is on the end square
+
+  // in spot I have to create a state that triggers when pawn is on end square, setState must await for user click after, state is responsible for letting
+  // board div promotion know what colour the piece should be
+
+  // how tf do I make it appear over a specific square
+
+  //create overlay on board that kind of forces user to click on the desired piece
+
+  // create state for endPawn and set it, send it down to spot
+  return (
+    <div className='viewport'>
+      <div className='board'>{state.board}</div>
+      <div className='promotion'>
+        <span className='promotion squareP beige'>
+          <QueenImage
+            className='piece white'
+            onClick={(e) => {
+              // send info to spawn piece
+            }}
+          />
+        </span>
+        <span className='promotion squareP brown'>
+          <KnightImage
+            className='piece white'
+            onClick={(e) => {
+              // send info to spawn piece
+            }}
+          />
+        </span>
+        <span className='promotion squareP beige'>
+          <RookImage
+            className='piece white'
+            onClick={(e) => {
+              // send info to spawn piece
+            }}
+          />
+        </span>
+        <span className='promotion squareP brown'>
+          <BishopImage
+            className='piece white'
+            onClick={(e) => {
+              // send info to spawn piece
+            }}
+          />
+        </span>
+      </div>
+    </div>
+  );
 }

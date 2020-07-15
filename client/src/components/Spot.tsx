@@ -249,7 +249,8 @@ export default function Spot(props: Props) {
       endPawn &&
       startPosition.activePiece.pieceType === 'pawn' &&
       startPosition.activePiece.color === 'white' &&
-      destination.y === 8
+      destination.y === 8 &&
+      startPosition.y === 7
     ) {
       let deletePawnWhite: Position = {
         tile: destination.tile,
@@ -306,7 +307,7 @@ export default function Spot(props: Props) {
         });
       }
     }
-  }, [endPawn, destination, setKillPosition, startPosition, state.tileInfo.tile]);
+  }, [endPawn, destination, setKillPosition, startPosition, state.tileInfo.tile, setEndPawn]);
 
   const onMoveStart = () => {
     if (startPosition.tile) {

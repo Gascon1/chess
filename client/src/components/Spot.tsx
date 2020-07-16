@@ -262,8 +262,8 @@ export default function Spot(props: Props) {
 
     if (
       endPawn &&
-      startPosition.activePiece.pieceType === 'pawn' &&
-      startPosition.activePiece.color === 'white' &&
+      destination.activePiece.pieceType === 'pawn' &&
+      destination.activePiece.color === 'white' &&
       destination.y === 8
     ) {
       let deletePawnWhite: Position = {
@@ -338,28 +338,31 @@ export default function Spot(props: Props) {
   ]);
 
   useEffect(() => {
-    if (promotion.pieceType !== '') {
+    if (
+      promotion.pieceType !== '' &&
+      setEndOfBoardPawn &&
+      state.tileInfo.tile === deletePawn.tile
+    ) {
       setKillPosition(deletePawn, true);
-      if (state.tileInfo.tile === deletePawn.tile) {
-        setState({
-          ...state,
-          activePiece: {
-            pieceType: promotion.pieceType,
-            color: promotion.color,
-          },
-          tileInfo: {
-            tile: deletePawn.tile,
-            x: deletePawn.x,
-            y: deletePawn.y,
-          },
-          isOccupied: true,
-          hasMoved: true,
-        });
-      }
-      let emptyPromotion = {
-        pieceType: '',
-        color: '',
-      };
+      setState({
+        ...state,
+        activePiece: {
+          pieceType: promotion.pieceType,
+          color: promotion.color,
+        },
+        tileInfo: {
+          tile: deletePawn.tile,
+          x: deletePawn.x,
+          y: deletePawn.y,
+        },
+        isOccupied: true,
+        hasMoved: true,
+      });
+      // let emptyPromotion = {
+      //   pieceType: '',
+      //   color: '',
+      // };
+      // setPromotion(emptyPromotion);
     }
   }, [endOfBoardPawn, deletePawn, promotion, setPromotion, setKillPosition]);
 
@@ -398,7 +401,7 @@ export default function Spot(props: Props) {
 
       setTileFocus();
       setAvailableMoves([]);
-      // setStartPosition({ x: 0, y: 0 }, '', '');
+      setStartPosition({ x: 0, y: 0 }, '', '');
     }
   };
 

@@ -335,8 +335,8 @@ export default function Spot(props: Props) {
     if (
       promotion.pieceType !== '' &&
       endOfBoardPawn &&
-      state.tileInfo.tile === deletePawn.tile
-      // && currentSpot?.activePiece.pieceType === 'pawn'
+      state.tileInfo.tile === deletePawn.tile &&
+      state.activePiece.pieceType === 'pawn'
     ) {
       setKillPosition(deletePawn, true);
       setState((prev) => ({

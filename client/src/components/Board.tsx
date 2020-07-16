@@ -107,7 +107,7 @@ export default function Board() {
       setState((prev) => ({ ...prev, killPosition: state.tileFocus }));
     }
     // castling case or pawn upgraded
-    if (specialMove) {
+    else if (specialMove) {
       setState((prev) => ({ ...prev, killPosition: tileInfo.tile }));
     }
   };
@@ -181,6 +181,7 @@ export default function Board() {
       });
     }
     setState((prev) => ({ ...prev, board }));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     state.destination,
     state.startPosition,

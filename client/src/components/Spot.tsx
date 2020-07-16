@@ -328,14 +328,7 @@ export default function Spot(props: Props) {
       //   });
       // }
     }
-  }, [
-    endPawn,
-    destination,
-    setKillPosition,
-    startPosition,
-    state.tileInfo.tile,
-    setEndOfBoardPawn,
-  ]);
+  }, [endPawn, destination]);
 
   useEffect(() => {
     let currentSpot = getSpotDetails(deletePawn.x, deletePawn.y);

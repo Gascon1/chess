@@ -331,35 +331,31 @@ export default function Spot(props: Props) {
   }, [endPawn, destination]);
 
   useEffect(() => {
-    let currentSpot = getSpotDetails(deletePawn.x, deletePawn.y);
+    // let currentSpot = getSpotDetails(deletePawn.x, deletePawn.y);
     if (
       promotion.pieceType !== '' &&
       endOfBoardPawn &&
-      state.tileInfo.tile === deletePawn.tile &&
-      currentSpot?.activePiece.pieceType === 'pawn'
+      state.tileInfo.tile === deletePawn.tile
+      // && currentSpot?.activePiece.pieceType === 'pawn'
     ) {
       setKillPosition(deletePawn, true);
-      setState({
-        ...state,
+      setState((prev) => ({
+        ...prev,
         activePiece: {
           pieceType: promotion.pieceType,
           color: promotion.color,
         },
-        // tileInfo: {
-        //   tile: deletePawn.tile,
-        //   x: deletePawn.x,
-        //   y: deletePawn.y,
-        // },
         isOccupied: true,
         hasMoved: true,
-      });
+      }));
+
       // let emptyPromotion = {
       //   pieceType: '',
       //   color: '',
       // };
       // setPromotion(emptyPromotion);
     }
-  }, [endOfBoardPawn, deletePawn, promotion, setPromotion, setKillPosition, state]);
+  }, [endOfBoardPawn, promotion.color, deletePawn, promotion.pieceType, setKillPosition]);
 
   const onMoveStart = () => {
     if (startPosition.tile) {

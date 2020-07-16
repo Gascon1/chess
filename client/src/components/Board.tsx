@@ -45,7 +45,38 @@ export default function Board() {
     killPosition: '',
     castling: false,
     endPawn: false,
+    endOfBoardPawn: false,
+    deletePawn: {
+      tile: '',
+      x: 0,
+      y: 0,
+    },
+    promotion: {
+      pieceType: '',
+      color: '',
+    },
   });
+
+  function setPromotion(promotion: any) {
+    setState((prev) => ({
+      ...prev,
+      promotion: promotion,
+    }));
+  }
+
+  function setDeletePawn(tilePosition: Position) {
+    setState((prev) => ({
+      ...prev,
+      deletePawn: tilePosition,
+    }));
+  }
+
+  function setEndOfBoardPawn(boolean: boolean) {
+    setState((prev) => ({
+      ...prev,
+      endOfBoardPawn: boolean,
+    }));
+  }
 
   function setEndPawn(boolean: boolean) {
     setState((prev) => ({
@@ -139,6 +170,12 @@ export default function Board() {
             setCastling={setCastling}
             endPawn={state.endPawn}
             setEndPawn={setEndPawn}
+            endOfBoardPawn={state.endOfBoardPawn}
+            setEndOfBoardPawn={setEndOfBoardPawn}
+            deletePawn={state.deletePawn}
+            setDeletePawn={setDeletePawn}
+            promotion={state.promotion}
+            setPromotion={setPromotion}
           />,
         );
       });
@@ -152,6 +189,9 @@ export default function Board() {
     state.tileFocus,
     state.castling,
     state.endPawn,
+    state.endOfBoardPawn,
+    state.deletePawn,
+    state.promotion,
   ]);
 
   // have a state that checks the color of the pawn
@@ -168,12 +208,20 @@ export default function Board() {
   return (
     <div className='viewport'>
       <div className='board'>{state.board}</div>
-      <div className='promotion'>
+      <div
+        className='promotion'
+        style={state.endOfBoardPawn ? { display: 'flex' } : { display: 'none' }}
+      >
         <span className='promotion squareP beige'>
           <QueenImage
             className='piece white'
             onClick={(e) => {
               // send info to spawn piece
+              let queenPromotion = {
+                pieceType: 'queen',
+                color: 'white',
+              };
+              setPromotion(queenPromotion);
             }}
           />
         </span>
@@ -182,6 +230,11 @@ export default function Board() {
             className='piece white'
             onClick={(e) => {
               // send info to spawn piece
+              let knightPromotion = {
+                pieceType: 'knight',
+                color: 'white',
+              };
+              setPromotion(knightPromotion);
             }}
           />
         </span>
@@ -190,6 +243,11 @@ export default function Board() {
             className='piece white'
             onClick={(e) => {
               // send info to spawn piece
+              let rookPromotion = {
+                pieceType: 'rook',
+                color: 'white',
+              };
+              setPromotion(rookPromotion);
             }}
           />
         </span>
@@ -198,6 +256,11 @@ export default function Board() {
             className='piece white'
             onClick={(e) => {
               // send info to spawn piece
+              let bishopPromotion = {
+                pieceType: 'bishop',
+                color: 'white',
+              };
+              setPromotion(bishopPromotion);
             }}
           />
         </span>

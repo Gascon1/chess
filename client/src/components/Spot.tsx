@@ -45,6 +45,15 @@ interface Props {
   setCastling: Function;
   endPawn: boolean;
   setEndPawn: Function;
+  endOfBoardPawn: boolean;
+  setEndOfBoardPawn: Function;
+  deletePawn: Position;
+  setDeletePawn: Function;
+  promotion: {
+    pieceType: string;
+    color: string;
+  };
+  setPromotion: Function;
 }
 const brown = '#8a604a';
 const beige = '#e5d3ba';
@@ -69,6 +78,12 @@ export default function Spot(props: Props) {
     setCastling,
     endPawn,
     setEndPawn,
+    endOfBoardPawn,
+    setEndOfBoardPawn,
+    deletePawn,
+    setDeletePawn,
+    promotion,
+    setPromotion,
   } = props;
 
   const [state, setState] = useState({
@@ -249,31 +264,35 @@ export default function Spot(props: Props) {
       endPawn &&
       startPosition.activePiece.pieceType === 'pawn' &&
       startPosition.activePiece.color === 'white' &&
-      destination.y === 8 &&
-      startPosition.y === 7
+      destination.y === 8
     ) {
       let deletePawnWhite: Position = {
         tile: destination.tile,
         x: destination.x,
         y: destination.y,
       };
-      setKillPosition(deletePawnWhite, true);
-      if (state.tileInfo.tile === destination.tile) {
-        setState({
-          ...state,
-          activePiece: {
-            pieceType: 'queen',
-            color: 'white',
-          },
-          tileInfo: {
-            tile: destination.tile,
-            x: destination.x,
-            y: destination.y,
-          },
-          isOccupied: true,
-          hasMoved: true,
-        });
-      }
+      setEndOfBoardPawn(true);
+      setDeletePawn(deletePawnWhite);
+      setEndPawn(false);
+
+      // setKillPosition(deletePawnWhite, true);
+
+      // if (state.tileInfo.tile === destination.tile) {
+      // setState({
+      //   ...state,
+      //   activePiece: {
+      //     pieceType: 'queen',
+      //     color: 'white',
+      //   },
+      //   tileInfo: {
+      //     tile: destination.tile,
+      //     x: destination.x,
+      //     y: destination.y,
+      //   },
+      //   isOccupied: true,
+      //   hasMoved: true,
+      // });
+      // }
     }
 
     // BLACK PAWN HAS REACHED END OF BOARD-----------------------------------------
@@ -289,25 +308,60 @@ export default function Spot(props: Props) {
         x: destination.x,
         y: destination.y,
       };
-      setKillPosition(deletePawnBlack, true);
-      if (state.tileInfo.tile === destination.tile) {
+      // setKillPosition(deletePawnBlack, true);
+      // if (state.tileInfo.tile === destination.tile) {
+      //   setState({
+      //     ...state,
+      //     activePiece: {
+      //       pieceType: 'queen',
+      //       color: 'black',
+      //     },
+      //     tileInfo: {
+      //       tile: destination.tile,
+      //       x: destination.x,
+      //       y: destination.y,
+      //     },
+      //     isOccupied: true,
+      //     hasMoved: true,
+      //   });
+      // }
+    }
+  }, [
+    endPawn,
+    destination,
+    setKillPosition,
+    startPosition,
+    state.tileInfo.tile,
+    setDeletePawn,
+    setEndPawn,
+    setEndOfBoardPawn,
+  ]);
+
+  useEffect(() => {
+    if (promotion.pieceType !== '') {
+      setKillPosition(deletePawn, true);
+      if (state.tileInfo.tile === deletePawn.tile) {
         setState({
           ...state,
           activePiece: {
-            pieceType: 'queen',
-            color: 'black',
+            pieceType: promotion.pieceType,
+            color: promotion.color,
           },
           tileInfo: {
-            tile: destination.tile,
-            x: destination.x,
-            y: destination.y,
+            tile: deletePawn.tile,
+            x: deletePawn.x,
+            y: deletePawn.y,
           },
           isOccupied: true,
           hasMoved: true,
         });
       }
+      let emptyPromotion = {
+        pieceType: '',
+        color: '',
+      };
     }
-  }, [endPawn, destination, setKillPosition, startPosition, state.tileInfo.tile, setEndPawn]);
+  }, [endOfBoardPawn, deletePawn, promotion, setPromotion, setKillPosition]);
 
   const onMoveStart = () => {
     if (startPosition.tile) {

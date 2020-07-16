@@ -5,7 +5,7 @@ import Knight from 'components/pieces/Knight';
 import Bishop from 'components/pieces/Bishop';
 import Queen from 'components/pieces/Queen';
 import King from 'components/pieces/King';
-import { SpotsContext } from 'context/SpotsContext';
+import { SpotsContext, Spots } from 'context/SpotsContext';
 import { useGenerateBoard } from 'hooks/useGenerateBoard';
 
 interface Position {
@@ -59,7 +59,7 @@ const brown = '#8a604a';
 const beige = '#e5d3ba';
 
 export default function Spot(props: Props) {
-  const { setSpotsContext, initSpotsContext } = useContext(SpotsContext);
+  const { setSpotsContext, initSpotsContext, getSpotDetails } = useContext(SpotsContext);
 
   const {
     tile,
@@ -255,7 +255,7 @@ export default function Spot(props: Props) {
         });
       }
     }
-  }, [castling, destination, startPosition.tile, setKillPosition]);
+  }, [castling, destination, startPosition.tile, setKillPosition, state]);
 
   useEffect(() => {
     // WHITE PAWN HAS REACHED END OF BOARD-----------------------------------------
@@ -273,7 +273,7 @@ export default function Spot(props: Props) {
       };
       setEndOfBoardPawn(true);
       setDeletePawn(deletePawnWhite);
-      setEndPawn(false);
+      // setEndPawn(false);
 
       // setKillPosition(deletePawnWhite, true);
 
@@ -308,6 +308,8 @@ export default function Spot(props: Props) {
         x: destination.x,
         y: destination.y,
       };
+      setEndOfBoardPawn(true);
+      // setDeletePawn(deletePawnBlack);
       // setKillPosition(deletePawnBlack, true);
       // if (state.tileInfo.tile === destination.tile) {
       //   setState({
@@ -332,16 +334,16 @@ export default function Spot(props: Props) {
     setKillPosition,
     startPosition,
     state.tileInfo.tile,
-    setDeletePawn,
-    setEndPawn,
     setEndOfBoardPawn,
   ]);
 
   useEffect(() => {
+    let currentSpot = getSpotDetails(deletePawn.x, deletePawn.y);
     if (
       promotion.pieceType !== '' &&
-      setEndOfBoardPawn &&
-      state.tileInfo.tile === deletePawn.tile
+      endOfBoardPawn &&
+      state.tileInfo.tile === deletePawn.tile &&
+      currentSpot?.activePiece.pieceType === 'pawn'
     ) {
       setKillPosition(deletePawn, true);
       setState({
@@ -350,11 +352,11 @@ export default function Spot(props: Props) {
           pieceType: promotion.pieceType,
           color: promotion.color,
         },
-        tileInfo: {
-          tile: deletePawn.tile,
-          x: deletePawn.x,
-          y: deletePawn.y,
-        },
+        // tileInfo: {
+        //   tile: deletePawn.tile,
+        //   x: deletePawn.x,
+        //   y: deletePawn.y,
+        // },
         isOccupied: true,
         hasMoved: true,
       });
@@ -364,7 +366,7 @@ export default function Spot(props: Props) {
       // };
       // setPromotion(emptyPromotion);
     }
-  }, [endOfBoardPawn, deletePawn, promotion, setPromotion, setKillPosition]);
+  }, [endOfBoardPawn, deletePawn, promotion, setPromotion, setKillPosition, state]);
 
   const onMoveStart = () => {
     if (startPosition.tile) {

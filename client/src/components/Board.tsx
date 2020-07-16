@@ -64,10 +64,10 @@ export default function Board() {
     }));
   }
 
-  function setDeletePawn(tilePosition: Position) {
+  function setDeletePawn(deletePawn: Position) {
     setState((prev) => ({
       ...prev,
-      deletePawn: tilePosition,
+      deletePawn,
     }));
   }
 

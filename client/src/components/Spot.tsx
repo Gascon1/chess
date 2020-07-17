@@ -43,8 +43,18 @@ interface Props {
   setKillPosition: Function;
   castling: boolean;
   setCastling: Function;
-  endPawn: boolean;
+  endPawn: {
+    flag: boolean;
+    color: string;
+  };
   setEndPawn: Function;
+  deletePawn: Position;
+  setDeletePawn: Function;
+  promotion: {
+    pieceType: string;
+    color: string;
+  };
+  setPromotion: Function;
 }
 const brown = '#8a604a';
 const beige = '#e5d3ba';
@@ -69,6 +79,10 @@ export default function Spot(props: Props) {
     setCastling,
     endPawn,
     setEndPawn,
+    deletePawn,
+    setDeletePawn,
+    promotion,
+    setPromotion,
   } = props;
 
   const [state, setState] = useState({
@@ -140,17 +154,16 @@ export default function Spot(props: Props) {
 
   useEffect(() => {
     //WHITE CASTLING -----------------------------------------------------------------------
-
     if (castling && startPosition.tile === 'e1' && destination.tile === 'g1') {
       let kingSideRookWhite: Position = {
         tile: 'h1',
         x: 8,
         y: 1,
       };
-      setKillPosition(kingSideRookWhite, true);
+      setKillPosition(kingSideRookWhite, true, false);
       if (state.tileInfo.tile === 'f1') {
-        setState({
-          ...state,
+        setState((prev) => ({
+          ...prev,
           activePiece: {
             pieceType: 'rook',
             color: 'white',
@@ -162,7 +175,7 @@ export default function Spot(props: Props) {
           },
           isOccupied: true,
           hasMoved: true,
-        });
+        }));
       }
     }
     if (castling && startPosition.tile === 'e1' && destination.tile === 'c1') {
@@ -171,10 +184,10 @@ export default function Spot(props: Props) {
         x: 1,
         y: 1,
       };
-      setKillPosition(queenSideRookWhite, true);
+      setKillPosition(queenSideRookWhite, true, false);
       if (state.tileInfo.tile === 'd1') {
-        setState({
-          ...state,
+        setState((prev) => ({
+          ...prev,
           activePiece: {
             pieceType: 'rook',
             color: 'white',
@@ -186,7 +199,7 @@ export default function Spot(props: Props) {
           },
           isOccupied: true,
           hasMoved: true,
-        });
+        }));
       }
     }
 
@@ -198,10 +211,11 @@ export default function Spot(props: Props) {
         x: 8,
         y: 8,
       };
-      setKillPosition(kingSideRookBlack, true);
+      console.log('here');
+      setKillPosition(kingSideRookBlack, true, false);
       if (state.tileInfo.tile === 'f8') {
-        setState({
-          ...state,
+        setState((prev) => ({
+          ...prev,
           activePiece: {
             pieceType: 'rook',
             color: 'black',
@@ -213,7 +227,7 @@ export default function Spot(props: Props) {
           },
           isOccupied: true,
           hasMoved: true,
-        });
+        }));
       }
     }
     if (castling && startPosition.tile === 'e8' && destination.tile === 'c8') {
@@ -222,10 +236,10 @@ export default function Spot(props: Props) {
         x: 1,
         y: 8,
       };
-      setKillPosition(queenSideRookBlack, true);
+      setKillPosition(queenSideRookBlack, true, false);
       if (state.tileInfo.tile === 'd8') {
-        setState({
-          ...state,
+        setState((prev) => ({
+          ...prev,
           activePiece: {
             pieceType: 'rook',
             color: 'black',
@@ -237,18 +251,17 @@ export default function Spot(props: Props) {
           },
           isOccupied: true,
           hasMoved: true,
-        });
+        }));
       }
     }
-  }, [castling, destination, startPosition.tile, setKillPosition]);
+  }, [destination, startPosition, castling]);
 
   useEffect(() => {
     // WHITE PAWN HAS REACHED END OF BOARD-----------------------------------------
 
     if (
-      endPawn &&
-      startPosition.activePiece.pieceType === 'pawn' &&
-      startPosition.activePiece.color === 'white' &&
+      destination.activePiece.pieceType === 'pawn' &&
+      destination.activePiece.color === 'white' &&
       destination.y === 8
     ) {
       let deletePawnWhite: Position = {
@@ -256,31 +269,15 @@ export default function Spot(props: Props) {
         x: destination.x,
         y: destination.y,
       };
-      setKillPosition(deletePawnWhite, true);
-      if (state.tileInfo.tile === destination.tile) {
-        setState({
-          ...state,
-          activePiece: {
-            pieceType: 'queen',
-            color: 'white',
-          },
-          tileInfo: {
-            tile: destination.tile,
-            x: destination.x,
-            y: destination.y,
-          },
-          isOccupied: true,
-          hasMoved: true,
-        });
-      }
+      setEndPawn('white', true);
+      setDeletePawn(deletePawnWhite);
     }
 
     // BLACK PAWN HAS REACHED END OF BOARD-----------------------------------------
 
     if (
-      endPawn &&
-      startPosition.activePiece.pieceType === 'pawn' &&
-      startPosition.activePiece.color === 'black' &&
+      destination.activePiece.pieceType === 'pawn' &&
+      destination.activePiece.color === 'black' &&
       destination.y === 1
     ) {
       let deletePawnBlack: Position = {
@@ -288,25 +285,38 @@ export default function Spot(props: Props) {
         x: destination.x,
         y: destination.y,
       };
-      setKillPosition(deletePawnBlack, true);
-      if (state.tileInfo.tile === destination.tile) {
-        setState({
-          ...state,
-          activePiece: {
-            pieceType: 'queen',
-            color: 'black',
-          },
-          tileInfo: {
-            tile: destination.tile,
-            x: destination.x,
-            y: destination.y,
-          },
-          isOccupied: true,
-          hasMoved: true,
-        });
-      }
+      setEndPawn('black', true);
+      setDeletePawn(deletePawnBlack);
     }
-  }, [endPawn, destination, setKillPosition, startPosition, state.tileInfo.tile]);
+  }, [destination]);
+
+  useEffect(() => {
+    // cannot merge this useEffect and the useEffect above cuz smooth brained.
+    if (
+      promotion.pieceType !== '' &&
+      endPawn &&
+      state.tileInfo.tile === deletePawn.tile &&
+      state.activePiece.pieceType === 'pawn'
+    ) {
+      setKillPosition(deletePawn, false, true);
+      setState((prev) => ({
+        ...prev,
+        activePiece: {
+          pieceType: promotion.pieceType,
+          color: promotion.color,
+        },
+        isOccupied: true,
+        hasMoved: true,
+      }));
+
+      let emptyPromotion = {
+        pieceType: '',
+        color: '',
+      };
+      setPromotion(emptyPromotion);
+      setEndPawn('', false);
+    }
+  }, [promotion]);
 
   const onMoveStart = () => {
     if (startPosition.tile) {
@@ -363,7 +373,6 @@ export default function Spot(props: Props) {
           setAvailableMoves={setAvailableMoves}
           setTileFocus={setTileFocus}
           setCastling={setCastling}
-          setEndPawn={setEndPawn}
         />
       )}
 
@@ -375,7 +384,6 @@ export default function Spot(props: Props) {
           setAvailableMoves={setAvailableMoves}
           setTileFocus={setTileFocus}
           setCastling={setCastling}
-          setEndPawn={setEndPawn}
         />
       )}
 
@@ -390,7 +398,6 @@ export default function Spot(props: Props) {
           setAvailableMoves={setAvailableMoves}
           setTileFocus={setTileFocus}
           setCastling={setCastling}
-          setEndPawn={setEndPawn}
         />
       )}
       {state.activePiece.pieceType === 'rook' && state.activePiece.color === 'white' && (
@@ -401,7 +408,6 @@ export default function Spot(props: Props) {
           setAvailableMoves={setAvailableMoves}
           setTileFocus={setTileFocus}
           setCastling={setCastling}
-          setEndPawn={setEndPawn}
         />
       )}
       {/* Rook END */}
@@ -415,7 +421,6 @@ export default function Spot(props: Props) {
           setAvailableMoves={setAvailableMoves}
           setTileFocus={setTileFocus}
           setCastling={setCastling}
-          setEndPawn={setEndPawn}
         />
       )}
       {state.activePiece.pieceType === 'knight' && state.activePiece.color === 'white' && (
@@ -426,7 +431,6 @@ export default function Spot(props: Props) {
           setAvailableMoves={setAvailableMoves}
           setTileFocus={setTileFocus}
           setCastling={setCastling}
-          setEndPawn={setEndPawn}
         />
       )}
       {/* Knight END */}
@@ -440,7 +444,6 @@ export default function Spot(props: Props) {
           setAvailableMoves={setAvailableMoves}
           setTileFocus={setTileFocus}
           setCastling={setCastling}
-          setEndPawn={setEndPawn}
         />
       )}
       {state.activePiece.pieceType === 'bishop' && state.activePiece.color === 'white' && (
@@ -451,7 +454,6 @@ export default function Spot(props: Props) {
           setAvailableMoves={setAvailableMoves}
           setTileFocus={setTileFocus}
           setCastling={setCastling}
-          setEndPawn={setEndPawn}
         />
       )}
       {/* Bishop END */}
@@ -465,7 +467,6 @@ export default function Spot(props: Props) {
           setAvailableMoves={setAvailableMoves}
           setTileFocus={setTileFocus}
           setCastling={setCastling}
-          setEndPawn={setEndPawn}
         />
       )}
       {state.activePiece.pieceType === 'queen' && state.activePiece.color === 'white' && (
@@ -476,7 +477,6 @@ export default function Spot(props: Props) {
           setAvailableMoves={setAvailableMoves}
           setTileFocus={setTileFocus}
           setCastling={setCastling}
-          setEndPawn={setEndPawn}
         />
       )}
       {/* Queen END */}
@@ -490,7 +490,6 @@ export default function Spot(props: Props) {
           setAvailableMoves={setAvailableMoves}
           setTileFocus={setTileFocus}
           setCastling={setCastling}
-          setEndPawn={setEndPawn}
         />
       )}
       {state.activePiece.pieceType === 'king' && state.activePiece.color === 'white' && (
@@ -501,7 +500,6 @@ export default function Spot(props: Props) {
           setAvailableMoves={setAvailableMoves}
           setTileFocus={setTileFocus}
           setCastling={setCastling}
-          setEndPawn={setEndPawn}
         />
       )}
       {/* King END */}

@@ -1,14 +1,18 @@
 @import 'styles/colors.scss';
 
+.viewport {
+  width: 100vw;
+}
+
 .board {
   display: grid;
   grid-template-columns: repeat(8, 12.5%);
   grid-template-rows: repeat(8, 12.5%);
-  width: 100vmin;
-  height: 100vmin;
+  // width: 100vmin;
+  // height: 100vmin;
   max-width: 800px;
   max-height: 800px;
-  margin: 0 auto;
+  margin: auto;
 
   .square {
     position: relative;

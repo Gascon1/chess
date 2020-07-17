@@ -17,20 +17,11 @@ interface Props {
   setAvailableMoves: Function;
   setTileFocus: Function;
   setCastling: Function;
-  setEndPawn: Function;
 }
 
 export default function Queen(props: Props) {
   const { getSpotDetails } = useContext(SpotsContext);
-  const {
-    tileInfo,
-    white,
-    setStartPosition,
-    setAvailableMoves,
-    setTileFocus,
-    setCastling,
-    setEndPawn,
-  } = props;
+  const { tileInfo, white, setStartPosition, setAvailableMoves, setTileFocus, setCastling } = props;
   const [state, setState] = useState({
     hasUsedFirstMoved: false,
     isWhite: true,
@@ -223,7 +214,6 @@ export default function Queen(props: Props) {
         diagonal.push(downRow);
       }
     }
-    setEndPawn(false);
     setCastling(false);
     return diagonal;
   };

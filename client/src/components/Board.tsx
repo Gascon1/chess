@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import isEven from 'helpers/isEven';
 import Spot from 'components/Spot';
+import Promotion from 'helpers/promotion';
 
 interface Position {
   tile: string;
@@ -40,13 +41,36 @@ export default function Board() {
     ],
     killPosition: '',
     castling: false,
-    endPawn: false,
+    endPawn: { color: '', flag: false },
+    deletePawn: {
+      tile: '',
+      x: 0,
+      y: 0,
+    },
+    promotion: {
+      pieceType: '',
+      color: '',
+    },
   });
 
-  function setEndPawn(boolean: boolean) {
+  function setPromotion(promotion: any) {
     setState((prev) => ({
       ...prev,
-      endPawn: boolean,
+      promotion: promotion,
+    }));
+  }
+
+  function setDeletePawn(deletePawn: Position) {
+    setState((prev) => ({
+      ...prev,
+      deletePawn,
+    }));
+  }
+
+  function setEndPawn(color: string, flag: boolean) {
+    setState((prev) => ({
+      ...prev,
+      endPawn: { flag, color },
     }));
   }
 
@@ -67,12 +91,16 @@ export default function Board() {
     // }
   }
 
-  const setKillPosition = (tileInfo: Position, specialMove: boolean) => {
+  const setKillPosition = (tileInfo: Position, castling: boolean, promotion: boolean) => {
     if (state.tileFocus !== tileInfo.tile) {
       setState((prev) => ({ ...prev, killPosition: state.tileFocus }));
     }
-    // castling case or pawn upgraded
-    if (specialMove) {
+    // promotion case
+    else if (promotion) {
+      setState((prev) => ({ ...prev, killPosition: tileInfo.tile }));
+    }
+    // castling case
+    if (castling) {
       setState((prev) => ({ ...prev, killPosition: tileInfo.tile }));
     }
   };
@@ -81,15 +109,6 @@ export default function Board() {
     setState((prev) => ({
       ...prev,
       startPosition: { activePiece: { pieceType, color }, ...tileInfo },
-      // destination: {
-      //   activePiece: {
-      //     pieceType: '',
-      //     color: '',
-      //   },
-      //   tile: '',
-      //   x: 0,
-      //   y: 0,
-      // },
     }));
   }
 
@@ -135,11 +154,16 @@ export default function Board() {
             setCastling={setCastling}
             endPawn={state.endPawn}
             setEndPawn={setEndPawn}
+            deletePawn={state.deletePawn}
+            setDeletePawn={setDeletePawn}
+            promotion={state.promotion}
+            setPromotion={setPromotion}
           />,
         );
       });
     }
     setState((prev) => ({ ...prev, board }));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     state.destination,
     state.startPosition,
@@ -148,7 +172,14 @@ export default function Board() {
     state.tileFocus,
     state.castling,
     state.endPawn,
+    state.deletePawn,
+    state.promotion,
   ]);
 
-  return <div className='board'>{state.board}</div>;
+  return (
+    <div className='viewport'>
+      <div className='board'>{state.board}</div>
+      <Promotion endPawn={state.endPawn} setPromotion={setPromotion} />
+    </div>
+  );
 }

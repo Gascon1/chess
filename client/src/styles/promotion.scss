@@ -1,0 +1,29 @@
+@import 'styles/colors.scss';
+
+.promotion {
+  position: relative;
+  width: 50vmin;
+  height: 12.5vmin;
+  //   max-width: 100px;
+  //   max-height: 100px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+
+  .squareP {
+    width: 12.5vmin;
+    height: 12.5vmin;
+    max-width: 100px;
+    max-height: 100px;
+  }
+
+  &.brown {
+    background: $brown;
+  }
+
+  &.beige {
+    background: $beige;
+  }
+}

@@ -5,7 +5,7 @@ import Knight from 'components/pieces/Knight';
 import Bishop from 'components/pieces/Bishop';
 import Queen from 'components/pieces/Queen';
 import King from 'components/pieces/King';
-import { SpotsContext, Spots } from 'context/SpotsContext';
+import { SpotsContext } from 'context/SpotsContext';
 import { useGenerateBoard } from 'hooks/useGenerateBoard';
 
 interface Position {
@@ -60,7 +60,7 @@ const brown = '#8a604a';
 const beige = '#e5d3ba';
 
 export default function Spot(props: Props) {
-  const { setSpotsContext, initSpotsContext, getSpotDetails } = useContext(SpotsContext);
+  const { setSpotsContext, initSpotsContext } = useContext(SpotsContext);
 
   const {
     tile,
@@ -154,17 +154,16 @@ export default function Spot(props: Props) {
 
   useEffect(() => {
     //WHITE CASTLING -----------------------------------------------------------------------
-
     if (castling && startPosition.tile === 'e1' && destination.tile === 'g1') {
       let kingSideRookWhite: Position = {
         tile: 'h1',
         x: 8,
         y: 1,
       };
-      setKillPosition(kingSideRookWhite, true);
+      setKillPosition(kingSideRookWhite, true, false);
       if (state.tileInfo.tile === 'f1') {
-        setState({
-          ...state,
+        setState((prev) => ({
+          ...prev,
           activePiece: {
             pieceType: 'rook',
             color: 'white',
@@ -176,7 +175,7 @@ export default function Spot(props: Props) {
           },
           isOccupied: true,
           hasMoved: true,
-        });
+        }));
       }
     }
     if (castling && startPosition.tile === 'e1' && destination.tile === 'c1') {
@@ -185,10 +184,10 @@ export default function Spot(props: Props) {
         x: 1,
         y: 1,
       };
-      setKillPosition(queenSideRookWhite, true);
+      setKillPosition(queenSideRookWhite, true, false);
       if (state.tileInfo.tile === 'd1') {
-        setState({
-          ...state,
+        setState((prev) => ({
+          ...prev,
           activePiece: {
             pieceType: 'rook',
             color: 'white',
@@ -200,7 +199,7 @@ export default function Spot(props: Props) {
           },
           isOccupied: true,
           hasMoved: true,
-        });
+        }));
       }
     }
 
@@ -212,10 +211,11 @@ export default function Spot(props: Props) {
         x: 8,
         y: 8,
       };
-      setKillPosition(kingSideRookBlack, true);
+      console.log('here');
+      setKillPosition(kingSideRookBlack, true, false);
       if (state.tileInfo.tile === 'f8') {
-        setState({
-          ...state,
+        setState((prev) => ({
+          ...prev,
           activePiece: {
             pieceType: 'rook',
             color: 'black',
@@ -227,7 +227,7 @@ export default function Spot(props: Props) {
           },
           isOccupied: true,
           hasMoved: true,
-        });
+        }));
       }
     }
     if (castling && startPosition.tile === 'e8' && destination.tile === 'c8') {
@@ -236,10 +236,10 @@ export default function Spot(props: Props) {
         x: 1,
         y: 8,
       };
-      setKillPosition(queenSideRookBlack, true);
+      setKillPosition(queenSideRookBlack, true, false);
       if (state.tileInfo.tile === 'd8') {
-        setState({
-          ...state,
+        setState((prev) => ({
+          ...prev,
           activePiece: {
             pieceType: 'rook',
             color: 'black',
@@ -251,10 +251,10 @@ export default function Spot(props: Props) {
           },
           isOccupied: true,
           hasMoved: true,
-        });
+        }));
       }
     }
-  }, [castling, destination, startPosition.tile, setKillPosition]);
+  }, [destination, startPosition, castling]);
 
   useEffect(() => {
     // WHITE PAWN HAS REACHED END OF BOARD-----------------------------------------
@@ -269,7 +269,7 @@ export default function Spot(props: Props) {
         x: destination.x,
         y: destination.y,
       };
-      setEndPawn(true, 'white');
+      setEndPawn('white', true);
       setDeletePawn(deletePawnWhite);
     }
 
@@ -285,20 +285,20 @@ export default function Spot(props: Props) {
         x: destination.x,
         y: destination.y,
       };
-      setEndPawn(true, 'black');
+      setEndPawn('black', true);
       setDeletePawn(deletePawnBlack);
     }
   }, [destination]);
 
   useEffect(() => {
-    // im to smooth brained to merge this and the above useEffects together, if you can do it, go for it. I keep getting infinite loops
+    // cannot merge this useEffect and the useEffect above cuz smooth brained.
     if (
       promotion.pieceType !== '' &&
       endPawn &&
       state.tileInfo.tile === deletePawn.tile &&
       state.activePiece.pieceType === 'pawn'
     ) {
-      setKillPosition(deletePawn, true);
+      setKillPosition(deletePawn, false, true);
       setState((prev) => ({
         ...prev,
         activePiece: {
@@ -314,9 +314,9 @@ export default function Spot(props: Props) {
         color: '',
       };
       setPromotion(emptyPromotion);
-      setEndPawn(false);
+      setEndPawn('', false);
     }
-  }, [endPawn, promotion.color, deletePawn, promotion.pieceType, setKillPosition]);
+  }, [promotion]);
 
   const onMoveStart = () => {
     if (startPosition.tile) {
@@ -353,7 +353,7 @@ export default function Spot(props: Props) {
 
       setTileFocus();
       setAvailableMoves([]);
-      setStartPosition({ x: 0, y: 0 }, '', '');
+      // setStartPosition({ x: 0, y: 0 }, '', '');
     }
   };
 

@@ -1,10 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import isEven from 'helpers/isEven';
 import Spot from 'components/Spot';
-import { ReactComponent as BishopImage } from 'images/bishop.svg';
-import { ReactComponent as RookImage } from 'images/rook.svg';
-import { ReactComponent as KnightImage } from 'images/knight.svg';
-import { ReactComponent as QueenImage } from 'images/queen.svg';
+import Promotion from 'helpers/promotion';
 
 interface Position {
   tile: string;
@@ -44,8 +41,7 @@ export default function Board() {
     ],
     killPosition: '',
     castling: false,
-    endPawn: false,
-    endOfBoardPawn: false,
+    endPawn: { flag: false, color: '' },
     deletePawn: {
       tile: '',
       x: 0,
@@ -71,17 +67,10 @@ export default function Board() {
     }));
   }
 
-  function setEndOfBoardPawn(boolean: boolean) {
+  function setEndPawn(flag: boolean, color: string) {
     setState((prev) => ({
       ...prev,
-      endOfBoardPawn: boolean,
-    }));
-  }
-
-  function setEndPawn(boolean: boolean) {
-    setState((prev) => ({
-      ...prev,
-      endPawn: boolean,
+      endPawn: { flag, color },
     }));
   }
 
@@ -107,7 +96,7 @@ export default function Board() {
       setState((prev) => ({ ...prev, killPosition: state.tileFocus }));
     }
     // castling case or pawn upgraded
-    else if (specialMove) {
+    if (specialMove) {
       setState((prev) => ({ ...prev, killPosition: tileInfo.tile }));
     }
   };
@@ -116,15 +105,6 @@ export default function Board() {
     setState((prev) => ({
       ...prev,
       startPosition: { activePiece: { pieceType, color }, ...tileInfo },
-      // destination: {
-      //   activePiece: {
-      //     pieceType: '',
-      //     color: '',
-      //   },
-      //   tile: '',
-      //   x: 0,
-      //   y: 0,
-      // },
     }));
   }
 
@@ -170,8 +150,6 @@ export default function Board() {
             setCastling={setCastling}
             endPawn={state.endPawn}
             setEndPawn={setEndPawn}
-            endOfBoardPawn={state.endOfBoardPawn}
-            setEndOfBoardPawn={setEndOfBoardPawn}
             deletePawn={state.deletePawn}
             setDeletePawn={setDeletePawn}
             promotion={state.promotion}
@@ -190,82 +168,14 @@ export default function Board() {
     state.tileFocus,
     state.castling,
     state.endPawn,
-    state.endOfBoardPawn,
     state.deletePawn,
     state.promotion,
   ]);
 
-  // have a state that checks the color of the pawn
-  // have state that triggers when pawn is on the end square
-
-  // in spot I have to create a state that triggers when pawn is on end square, setState must await for user click after, state is responsible for letting
-  // board div promotion know what colour the piece should be
-
-  // how tf do I make it appear over a specific square
-
-  //create overlay on board that kind of forces user to click on the desired piece
-
-  // create state for endPawn and set it, send it down to spot
   return (
     <div className='viewport'>
       <div className='board'>{state.board}</div>
-      <div
-        className='promotion'
-        style={state.endOfBoardPawn ? { display: 'flex' } : { display: 'none' }}
-      >
-        <span className='promotion squareP beige'>
-          <QueenImage
-            className='piece white'
-            onClick={(e) => {
-              // send info to spawn piece
-              let queenPromotion = {
-                pieceType: 'queen',
-                color: 'white',
-              };
-              setPromotion(queenPromotion);
-            }}
-          />
-        </span>
-        <span className='promotion squareP brown'>
-          <KnightImage
-            className='piece white'
-            onClick={(e) => {
-              // send info to spawn piece
-              let knightPromotion = {
-                pieceType: 'knight',
-                color: 'white',
-              };
-              setPromotion(knightPromotion);
-            }}
-          />
-        </span>
-        <span className='promotion squareP beige'>
-          <RookImage
-            className='piece white'
-            onClick={(e) => {
-              // send info to spawn piece
-              let rookPromotion = {
-                pieceType: 'rook',
-                color: 'white',
-              };
-              setPromotion(rookPromotion);
-            }}
-          />
-        </span>
-        <span className='promotion squareP brown'>
-          <BishopImage
-            className='piece white'
-            onClick={(e) => {
-              // send info to spawn piece
-              let bishopPromotion = {
-                pieceType: 'bishop',
-                color: 'white',
-              };
-              setPromotion(bishopPromotion);
-            }}
-          />
-        </span>
-      </div>
+      <Promotion endPawn={state.endPawn} setPromotion={setPromotion} />
     </div>
   );
 }

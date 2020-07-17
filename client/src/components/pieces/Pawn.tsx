@@ -17,20 +17,11 @@ interface Props {
   setAvailableMoves: Function;
   setTileFocus: Function;
   setCastling: Function;
-  setEndPawn: Function;
 }
 
 export default function Pawn(props: Props) {
   const { getSpotDetails } = useContext(SpotsContext);
-  const {
-    tileInfo,
-    white,
-    setStartPosition,
-    setAvailableMoves,
-    setTileFocus,
-    setCastling,
-    setEndPawn,
-  } = props;
+  const { tileInfo, white, setStartPosition, setAvailableMoves, setTileFocus, setCastling } = props;
   const [state, setState] = useState({
     hasUsedFirstMoved: false,
     pieceType: 'pawn',
@@ -189,18 +180,18 @@ export default function Pawn(props: Props) {
     }
 
     // Checks if pawn has availableMove towards end of the board
-    const endPawn = (item: Object, endPoint: number) => {
-      if (Object.values(item).includes(endPoint, 1)) {
-        setEndPawn(true);
-      } else {
-        setEndPawn(false);
-      }
-    };
-    if (currentSquare?.activePiece.color === 'white') {
-      result.forEach((coord) => endPawn(coord, 8));
-    } else {
-      result.forEach((coord) => endPawn(coord, 1));
-    }
+    // const endPawn = (item: Object, endPoint: number) => {
+    //   if (Object.values(item).includes(endPoint, 1)) {
+    //     setEndPawn(true);
+    //   } else {
+    //     setEndPawn(false);
+    //   }
+    // };
+    // if (currentSquare?.activePiece.color === 'white') {
+    //   result.forEach((coord) => endPawn(coord, 8));
+    // } else {
+    //   result.forEach((coord) => endPawn(coord, 1));
+    // }
 
     setCastling(false);
     return result;

@@ -21,20 +21,11 @@ interface Props {
   setAvailableMoves: Function;
   setTileFocus: Function;
   setCastling: Function;
-  setEndPawn: Function;
 }
 
 export default function Knight(props: Props) {
   const { getSpotDetails } = useContext(SpotsContext);
-  const {
-    tileInfo,
-    white,
-    setStartPosition,
-    setAvailableMoves,
-    setTileFocus,
-    setCastling,
-    setEndPawn,
-  } = props;
+  const { tileInfo, white, setStartPosition, setAvailableMoves, setTileFocus, setCastling } = props;
   const [state, setState] = useState({
     hasUsedFirstMoved: false,
     isWhite: true,
@@ -64,7 +55,6 @@ export default function Knight(props: Props) {
 
   const availableMoves = (currentPosition: Position) => {
     //code can be optimized perhaps
-    setEndPawn(false);
     setCastling(false);
     return [
       availableMovesChecker(currentPosition, 2, 1),

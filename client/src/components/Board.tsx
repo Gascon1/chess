@@ -11,7 +11,16 @@ interface Position {
   isFriendly?: boolean;
 }
 
-export default function Board() {
+interface Props {
+  turn: number;
+  activePlayer: string;
+  isRoundOver: boolean;
+  isGameOver: boolean;
+}
+
+export default function Board(props: Props) {
+  const { turn, activePlayer, isRoundOver, isGameOver } = props;
+
   const [state, setState] = useState({
     board: [],
     startPosition: {
@@ -158,6 +167,7 @@ export default function Board() {
             setDeletePawn={setDeletePawn}
             promotion={state.promotion}
             setPromotion={setPromotion}
+            turn={turn}
           />,
         );
       });

@@ -55,6 +55,7 @@ interface Props {
     color: string;
   };
   setPromotion: Function;
+  turn: number;
 }
 const brown = '#8a604a';
 const beige = '#e5d3ba';
@@ -63,6 +64,7 @@ export default function Spot(props: Props) {
   const { setSpotsContext, initSpotsContext } = useContext(SpotsContext);
 
   const {
+    turn,
     tile,
     x,
     y,
@@ -111,6 +113,16 @@ export default function Spot(props: Props) {
   }
 
   const initBoard = useGenerateBoard(tile, x, y);
+
+
+  // need the data from the game state to refresh this useEffect,
+  // it should only refresh when there is a change of turn
+  // useEffect(() => {
+  //   if (activePlayer === state.activePiece.color) {
+  //     use a new setAvailableMoves() function that does not override the previous
+  //     availableMoves, see example in the useSpots hook (initSpots)
+  //   }
+  // }, [turn])
 
   useEffect(() => {
     setState((prev) => ({ ...prev, ...initBoard }));

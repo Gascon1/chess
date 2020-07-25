@@ -16,10 +16,11 @@ interface Props {
   activePlayer: string;
   isRoundOver: boolean;
   isGameOver: boolean;
+  setTurn: Function;
 }
 
 export default function Board(props: Props) {
-  const { turn, activePlayer, isRoundOver, isGameOver } = props;
+  const { turn, activePlayer, isRoundOver, isGameOver, setTurn } = props;
 
   const [state, setState] = useState({
     board: [],
@@ -60,7 +61,22 @@ export default function Board(props: Props) {
       pieceType: '',
       color: '',
     },
+    allAvailableMoves: [{ x: 0, y: 0 }],
   });
+
+  function setAllAvailableMoves(availableMove: any, reset: boolean) {
+    if (!reset) {
+      setState((prev) => ({
+        ...prev,
+        allAvailableMoves: [...prev.allAvailableMoves, availableMove],
+      }));
+    } else {
+      setState((prev) => ({
+        ...prev,
+        allAvailableMoves: [],
+      }));
+    }
+  }
 
   function setPromotion(promotion: any) {
     setState((prev) => ({
@@ -168,6 +184,10 @@ export default function Board(props: Props) {
             promotion={state.promotion}
             setPromotion={setPromotion}
             turn={turn}
+            setTurn={setTurn}
+            allAvailableMoves={state.allAvailableMoves}
+            setAllAvailableMoves={setAllAvailableMoves}
+            activePlayer={activePlayer}
           />,
         );
       });

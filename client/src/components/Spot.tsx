@@ -7,6 +7,12 @@ import Queen from 'components/pieces/Queen';
 import King from 'components/pieces/King';
 import { SpotsContext } from 'context/SpotsContext';
 import { useGenerateBoard } from 'hooks/useGenerateBoard';
+import KingAvailableMoves from 'helpers/availableMoves/kingAvailableMoves';
+import QueenAvailableMoves from 'helpers/availableMoves/queenAvailableMoves';
+import BishopAvailableMoves from 'helpers/availableMoves/bishopAvailableMoves';
+import KnightAvailableMoves from 'helpers/availableMoves/knightAvailableMoves';
+import RookAvailableMoves from 'helpers/availableMoves/rookAvailableMoves';
+import PawnAvailableMoves from 'helpers/availableMoves/pawnAvailableMoves';
 
 interface Position {
   tile: string;
@@ -56,15 +62,23 @@ interface Props {
   };
   setPromotion: Function;
   turn: number;
+  setTurn: Function;
+  allAvailableMoves: {
+    x: number;
+    y: number;
+  }[];
+  setAllAvailableMoves: Function;
+  activePlayer: string;
 }
 const brown = '#8a604a';
 const beige = '#e5d3ba';
 
 export default function Spot(props: Props) {
-  const { setSpotsContext, initSpotsContext } = useContext(SpotsContext);
+  const { setSpotsContext, initSpotsContext, getSpotDetails } = useContext(SpotsContext);
 
   const {
     turn,
+    setTurn,
     tile,
     x,
     y,
@@ -85,6 +99,9 @@ export default function Spot(props: Props) {
     setDeletePawn,
     promotion,
     setPromotion,
+    allAvailableMoves,
+    setAllAvailableMoves,
+    activePlayer,
   } = props;
 
   const [state, setState] = useState({
@@ -101,6 +118,7 @@ export default function Spot(props: Props) {
     isCircleVisible: false,
     hasUpdated: false,
     hasMoved: false,
+    moves: [{ x: 0, y: 0 }],
   });
 
   let labelColor = '';
@@ -114,7 +132,6 @@ export default function Spot(props: Props) {
 
   const initBoard = useGenerateBoard(tile, x, y);
 
-
   // need the data from the game state to refresh this useEffect,
   // it should only refresh when there is a change of turn
   // useEffect(() => {
@@ -123,6 +140,52 @@ export default function Spot(props: Props) {
   //     availableMoves, see example in the useSpots hook (initSpots)
   //   }
   // }, [turn])
+
+  // need an override to setAllAvailableMoves when king in specific moves
+  // need to reset the allAvailableMoves at the beginning of each turn.
+
+  useEffect(() => {
+    if (activePlayer === state.activePiece.color) {
+      let tile: Position = {
+        tile: state.tileInfo.tile,
+        x: state.tileInfo.x,
+        y: state.tileInfo.y,
+      };
+      let currentPosition = getSpotDetails(tile.x, tile.y);
+
+      // let moves;
+      switch (currentPosition?.activePiece.pieceType) {
+        case 'king':
+          setState((prev) => ({
+            ...prev,
+            moves: KingAvailableMoves(tile, setCastling, getSpotDetails),
+          }));
+          setAllAvailableMoves(state.moves, false);
+          // setState = KingAvailableMoves(tile, setCastling, getSpotDetails);
+          break;
+        case 'queen':
+        // moves = QueenAvailableMoves(tile, getSpotDetails);
+        // setAllAvailableMoves(moves, false);
+        // break;
+        case 'bishop':
+          // moves = BishopAvailableMoves(tile, getSpotDetails);
+          // setAllAvailableMoves(moves, false);
+          break;
+        case 'knight':
+          // moves = KnightAvailableMoves(tile, getSpotDetails);
+          // setAllAvailableMoves(moves, false);
+          break;
+        case 'rook':
+          // moves = RookAvailableMoves(tile, getSpotDetails);
+          // setAllAvailableMoves(moves, false);
+          break;
+        default:
+          // moves =PawnAvailableMoves(tile, getSpotDetails);
+          // setAllAvailableMoves(moves, false);
+          break;
+      }
+    }
+  }, [turn]);
 
   useEffect(() => {
     setState((prev) => ({ ...prev, ...initBoard }));
@@ -188,6 +251,7 @@ export default function Spot(props: Props) {
           isOccupied: true,
           hasMoved: true,
         }));
+        setCastling(false);
       }
     }
     if (castling && startPosition.tile === 'e1' && destination.tile === 'c1') {
@@ -212,6 +276,7 @@ export default function Spot(props: Props) {
           isOccupied: true,
           hasMoved: true,
         }));
+        setCastling(false);
       }
     }
 
@@ -223,7 +288,6 @@ export default function Spot(props: Props) {
         x: 8,
         y: 8,
       };
-      console.log('here');
       setKillPosition(kingSideRookBlack, true, false);
       if (state.tileInfo.tile === 'f8') {
         setState((prev) => ({
@@ -240,6 +304,7 @@ export default function Spot(props: Props) {
           isOccupied: true,
           hasMoved: true,
         }));
+        setCastling(false);
       }
     }
     if (castling && startPosition.tile === 'e8' && destination.tile === 'c8') {
@@ -264,6 +329,7 @@ export default function Spot(props: Props) {
           isOccupied: true,
           hasMoved: true,
         }));
+        setCastling(false);
       }
     }
   }, [destination, startPosition, castling]);
@@ -359,6 +425,11 @@ export default function Spot(props: Props) {
               isOccupied: true,
               hasMoved: true,
             });
+            if (turn === 0) {
+              setTurn(1);
+            } else {
+              setTurn(0);
+            }
           }
         }
       }
@@ -384,7 +455,6 @@ export default function Spot(props: Props) {
           setStartPosition={setStartPosition}
           setAvailableMoves={setAvailableMoves}
           setTileFocus={setTileFocus}
-          setCastling={setCastling}
         />
       )}
 
@@ -395,7 +465,6 @@ export default function Spot(props: Props) {
           setStartPosition={setStartPosition}
           setAvailableMoves={setAvailableMoves}
           setTileFocus={setTileFocus}
-          setCastling={setCastling}
         />
       )}
 
@@ -409,7 +478,6 @@ export default function Spot(props: Props) {
           setStartPosition={setStartPosition}
           setAvailableMoves={setAvailableMoves}
           setTileFocus={setTileFocus}
-          setCastling={setCastling}
         />
       )}
       {state.activePiece.pieceType === 'rook' && state.activePiece.color === 'white' && (
@@ -419,7 +487,6 @@ export default function Spot(props: Props) {
           setStartPosition={setStartPosition}
           setAvailableMoves={setAvailableMoves}
           setTileFocus={setTileFocus}
-          setCastling={setCastling}
         />
       )}
       {/* Rook END */}
@@ -432,7 +499,6 @@ export default function Spot(props: Props) {
           setStartPosition={setStartPosition}
           setAvailableMoves={setAvailableMoves}
           setTileFocus={setTileFocus}
-          setCastling={setCastling}
         />
       )}
       {state.activePiece.pieceType === 'knight' && state.activePiece.color === 'white' && (
@@ -442,7 +508,6 @@ export default function Spot(props: Props) {
           setStartPosition={setStartPosition}
           setAvailableMoves={setAvailableMoves}
           setTileFocus={setTileFocus}
-          setCastling={setCastling}
         />
       )}
       {/* Knight END */}
@@ -455,7 +520,6 @@ export default function Spot(props: Props) {
           setStartPosition={setStartPosition}
           setAvailableMoves={setAvailableMoves}
           setTileFocus={setTileFocus}
-          setCastling={setCastling}
         />
       )}
       {state.activePiece.pieceType === 'bishop' && state.activePiece.color === 'white' && (
@@ -465,7 +529,6 @@ export default function Spot(props: Props) {
           setStartPosition={setStartPosition}
           setAvailableMoves={setAvailableMoves}
           setTileFocus={setTileFocus}
-          setCastling={setCastling}
         />
       )}
       {/* Bishop END */}
@@ -478,7 +541,6 @@ export default function Spot(props: Props) {
           setStartPosition={setStartPosition}
           setAvailableMoves={setAvailableMoves}
           setTileFocus={setTileFocus}
-          setCastling={setCastling}
         />
       )}
       {state.activePiece.pieceType === 'queen' && state.activePiece.color === 'white' && (
@@ -488,7 +550,6 @@ export default function Spot(props: Props) {
           setStartPosition={setStartPosition}
           setAvailableMoves={setAvailableMoves}
           setTileFocus={setTileFocus}
-          setCastling={setCastling}
         />
       )}
       {/* Queen END */}

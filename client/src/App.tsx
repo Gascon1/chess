@@ -17,6 +17,13 @@ function App() {
     typeOfWin: 'checkmate',
   });
 
+  function setTurn(value: number) {
+    setState((prev) => ({
+      ...prev,
+      turn: value,
+    }));
+  }
+
   return (
     <SpotsContext.Provider value={spots}>
       <Board
@@ -24,6 +31,7 @@ function App() {
         activePlayer={state.activePlayer}
         isRoundOver={state.isRoundOver}
         isGameOver={state.isGameOver}
+        setTurn={setTurn}
       />
     </SpotsContext.Provider>
   );

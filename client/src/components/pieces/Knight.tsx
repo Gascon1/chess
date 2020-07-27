@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { ReactComponent as KnightImage } from 'images/knight.svg';
-import { SpotsContext, Spots } from 'context/SpotsContext';
+import { SpotsContext } from 'context/SpotsContext';
 import KnightAvailableMoves from 'helpers/availableMoves/knightAvailableMoves';
 
 // export default function Knight() {

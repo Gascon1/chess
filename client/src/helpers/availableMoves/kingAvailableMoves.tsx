@@ -1,5 +1,4 @@
 import { Spots } from 'context/SpotsContext';
-// import { setCastling } from "components/Board"
 
 interface Position {
   tile: string;
@@ -15,33 +14,36 @@ export default function KingAvailableMoves(
   getSpotDetails: Function,
 ) {
   const castlingChecker = () => {
-    const kingCurrentSquare: Spots = getSpotDetails(currentPosition.x, currentPosition.y);
+    const kingCurrentSquare: Spots | undefined = getSpotDetails(
+      currentPosition.x,
+      currentPosition.y,
+    );
 
     const castlingMoves = [];
 
     // WHITE--------------------------------------------------------------------
 
     // QUEEN SIDE
-    const queenSideRookWhite: Spots = getSpotDetails(1, 1);
-    const queenSideKnightWhite: Spots = getSpotDetails(2, 1);
-    const queenSideBishopWhite: Spots = getSpotDetails(3, 1);
-    const queenWhite: Spots = getSpotDetails(4, 1);
+    const queenSideRookWhite: Spots | undefined = getSpotDetails(1, 1);
+    const queenSideKnightWhite: Spots | undefined = getSpotDetails(2, 1);
+    const queenSideBishopWhite: Spots | undefined = getSpotDetails(3, 1);
+    const queenWhite: Spots | undefined = getSpotDetails(4, 1);
     // KING SIDE
-    const kingSideBishopWhite: Spots = getSpotDetails(6, 1);
-    const kingSideKnightWhite: Spots = getSpotDetails(7, 1);
-    const kingSideRookWhite: Spots = getSpotDetails(8, 1);
+    const kingSideBishopWhite: Spots | undefined = getSpotDetails(6, 1);
+    const kingSideKnightWhite: Spots | undefined = getSpotDetails(7, 1);
+    const kingSideRookWhite: Spots | undefined = getSpotDetails(8, 1);
 
     // BLACK--------------------------------------------------------------------
 
     // QUEEN SIDE
-    const queenSideRookBlack: Spots = getSpotDetails(1, 8);
-    const queenSideKnightBlack: Spots = getSpotDetails(2, 8);
-    const queenSideBishopBlack: Spots = getSpotDetails(3, 8);
-    const queenBlack: Spots = getSpotDetails(4, 8);
+    const queenSideRookBlack: Spots | undefined = getSpotDetails(1, 8);
+    const queenSideKnightBlack: Spots | undefined = getSpotDetails(2, 8);
+    const queenSideBishopBlack: Spots | undefined = getSpotDetails(3, 8);
+    const queenBlack: Spots | undefined = getSpotDetails(4, 8);
     // KING SIDE
-    const kingSideBishopBlack: Spots = getSpotDetails(6, 8);
-    const kingSideKnightBlack: Spots = getSpotDetails(7, 8);
-    const kingSideRookBlack: Spots = getSpotDetails(8, 8);
+    const kingSideBishopBlack: Spots | undefined = getSpotDetails(6, 8);
+    const kingSideKnightBlack: Spots | undefined = getSpotDetails(7, 8);
+    const kingSideRookBlack: Spots | undefined = getSpotDetails(8, 8);
 
     if (
       //KING side castling case for WHITE king
@@ -102,7 +104,6 @@ export default function KingAvailableMoves(
       castlingMoves.push({ x: 3, y: 8 });
     }
     if (!castlingMoves.length) {
-      castlingMoves.push({ x: 0, y: 0 });
       setCastling(false);
     } else {
       setCastling(true);
@@ -112,31 +113,69 @@ export default function KingAvailableMoves(
   };
 
   const availableMovesChecker = (x: number, y: number) => {
-    const currentSquare: Spots = getSpotDetails(currentPosition.x, currentPosition.y);
-    const square: Spots = getSpotDetails(currentPosition.x + x, currentPosition.y + y);
-    if (square?.isOccupied && square.activePiece.color !== currentSquare?.activePiece.color) {
-      return { x: square.tileInfo.x, y: square.tileInfo.y };
-    } else if (!square?.isOccupied) {
-      return { x: square?.tileInfo.x, y: square?.tileInfo.y };
-    } else {
-      return { x: 0, y: 0 };
+    const currentSquare: Spots | undefined = getSpotDetails(currentPosition.x, currentPosition.y);
+    const square: Spots | undefined = getSpotDetails(currentPosition.x + x, currentPosition.y + y);
+    if (
+      square?.tileInfo != undefined &&
+      square?.tileInfo.x >= 1 &&
+      square?.tileInfo.x <= 8 &&
+      square?.tileInfo.y >= 1 &&
+      square?.tileInfo.y <= 8
+    ) {
+      if (square?.isOccupied && square.activePiece.color !== currentSquare?.activePiece.color) {
+        return { x: square.tileInfo.x, y: square.tileInfo.y };
+      } else if (!square?.isOccupied) {
+        return { x: square?.tileInfo.x, y: square?.tileInfo.y };
+      }
     }
+  };
+
+  const isUndefined = (obj: Object | undefined) => {
+    if (obj) {
+      return true;
+    }
+    return false;
   };
 
   const availableMoves = () => {
     let kingPossibleMoves = [];
+    let up = availableMovesChecker(1, 0);
+    let left = availableMovesChecker(-1, 0);
+    let right = availableMovesChecker(0, 1);
+    let down = availableMovesChecker(0, -1);
+    let leftUp = availableMovesChecker(-1, 1);
+    let rightDown = availableMovesChecker(1, -1);
+    let rightUp = availableMovesChecker(1, 1);
+    let leftDown = availableMovesChecker(-1, -1);
     let castlingMoves = castlingChecker();
     for (let move of castlingMoves) {
       kingPossibleMoves.push(move);
     }
-    kingPossibleMoves.push(availableMovesChecker(1, 0));
-    kingPossibleMoves.push(availableMovesChecker(-1, 0));
-    kingPossibleMoves.push(availableMovesChecker(0, 1));
-    kingPossibleMoves.push(availableMovesChecker(0, -1));
-    kingPossibleMoves.push(availableMovesChecker(-1, 1));
-    kingPossibleMoves.push(availableMovesChecker(1, -1));
-    kingPossibleMoves.push(availableMovesChecker(1, 1));
-    kingPossibleMoves.push(availableMovesChecker(-1, -1));
+    if (isUndefined(up)) {
+      kingPossibleMoves.push(up);
+    }
+    if (isUndefined(left)) {
+      kingPossibleMoves.push(left);
+    }
+    if (isUndefined(right)) {
+      kingPossibleMoves.push(right);
+    }
+    if (isUndefined(down)) {
+      kingPossibleMoves.push(down);
+    }
+    if (isUndefined(rightUp)) {
+      kingPossibleMoves.push(rightUp);
+    }
+    if (isUndefined(leftUp)) {
+      kingPossibleMoves.push(leftUp);
+    }
+    if (isUndefined(leftDown)) {
+      kingPossibleMoves.push(leftDown);
+    }
+    if (isUndefined(rightDown)) {
+      kingPossibleMoves.push(rightDown);
+    }
+
     return kingPossibleMoves;
   };
 

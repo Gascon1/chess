@@ -118,7 +118,6 @@ export default function Spot(props: Props) {
     isCircleVisible: false,
     hasUpdated: false,
     hasMoved: false,
-    moves: [{ x: 0, y: 0 }],
   });
 
   let labelColor = '';
@@ -153,20 +152,21 @@ export default function Spot(props: Props) {
       };
       let currentPosition = getSpotDetails(tile.x, tile.y);
 
-      // let moves;
+      let moves;
       switch (currentPosition?.activePiece.pieceType) {
         case 'king':
-          setState((prev) => ({
-            ...prev,
-            moves: KingAvailableMoves(tile, setCastling, getSpotDetails),
-          }));
-          setAllAvailableMoves(state.moves, false);
+          // setState((prev) => ({
+          //   ...prev,
+          //   moves: KingAvailableMoves(tile, setCastling, getSpotDetails),
+          // }));
+          moves = KingAvailableMoves(tile, setCastling, getSpotDetails);
+          setAllAvailableMoves(moves, false);
           // setState = KingAvailableMoves(tile, setCastling, getSpotDetails);
           break;
         case 'queen':
-        // moves = QueenAvailableMoves(tile, getSpotDetails);
-        // setAllAvailableMoves(moves, false);
-        // break;
+          // moves = QueenAvailableMoves(tile, getSpotDetails);
+          // setAllAvailableMoves(moves, false);
+          break;
         case 'bishop':
           // moves = BishopAvailableMoves(tile, getSpotDetails);
           // setAllAvailableMoves(moves, false);
@@ -185,7 +185,7 @@ export default function Spot(props: Props) {
           break;
       }
     }
-  }, [turn]);
+  }, [activePlayer, getSpotDetails]);
 
   useEffect(() => {
     setState((prev) => ({ ...prev, ...initBoard }));

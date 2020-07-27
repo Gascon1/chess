@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { ReactComponent as PawnImage } from 'images/pawn.svg';
-import { SpotsContext, Spots } from 'context/SpotsContext';
+import { SpotsContext } from 'context/SpotsContext';
 import PawnAvailableMoves from 'helpers/availableMoves/pawnAvailableMoves';
 
 interface Position {

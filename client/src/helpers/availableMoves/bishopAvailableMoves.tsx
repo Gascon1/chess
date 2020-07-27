@@ -26,6 +26,9 @@ export default function BishopAvailableMoves(currentPosition: Position, getSpotD
 
   for (i; i < 9; i++) {
     let downRight = { x: i, y: b-- };
+    if (downRight.y < 1 || downRight.y > 8) {
+      break;
+    }
 
     if (i === currentPosition.x) {
       continue;
@@ -47,6 +50,9 @@ export default function BishopAvailableMoves(currentPosition: Position, getSpotD
 
   for (j; j < 9; j++) {
     let upRight = { x: j, y: c++ };
+    if (upRight.y < 1 || upRight.y > 8) {
+      break;
+    }
     if (j === currentPosition.x) {
       continue;
     }
@@ -64,7 +70,9 @@ export default function BishopAvailableMoves(currentPosition: Position, getSpotD
   }
   for (k; k > 0; k--) {
     let downLeft = { x: k, y: d-- };
-
+    if (downLeft.y < 1 || downLeft.y > 8) {
+      break;
+    }
     if (k === currentPosition.x) {
       continue;
     }
@@ -83,6 +91,9 @@ export default function BishopAvailableMoves(currentPosition: Position, getSpotD
 
   for (l; l > 0; l--) {
     let upLeft = { x: l, y: e++ };
+    if (upLeft.y < 1 || upLeft.y > 8) {
+      break;
+    }
     if (l === currentPosition.x) {
       continue;
     }

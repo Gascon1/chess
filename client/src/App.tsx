@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Board from 'components/Board';
 import { SpotsContext } from 'context/SpotsContext';
 import { useSpots } from 'hooks/useSpots';

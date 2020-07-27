@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { ReactComponent as QueenImage } from 'images/queen.svg';
-import { SpotsContext, Spots } from 'context/SpotsContext';
+import { SpotsContext } from 'context/SpotsContext';
 import QueenAvailableMoves from 'helpers/availableMoves/queenAvailableMoves';
 
 interface Position {

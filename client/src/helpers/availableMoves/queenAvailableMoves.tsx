@@ -34,6 +34,9 @@ export default function queenAvailableMoves(currentPosition: Position, getSpotDe
   // ------------------------------BISHOP FOR LOOPS-----------------------------------------
   for (i; i < 9; i++) {
     let downRight = { x: i, y: b-- };
+    if (downRight.y < 1 || downRight.y > 8) {
+      break;
+    }
 
     if (i === currentPosition.x) {
       continue;
@@ -55,6 +58,9 @@ export default function queenAvailableMoves(currentPosition: Position, getSpotDe
 
   for (j; j < 9; j++) {
     let upRight = { x: j, y: c++ };
+    if (upRight.y < 1 || upRight.y > 8) {
+      break;
+    }
     if (j === currentPosition.x) {
       continue;
     }
@@ -72,6 +78,9 @@ export default function queenAvailableMoves(currentPosition: Position, getSpotDe
   }
   for (k; k > 0; k--) {
     let downLeft = { x: k, y: d-- };
+    if (downLeft.y < 1 || downLeft.y > 8) {
+      break;
+    }
 
     if (k === currentPosition.x) {
       continue;
@@ -91,6 +100,9 @@ export default function queenAvailableMoves(currentPosition: Position, getSpotDe
 
   for (l; l > 0; l--) {
     let upLeft = { x: l, y: e++ };
+    if (upLeft.y < 1 || upLeft.y > 8) {
+      break;
+    }
     if (l === currentPosition.x) {
       continue;
     }

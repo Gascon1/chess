@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { ReactComponent as KingImage } from 'images/king.svg';
-import { SpotsContext, Spots } from 'context/SpotsContext';
+import { SpotsContext } from 'context/SpotsContext';
 import KingAvailableMoves from 'helpers/availableMoves/kingAvailableMoves';
 
 interface Position {
@@ -9,11 +9,6 @@ interface Position {
   y: number;
   isOccupied?: boolean;
   isFriendly?: boolean;
-}
-
-interface Moves {
-  x: number;
-  y: number;
 }
 
 interface Props {
@@ -48,7 +43,6 @@ export default function King(props: Props) {
     e: React.MouseEvent<SVGSVGElement, MouseEvent>,
   ) => {
     e.stopPropagation();
-    // let availMoves = availableMoves(currentPosition);
     let availMoves = KingAvailableMoves(currentPosition, setCastling, getSpotDetails);
     setAvailableMoves(availMoves);
     setStartPosition(currentPosition, state.pieceType, state.isWhite ? 'white' : 'black');

@@ -66,19 +66,16 @@ export default function Board(props: Props) {
 
   function setAllAvailableMoves(color: string, availableMove?: any) {
     if (availableMove?.length > 0 && color === 'white') {
-      for (let move of availableMove) {
-        if (!JSON.stringify(state.allAvailableMoves).includes(JSON.stringify(move))) {
-          console.log('move', move);
-          console.log(state.allAvailableMoves);
-          setState((prev) => ({
-            ...prev,
-            allAvailableMoves: {
-              ...prev.allAvailableMoves,
-              white: [...prev.allAvailableMoves.white, move],
-            },
-          }));
-        }
-      }
+      let whiteCopy = state.allAvailableMoves.white.slice();
+      whiteCopy.push(...availableMove);
+      whiteCopy.filter((item, index) => whiteCopy.indexOf(item) === index);
+      setState((prev) => ({
+        ...prev,
+        allAvailableMoves: {
+          ...prev.allAvailableMoves,
+          white: [...whiteCopy],
+        },
+      }));
     } else {
       setState((prev) => ({
         ...prev,

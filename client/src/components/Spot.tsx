@@ -170,7 +170,7 @@ export default function Spot(props: Props) {
           break;
       }
     }
-  }, [allAvailableMoves, getSpotDetails]);
+  }, [turn, getSpotDetails]);
 
   useEffect(() => {
     setState((prev) => ({ ...prev, ...initBoard }));

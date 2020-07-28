@@ -63,10 +63,7 @@ interface Props {
   setPromotion: Function;
   turn: number;
   setTurn: Function;
-  allAvailableMoves: {
-    x: number;
-    y: number;
-  }[];
+  allAvailableMoves: { white: { x: number; y: number }[]; black: { x: number; y: number }[] };
   setAllAvailableMoves: Function;
   activePlayer: string;
 }
@@ -131,19 +128,11 @@ export default function Spot(props: Props) {
 
   const initBoard = useGenerateBoard(tile, x, y);
 
-  // need the data from the game state to refresh this useEffect,
-  // it should only refresh when there is a change of turn
-  // useEffect(() => {
-  //   if (activePlayer === state.activePiece.color) {
-  //     use a new setAvailableMoves() function that does not override the previous
-  //     availableMoves, see example in the useSpots hook (initSpots)
-  //   }
-  // }, [turn])
-
-  // need an override to setAllAvailableMoves when king in specific moves
-  // need to reset the allAvailableMoves at the beginning of each turn.
-
   useEffect(() => {
+    if (turn === 0) {
+      setAllAvailableMoves('white');
+    }
+
     if (activePlayer === state.activePiece.color) {
       let tile: Position = {
         tile: state.tileInfo.tile,
@@ -155,12 +144,8 @@ export default function Spot(props: Props) {
       let moves;
       switch (currentPosition?.activePiece.pieceType) {
         case 'king':
-          // setState((prev) => ({
-          //   ...prev,
-          //   moves: KingAvailableMoves(tile, setCastling, getSpotDetails),
-          // }));
           moves = KingAvailableMoves(tile, setCastling, getSpotDetails);
-          setAllAvailableMoves(moves, false);
+          setAllAvailableMoves('white', moves);
           // setState = KingAvailableMoves(tile, setCastling, getSpotDetails);
           break;
         case 'queen':
@@ -185,7 +170,7 @@ export default function Spot(props: Props) {
           break;
       }
     }
-  }, [activePlayer, getSpotDetails]);
+  }, [allAvailableMoves, getSpotDetails]);
 
   useEffect(() => {
     setState((prev) => ({ ...prev, ...initBoard }));

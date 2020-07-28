@@ -61,19 +61,31 @@ export default function Board(props: Props) {
       pieceType: '',
       color: '',
     },
-    allAvailableMoves: [{ x: 0, y: 0 }],
+    allAvailableMoves: { white: [{ x: 0, y: 0 }], black: [{ x: 0, y: 0 }] },
   });
 
-  function setAllAvailableMoves(availableMove: any, reset: boolean) {
-    if (!reset) {
-      setState((prev) => ({
-        ...prev,
-        allAvailableMoves: [...prev.allAvailableMoves, availableMove],
-      }));
+  function setAllAvailableMoves(color: string, availableMove?: any) {
+    if (availableMove?.length > 0 && color === 'white') {
+      for (let move of availableMove) {
+        if (!JSON.stringify(state.allAvailableMoves).includes(JSON.stringify(move))) {
+          console.log('move', move);
+          console.log(state.allAvailableMoves);
+          setState((prev) => ({
+            ...prev,
+            allAvailableMoves: {
+              ...prev.allAvailableMoves,
+              white: [...prev.allAvailableMoves.white, move],
+            },
+          }));
+        }
+      }
     } else {
       setState((prev) => ({
         ...prev,
-        allAvailableMoves: [],
+        allAvailableMoves: {
+          ...prev.allAvailableMoves,
+          white: [],
+        },
       }));
     }
   }

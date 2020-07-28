@@ -13,7 +13,7 @@ export default function KnightAvailableMoves(currentPosition: Position, getSpotD
     const currentSquare: Spots | undefined = getSpotDetails(currentPosition.x, currentPosition.y);
     const square: Spots | undefined = getSpotDetails(currentPosition.x + x, currentPosition.y + y);
     if (
-      square?.tileInfo != undefined &&
+      square?.tileInfo !== undefined &&
       square?.tileInfo.x >= 1 &&
       square?.tileInfo.x <= 8 &&
       square?.tileInfo.y >= 1 &&

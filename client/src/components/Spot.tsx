@@ -69,6 +69,8 @@ interface Props {
   preTurn: number;
   setPreTurn: Function;
   setDeleteColorMoves: Function;
+  check: boolean;
+  setCheck: Function;
 }
 const brown = '#8a604a';
 const beige = '#e5d3ba';
@@ -105,6 +107,8 @@ export default function Spot(props: Props) {
     preTurn,
     setPreTurn,
     setDeleteColorMoves,
+    check,
+    setCheck,
   } = props;
 
   const [state, setState] = useState({
@@ -146,6 +150,32 @@ export default function Spot(props: Props) {
   //     setDeleteColorMoves('black');
   //   }
   // }, [preTurn]);
+
+  //bug: the check only occurs when I click the piece after the turn is done
+
+  useEffect(() => {
+    if (state.activePiece.pieceType === 'king') {
+      let king = {
+        x: state.tileInfo.x,
+        y: state.tileInfo.y,
+      };
+
+      if (
+        state.activePiece.color === 'white' &&
+        JSON.stringify(allAvailableMoves.black).includes(JSON.stringify(king))
+      ) {
+        console.log('check', state.activePiece.color);
+        setCheck(true);
+      }
+      if (
+        state.activePiece.color === 'black' &&
+        JSON.stringify(allAvailableMoves.white).includes(JSON.stringify(king))
+      ) {
+        console.log('check', state.activePiece.color);
+        setCheck(true);
+      }
+    }
+  }, [allAvailableMoves]);
 
   useEffect(() => {
     // if (turn === 0) {

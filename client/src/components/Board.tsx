@@ -17,10 +17,12 @@ interface Props {
   isRoundOver: boolean;
   isGameOver: boolean;
   setTurn: Function;
+  check: boolean;
+  setCheck: Function;
 }
 
 export default function Board(props: Props) {
-  const { turn, activePlayer, isRoundOver, isGameOver, setTurn } = props;
+  const { turn, activePlayer, isRoundOver, isGameOver, setTurn, check, setCheck } = props;
 
   const [state, setState] = useState({
     board: [],
@@ -72,17 +74,9 @@ export default function Board(props: Props) {
     }));
   }
 
-  function setAllAvailableMoves(color: string, availableMove?: any) {
+  function setAllAvailableMoves(color: string, availableMove: any) {
     // WHITE CASE
     if (availableMove?.length > 0 && color === 'white') {
-      // let whiteCopy = state.allAvailableMoves.white.slice();
-      // console.log('slice copy', whiteCopy);
-      // whiteCopy.push(...availableMove);
-      // console.log('added availableMoves to slice copy', whiteCopy);
-      // console.log('pre filter', whiteCopy);
-      // whiteCopy.filter((item, index) => whiteCopy.indexOf(item) === index);
-      // console.log('post filter', whiteCopy);
-
       // moved code into setState because it can access prev directly and be more synchronous
       // cool trick
 
@@ -274,6 +268,8 @@ export default function Board(props: Props) {
             preTurn={state.preTurn}
             setPreTurn={setPreTurn}
             setDeleteColorMoves={setDeleteColorMoves}
+            check={check}
+            setCheck={setCheck}
           />,
         );
       });

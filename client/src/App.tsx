@@ -15,7 +15,7 @@ function App() {
     isGameOver: false,
     typeOfGameEnd: 'win',
     typeOfWin: 'checkmate',
-    check: false,
+    check: { colour: '', flag: false },
   });
 
   function setTurn(value: number) {
@@ -30,10 +30,13 @@ function App() {
       activePlayer: colour,
     }));
   }
-  function setCheck(flag: boolean) {
+  function setCheck(colour: string, flag: boolean) {
     setState((prev) => ({
       ...prev,
-      check: flag,
+      check: {
+        colour: colour,
+        flag: flag,
+      },
     }));
   }
 

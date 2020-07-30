@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import isEven from 'helpers/isEven';
 import Spot from 'components/Spot';
 import Promotion from 'helpers/promotion';
+import CheckDisplay from 'helpers/checkDisplay';
 
 interface Position {
   tile: string;
@@ -17,7 +18,7 @@ interface Props {
   isRoundOver: boolean;
   isGameOver: boolean;
   setTurn: Function;
-  check: boolean;
+  check: { colour: string; flag: boolean };
   setCheck: Function;
   setActivePlayer: Function;
 }
@@ -301,6 +302,7 @@ export default function Board(props: Props) {
 
   return (
     <div className='viewport'>
+      <CheckDisplay check={check} />
       <div className='board'>{state.board}</div>
       <Promotion endPawn={state.endPawn} setPromotion={setPromotion} />
     </div>

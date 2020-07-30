@@ -69,7 +69,7 @@ interface Props {
   preTurn: number;
   setPreTurn: Function;
   setDeleteColorMoves: Function;
-  check: boolean;
+  check: { colour: string; flag: boolean };
   setCheck: Function;
   setActivePlayer: Function;
 }
@@ -167,14 +167,14 @@ export default function Spot(props: Props) {
         JSON.stringify(allAvailableMoves.black).includes(JSON.stringify(king))
       ) {
         console.log('check', state.activePiece.color);
-        setCheck(true);
+        setCheck('White ', true);
       }
       if (
         state.activePiece.color === 'black' &&
         JSON.stringify(allAvailableMoves.white).includes(JSON.stringify(king))
       ) {
         console.log('check', state.activePiece.color);
-        setCheck(true);
+        setCheck('Black', true);
       }
     }
   }, [allAvailableMoves]);

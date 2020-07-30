@@ -140,6 +140,27 @@ export default function Board(props: Props) {
     }
   }
 
+  function setDeleteColorMoves(color: string) {
+    if (color === 'white') {
+      setState((prev) => ({
+        ...prev,
+        allAvailableMoves: {
+          ...prev.allAvailableMoves,
+          white: [],
+        },
+      }));
+    }
+    if (color === 'black') {
+      setState((prev) => ({
+        ...prev,
+        allAvailableMoves: {
+          ...prev.allAvailableMoves,
+          black: [],
+        },
+      }));
+    }
+  }
+
   function setPromotion(promotion: any) {
     setState((prev) => ({
       ...prev,
@@ -252,6 +273,7 @@ export default function Board(props: Props) {
             activePlayer={activePlayer}
             preTurn={state.preTurn}
             setPreTurn={setPreTurn}
+            setDeleteColorMoves={setDeleteColorMoves}
           />,
         );
       });

@@ -68,6 +68,7 @@ interface Props {
   activePlayer: string;
   preTurn: number;
   setPreTurn: Function;
+  setDeleteColorMoves: Function;
 }
 const brown = '#8a604a';
 const beige = '#e5d3ba';
@@ -103,6 +104,7 @@ export default function Spot(props: Props) {
     activePlayer,
     preTurn,
     setPreTurn,
+    setDeleteColorMoves,
   } = props;
 
   const [state, setState] = useState({
@@ -136,21 +138,29 @@ export default function Spot(props: Props) {
   //   if (preTurn === 0) {
   //     // setAllAvailableMoves('white', null);
   //     setTurn(0);
+  //     setDeleteColorMoves('white');
   //   }
   //   if (preTurn === 1) {
   //     // setAllAvailableMoves('black', null);
   //     setTurn(1);
+  //     setDeleteColorMoves('black');
   //   }
   // }, [preTurn]);
 
   useEffect(() => {
-    // if (activePlayer === state.activePiece.color)
-    if (turn === 0) {
-      setAllAvailableMoves('white', null);
-    }
-    if (turn === 1) {
-      setAllAvailableMoves('black', null);
-    }
+    // if (turn === 0) {
+    //   setAllAvailableMoves('white', null);
+    // }
+    // if (turn === 1) {
+    //   setAllAvailableMoves('black', null);
+    // }
+
+    // if (turn === 0) {
+    //   setPreTurn('white');
+    // }
+    // if (turn === 1) {
+    //   setPreTurn('black');
+    // }
 
     if (state.isOccupied) {
       let tile: Position = {
@@ -188,6 +198,14 @@ export default function Spot(props: Props) {
           // setAllAvailableMoves('white', moves);
           break;
       }
+    }
+
+    // idk why this works
+    if (turn === 0) {
+      setAllAvailableMoves('white', null);
+    }
+    if (turn === 1) {
+      setAllAvailableMoves('black', null);
     }
   }, [turn, getSpotDetails]);
 

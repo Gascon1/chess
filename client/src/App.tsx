@@ -18,10 +18,10 @@ function App() {
     check: false,
   });
 
-  function setTurn(value: number) {
+  function setTurn() {
     setState((prev) => ({
       ...prev,
-      turn: value,
+      turn: prev.turn + 1,
     }));
   }
   function setActivePlayer(colour: string) {

@@ -62,26 +62,79 @@ export default function Board(props: Props) {
       color: '',
     },
     allAvailableMoves: { white: [{ x: 0, y: 0 }], black: [{ x: 0, y: 0 }] },
+    preTurn: 0,
   });
 
+  function setPreTurn(value: number) {
+    setState((prev) => ({
+      ...prev,
+      preTurn: value,
+    }));
+  }
+
   function setAllAvailableMoves(color: string, availableMove?: any) {
+    // WHITE CASE
     if (availableMove?.length > 0 && color === 'white') {
-      let whiteCopy = state.allAvailableMoves.white.slice();
-      whiteCopy.push(...availableMove);
-      whiteCopy.filter((item, index) => whiteCopy.indexOf(item) === index);
-      setState((prev) => ({
-        ...prev,
-        allAvailableMoves: {
-          ...prev.allAvailableMoves,
-          white: [...whiteCopy],
-        },
-      }));
-    } else {
+      // let whiteCopy = state.allAvailableMoves.white.slice();
+      // console.log('slice copy', whiteCopy);
+      // whiteCopy.push(...availableMove);
+      // console.log('added availableMoves to slice copy', whiteCopy);
+      // console.log('pre filter', whiteCopy);
+      // whiteCopy.filter((item, index) => whiteCopy.indexOf(item) === index);
+      // console.log('post filter', whiteCopy);
+
+      // moved code into setState because it can access prev directly and be more synchronous
+      // cool trick
+
+      // indexOf doesn't work with objects or JSON.stringify(objects) hence I changed it
+      setState((prev) => {
+        let whiteCopy = prev.allAvailableMoves.white.slice();
+        whiteCopy.push(...availableMove);
+        whiteCopy = whiteCopy.filter(
+          (item, index, self) => index === self.findIndex((w) => w.x === item.x && w.y === item.y),
+        );
+        return {
+          ...prev,
+          allAvailableMoves: {
+            ...prev.allAvailableMoves,
+            white: [...whiteCopy],
+          },
+        };
+      });
+    }
+    // BLACK CASE
+    if (availableMove?.length > 0 && color === 'black') {
+      setState((prev) => {
+        let blackCopy = prev.allAvailableMoves.black.slice();
+        blackCopy.push(...availableMove);
+        blackCopy = blackCopy.filter(
+          (item, index, self) => index === self.findIndex((w) => w.x === item.x && w.y === item.y),
+        );
+        return {
+          ...prev,
+          allAvailableMoves: {
+            ...prev.allAvailableMoves,
+            black: [...blackCopy],
+          },
+        };
+      });
+    }
+
+    if (availableMove === null && color === 'white') {
       setState((prev) => ({
         ...prev,
         allAvailableMoves: {
           ...prev.allAvailableMoves,
           white: [],
+        },
+      }));
+    }
+    if (availableMove === null && color === 'black') {
+      setState((prev) => ({
+        ...prev,
+        allAvailableMoves: {
+          ...prev.allAvailableMoves,
+          black: [],
         },
       }));
     }
@@ -197,6 +250,8 @@ export default function Board(props: Props) {
             allAvailableMoves={state.allAvailableMoves}
             setAllAvailableMoves={setAllAvailableMoves}
             activePlayer={activePlayer}
+            preTurn={state.preTurn}
+            setPreTurn={setPreTurn}
           />,
         );
       });

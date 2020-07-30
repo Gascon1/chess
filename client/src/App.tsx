@@ -18,10 +18,19 @@ function App() {
   });
 
   function setTurn(value: number) {
-    setState((prev) => ({
-      ...prev,
-      turn: value,
-    }));
+    if (!value) {
+      setState((prev) => ({
+        ...prev,
+        turn: value,
+        activePlayer: 'white',
+      }));
+    } else {
+      setState((prev) => ({
+        ...prev,
+        turn: value,
+        activePlayer: 'black',
+      }));
+    }
   }
 
   return (

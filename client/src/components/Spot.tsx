@@ -66,6 +66,8 @@ interface Props {
   allAvailableMoves: { white: { x: number; y: number }[]; black: { x: number; y: number }[] };
   setAllAvailableMoves: Function;
   activePlayer: string;
+  preTurn: number;
+  setPreTurn: Function;
 }
 const brown = '#8a604a';
 const beige = '#e5d3ba';
@@ -99,6 +101,8 @@ export default function Spot(props: Props) {
     allAvailableMoves,
     setAllAvailableMoves,
     activePlayer,
+    preTurn,
+    setPreTurn,
   } = props;
 
   const [state, setState] = useState({
@@ -128,12 +132,27 @@ export default function Spot(props: Props) {
 
   const initBoard = useGenerateBoard(tile, x, y);
 
+  // useEffect(() => {
+  //   if (preTurn === 0) {
+  //     // setAllAvailableMoves('white', null);
+  //     setTurn(0);
+  //   }
+  //   if (preTurn === 1) {
+  //     // setAllAvailableMoves('black', null);
+  //     setTurn(1);
+  //   }
+  // }, [preTurn]);
+
   useEffect(() => {
+    // if (activePlayer === state.activePiece.color)
     if (turn === 0) {
-      setAllAvailableMoves('white');
+      setAllAvailableMoves('white', null);
+    }
+    if (turn === 1) {
+      setAllAvailableMoves('black', null);
     }
 
-    if (activePlayer === state.activePiece.color) {
+    if (state.isOccupied) {
       let tile: Position = {
         tile: state.tileInfo.tile,
         x: state.tileInfo.x,
@@ -145,28 +164,28 @@ export default function Spot(props: Props) {
       switch (currentPosition?.activePiece.pieceType) {
         case 'king':
           moves = KingAvailableMoves(tile, setCastling, getSpotDetails);
-          setAllAvailableMoves('white', moves);
-          // setState = KingAvailableMoves(tile, setCastling, getSpotDetails);
+          setAllAvailableMoves(currentPosition?.activePiece.color, moves);
           break;
         case 'queen':
-          // moves = QueenAvailableMoves(tile, getSpotDetails);
-          // setAllAvailableMoves(moves, false);
+          moves = QueenAvailableMoves(tile, getSpotDetails);
+          setAllAvailableMoves(currentPosition?.activePiece.color, moves);
           break;
         case 'bishop':
-          // moves = BishopAvailableMoves(tile, getSpotDetails);
-          // setAllAvailableMoves(moves, false);
+          moves = BishopAvailableMoves(tile, getSpotDetails);
+          setAllAvailableMoves(currentPosition?.activePiece.color, moves);
           break;
         case 'knight':
-          // moves = KnightAvailableMoves(tile, getSpotDetails);
-          // setAllAvailableMoves(moves, false);
+          moves = KnightAvailableMoves(tile, getSpotDetails);
+          setAllAvailableMoves(currentPosition?.activePiece.color, moves);
           break;
         case 'rook':
-          // moves = RookAvailableMoves(tile, getSpotDetails);
-          // setAllAvailableMoves(moves, false);
+          moves = RookAvailableMoves(tile, getSpotDetails);
+          setAllAvailableMoves(currentPosition?.activePiece.color, moves);
           break;
         default:
-          // moves =PawnAvailableMoves(tile, getSpotDetails);
-          // setAllAvailableMoves(moves, false);
+          // TODO: pawns are displaying there movement options (ie. up/down) but we need to only have it display it's diagonal kill square options
+          // moves = PawnAvailableMoves(tile, getSpotDetails);
+          // setAllAvailableMoves('white', moves);
           break;
       }
     }
@@ -411,8 +430,10 @@ export default function Spot(props: Props) {
               hasMoved: true,
             });
             if (turn === 0) {
+              // setPreTurn(1);
               setTurn(1);
-            } else {
+            } else if (turn === 1) {
+              // setPreTurn(0);
               setTurn(0);
             }
           }

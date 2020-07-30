@@ -19,10 +19,20 @@ interface Props {
   setTurn: Function;
   check: boolean;
   setCheck: Function;
+  setActivePlayer: Function;
 }
 
 export default function Board(props: Props) {
-  const { turn, activePlayer, isRoundOver, isGameOver, setTurn, check, setCheck } = props;
+  const {
+    turn,
+    activePlayer,
+    isRoundOver,
+    isGameOver,
+    setTurn,
+    check,
+    setCheck,
+    setActivePlayer,
+  } = props;
 
   const [state, setState] = useState({
     board: [],
@@ -270,6 +280,7 @@ export default function Board(props: Props) {
             setDeleteColorMoves={setDeleteColorMoves}
             check={check}
             setCheck={setCheck}
+            setActivePlayer={setActivePlayer}
           />,
         );
       });

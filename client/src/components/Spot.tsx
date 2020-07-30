@@ -71,6 +71,7 @@ interface Props {
   setDeleteColorMoves: Function;
   check: boolean;
   setCheck: Function;
+  setActivePlayer: Function;
 }
 const brown = '#8a604a';
 const beige = '#e5d3ba';
@@ -109,6 +110,7 @@ export default function Spot(props: Props) {
     setDeleteColorMoves,
     check,
     setCheck,
+    setActivePlayer,
   } = props;
 
   const [state, setState] = useState({
@@ -359,6 +361,7 @@ export default function Spot(props: Props) {
         setCastling(false);
       }
     }
+
     if (castling && startPosition.tile === 'e8' && destination.tile === 'c8') {
       let queenSideRookBlack: Position = {
         tile: 'a8',
@@ -480,9 +483,11 @@ export default function Spot(props: Props) {
             if (turn === 0) {
               // setPreTurn(1);
               setTurn(1);
+              setActivePlayer('black');
             } else if (turn === 1) {
               // setPreTurn(0);
               setTurn(0);
+              setActivePlayer('white');
             }
           }
         }

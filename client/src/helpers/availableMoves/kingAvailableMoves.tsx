@@ -103,11 +103,6 @@ export default function KingAvailableMoves(
     ) {
       castlingMoves.push({ x: 3, y: 8 });
     }
-    if (!castlingMoves.length) {
-      setCastling(false);
-    } else {
-      setCastling(true);
-    }
 
     return castlingMoves;
   };
@@ -148,6 +143,11 @@ export default function KingAvailableMoves(
     let rightUp = availableMovesChecker(1, 1);
     let leftDown = availableMovesChecker(-1, -1);
     let castlingMoves = castlingChecker();
+
+    if (castlingMoves.length) {
+      setCastling(true);
+    }
+
     for (let move of castlingMoves) {
       kingPossibleMoves.push(move);
     }

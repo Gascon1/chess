@@ -19,19 +19,16 @@ function App() {
   });
 
   function setTurn(value: number) {
-    if (!value) {
-      setState((prev) => ({
-        ...prev,
-        turn: value,
-        activePlayer: 'white',
-      }));
-    } else {
-      setState((prev) => ({
-        ...prev,
-        turn: value,
-        activePlayer: 'black',
-      }));
-    }
+    setState((prev) => ({
+      ...prev,
+      turn: value,
+    }));
+  }
+  function setActivePlayer(colour: string) {
+    setState((prev) => ({
+      ...prev,
+      activePlayer: colour,
+    }));
   }
   function setCheck(flag: boolean) {
     setState((prev) => ({
@@ -50,6 +47,7 @@ function App() {
         setTurn={setTurn}
         check={state.check}
         setCheck={setCheck}
+        setActivePlayer={setActivePlayer}
       />
     </SpotsContext.Provider>
   );

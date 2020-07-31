@@ -238,7 +238,7 @@ export default function Spot(props: Props) {
       setAllAvailableMoves('white', null);
     }
     if (isEven(turn)) {
-      setAllAvailableMoves('black');
+      setAllAvailableMoves('black', null);
     }
   }, [turn, getSpotDetails]);
 

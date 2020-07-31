@@ -13,6 +13,7 @@ import BishopAvailableMoves from 'helpers/availableMoves/bishopAvailableMoves';
 import KnightAvailableMoves from 'helpers/availableMoves/knightAvailableMoves';
 import RookAvailableMoves from 'helpers/availableMoves/rookAvailableMoves';
 import PawnAvailableMoves from 'helpers/availableMoves/pawnAvailableMoves';
+import isEven from 'helpers/isEven';
 
 interface Position {
   tile: string;
@@ -233,10 +234,10 @@ export default function Spot(props: Props) {
     }
 
     // idk why this works
-    if (turn === 0) {
+    if (isEven(turn)) {
       setAllAvailableMoves('white', null);
     }
-    if (turn === 1) {
+    if (isEven(turn)) {
       setAllAvailableMoves('black', null);
     }
   }, [turn, getSpotDetails]);
@@ -480,13 +481,13 @@ export default function Spot(props: Props) {
               isOccupied: true,
               hasMoved: true,
             });
-            if (turn === 0) {
+            if (isEven(turn)) {
               // setPreTurn(1);
-              setTurn(1);
+              setTurn();
               setActivePlayer('black');
-            } else if (turn === 1) {
+            } else if (!isEven(turn)) {
               // setPreTurn(0);
-              setTurn(0);
+              setTurn();
               setActivePlayer('white');
             }
           }

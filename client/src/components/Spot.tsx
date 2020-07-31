@@ -235,7 +235,7 @@ export default function Spot(props: Props) {
 
     // idk why this works
     if (isEven(turn)) {
-      setAllAvailableMoves('white');
+      setAllAvailableMoves('white', null);
     }
     if (isEven(turn)) {
       setAllAvailableMoves('black');

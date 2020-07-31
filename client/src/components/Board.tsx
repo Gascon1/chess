@@ -84,7 +84,7 @@ export default function Board(props: Props) {
     }));
   }
 
-  function setAllAvailableMoves(color: string, availableMove?: any) {
+  function setAllAvailableMoves(color: string, availableMove: any) {
     // WHITE CASE
     if (availableMove?.length > 0 && color === 'white') {
       // moved code into setState because it can access prev directly and be more synchronous

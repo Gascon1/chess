@@ -78,7 +78,7 @@ export default function Board(props: Props) {
     },
     allAvailableMoves: { white: [{ x: 0, y: 0 }], black: [{ x: 0, y: 0 }] },
     preTurn: 0,
-    check: ''
+    check: '',
   });
 
   function setPreTurn(value: number) {
@@ -202,9 +202,6 @@ export default function Board(props: Props) {
       ...prev,
       destination: { activePiece: { pieceType, color }, ...tileInfo },
     }));
-    // if (state.tileFocus !== tileInfo.tile) {
-    //   setState((prev) => ({ ...prev, killPosition: state.tileFocus }));
-    // }
   }
 
   const setKillPosition = (tileInfo: Position, castling: boolean, promotion: boolean) => {
@@ -237,12 +234,18 @@ export default function Board(props: Props) {
   };
 
   useEffect(() => {
-    let king = getSpotDetailsByName('king', 'black');
+    let blackKing = getSpotDetailsByName('king', 'black');
+    let whiteKing = getSpotDetailsByName('king', 'white');
 
     const allWhiteAvailMoves = JSON.stringify(state.allAvailableMoves.white);
-    if (allWhiteAvailMoves.includes(JSON.stringify(king))) {
-      // setCheck('Black', true);
-      setState((prev) => ({...prev, check: 'black'}))
+    const allBlackAvailMoves = JSON.stringify(state.allAvailableMoves.black);
+
+    if (allWhiteAvailMoves.includes(JSON.stringify(blackKing))) {
+      setState((prev) => ({ ...prev, check: 'Black' }));
+    }
+
+    if (allBlackAvailMoves.includes(JSON.stringify(whiteKing))) {
+      setState((prev) => ({ ...prev, check: 'White' }));
     }
   }, [getSpotDetailsByName, setCheck, state.allAvailableMoves]);
 

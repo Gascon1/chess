@@ -12,7 +12,8 @@ import QueenAvailableMoves from 'helpers/availableMoves/queenAvailableMoves';
 import BishopAvailableMoves from 'helpers/availableMoves/bishopAvailableMoves';
 import KnightAvailableMoves from 'helpers/availableMoves/knightAvailableMoves';
 import RookAvailableMoves from 'helpers/availableMoves/rookAvailableMoves';
-import PawnAvailableMoves from 'helpers/availableMoves/pawnAvailableMoves';
+// import PawnAvailableMoves from 'helpers/availableMoves/pawnAvailableMoves';
+import PawnAvailableKillMoves from 'helpers/availableMoves/pawnAvailableKillMoves';
 
 interface Position {
   tile: string;
@@ -136,21 +137,6 @@ export default function Spot(props: Props) {
 
   const initBoard = useGenerateBoard(tile, x, y);
 
-  // useEffect(() => {
-  //   if (preTurn === 0) {
-  //     // setAllAvailableMoves('white', null);
-  //     setTurn(0);
-  //     setDeleteColorMoves('white');
-  //   }
-  //   if (preTurn === 1) {
-  //     // setAllAvailableMoves('black', null);
-  //     setTurn(1);
-  //     setDeleteColorMoves('black');
-  //   }
-  // }, [preTurn]);
-
-  //bug: the check only occurs when I click the piece after the turn is done
-
   useEffect(() => {
     if (state.isOccupied) {
       let tile: Position = {
@@ -183,9 +169,8 @@ export default function Spot(props: Props) {
           setAllAvailableMoves(currentPosition?.activePiece.color, moves);
           break;
         default:
-          // TODO: pawns are displaying there movement options (ie. up/down) but we need to only have it display it's diagonal kill square options
-          // moves = PawnAvailableMoves(tile, getSpotDetails);
-          // setAllAvailableMoves('white', moves);
+          moves = PawnAvailableKillMoves(tile, getSpotDetails);
+          setAllAvailableMoves(currentPosition?.activePiece.color, moves);
           break;
       }
     }
@@ -447,11 +432,9 @@ export default function Spot(props: Props) {
               hasMoved: true,
             });
             if (turn === 0) {
-              // setPreTurn(1);
               setTurn(1);
               setActivePlayer('black');
             } else if (turn === 1) {
-              // setPreTurn(0);
               setTurn(0);
               setActivePlayer('white');
             }
@@ -464,38 +447,6 @@ export default function Spot(props: Props) {
       // setStartPosition({ x: 0, y: 0 }, '', '');
     }
   };
-
-  // useEffect(() => {
-  //   let king;
-  //   if (state.activePiece.pieceType === 'king') {
-  //     king = {
-  //       x: state.tileInfo.x,
-  //       y: state.tileInfo.y,
-  //     };
-  //   }
-
-  //   if (
-  //     state.activePiece.color === 'white' &&
-  //     JSON.stringify(allAvailableMoves.black).includes(JSON.stringify(king))
-  //   ) {
-  //     setCheck('White', true);
-  //   }
-  //   if (
-  //     state.activePiece.color === 'black' &&
-  //     JSON.stringify(allAvailableMoves.white).includes(JSON.stringify(king))
-  //   ) {
-  //     setCheck('Black', true);
-  //   }
-  // }, [
-  //   allAvailableMoves,
-  //   setCheck,
-  //   state.activePiece.color,
-  //   state.activePiece.pieceType,
-  //   state.tileInfo.x,
-  //   state.tileInfo.y,
-  //   turn,
-  //   flag,
-  // ]);
 
   return (
     <div

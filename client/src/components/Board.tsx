@@ -16,7 +16,6 @@ interface Position {
 interface Props {
   turn: number;
   activePlayer: string;
-  // isRoundOver: boolean;
   isGameOver: boolean;
   setTurn: Function;
   setActivePlayer: Function;
@@ -26,22 +25,15 @@ interface Props {
 
 export default function Board(props: Props) {
   const { getSpotDetailsByName } = useContext(SpotsContext);
-<<<<<<< Updated upstream
-  const { turn, activePlayer, isRoundOver, isGameOver, setTurn, setActivePlayer } = props;
-=======
   const {
     turn,
     activePlayer,
-    // isRoundOver,
     isGameOver,
     setTurn,
-    check,
-    setCheck,
     setActivePlayer,
     setIsGameOver,
     setTypeOfWin,
   } = props;
->>>>>>> Stashed changes
 
   const [state, setState] = useState({
     board: [],

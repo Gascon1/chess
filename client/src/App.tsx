@@ -11,7 +11,6 @@ function App() {
     player2Name: '',
     turn: 0,
     activePlayer: 'white',
-    // isRoundOver: false,
     isGameOver: false,
     typeOfGameEnd: 'win',
     typeOfWin: 'checkmate',
@@ -30,18 +29,6 @@ function App() {
     }));
   }
 
-<<<<<<< Updated upstream
-=======
-  function setCheck(colour: string, flag: boolean) {
-    setState((prev) => ({
-      ...prev,
-      check: {
-        colour,
-        flag,
-      },
-    }));
-  }
-
   function setIsGameOver(flag: boolean) {
     setState((prev) => ({
       ...prev,
@@ -56,13 +43,11 @@ function App() {
     }));
   }
 
->>>>>>> Stashed changes
   return (
     <SpotsContext.Provider value={spots}>
       <Board
         turn={state.turn}
         activePlayer={state.activePlayer}
-        // isRoundOver={state.isRoundOver}
         isGameOver={state.isGameOver}
         setTurn={setTurn}
         setActivePlayer={setActivePlayer}

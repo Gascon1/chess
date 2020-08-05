@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import isEven from 'helpers/isEven';
 import Spot from 'components/Spot';
-import Promotion from 'helpers/promotion';
-import CheckDisplay from 'helpers/checkDisplay';
+import Promotion from 'components/Promotion';
 
 interface Position {
   tile: string;
@@ -18,7 +17,6 @@ interface Props {
   isRoundOver: boolean;
   isGameOver: boolean;
   setTurn: Function;
-  check: { colour: string; flag: boolean };
   setCheck: Function;
   setActivePlayer: Function;
 }
@@ -30,7 +28,6 @@ export default function Board(props: Props) {
     isRoundOver,
     isGameOver,
     setTurn,
-    check,
     setCheck,
     setActivePlayer,
   } = props;
@@ -92,7 +89,6 @@ export default function Board(props: Props) {
       // cool trick
 
       // indexOf doesn't work with objects or JSON.stringify(objects) hence I changed it
-      console.log('in setAllAvaiableMoves');
       setState((prev) => {
         let whiteCopy = prev.allAvailableMoves.white.slice();
         whiteCopy.push(...availableMove);
@@ -280,7 +276,6 @@ export default function Board(props: Props) {
             preTurn={state.preTurn}
             setPreTurn={setPreTurn}
             setDeleteColorMoves={setDeleteColorMoves}
-            check={check}
             setCheck={setCheck}
             setActivePlayer={setActivePlayer}
           />,
@@ -299,11 +294,11 @@ export default function Board(props: Props) {
     state.endPawn,
     state.deletePawn,
     state.promotion,
+    state.allAvailableMoves,
   ]);
 
   return (
     <div className='viewport'>
-      <CheckDisplay check={check} />
       <div className='board'>{state.board}</div>
       <Promotion endPawn={state.endPawn} setPromotion={setPromotion} />
     </div>

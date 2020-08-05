@@ -69,7 +69,6 @@ interface Props {
   preTurn: number;
   setPreTurn: Function;
   setDeleteColorMoves: Function;
-  check: { colour: string; flag: boolean };
   setCheck: Function;
   setActivePlayer: Function;
 }
@@ -108,7 +107,6 @@ export default function Spot(props: Props) {
     preTurn,
     setPreTurn,
     setDeleteColorMoves,
-    check,
     setCheck,
     setActivePlayer,
   } = props;
@@ -156,8 +154,6 @@ export default function Spot(props: Props) {
   //bug: the check only occurs when I click the piece after the turn is done
 
   useEffect(() => {
-    console.log(allAvailableMoves);
-
     if (state.activePiece.pieceType === 'king') {
       let king = {
         x: state.tileInfo.x,
@@ -168,16 +164,28 @@ export default function Spot(props: Props) {
         state.activePiece.color === 'white' &&
         JSON.stringify(allAvailableMoves.black).includes(JSON.stringify(king))
       ) {
-        setCheck('White', true);
+        // setCheck('White', true);
       }
       if (
         state.activePiece.color === 'black' &&
         JSON.stringify(allAvailableMoves.white).includes(JSON.stringify(king))
       ) {
         setCheck('Black', true);
+
+        console.log('hi');
+
+        setAllAvailableMoves('black', null);
+        setAllAvailableMoves('white', null);
       }
     }
-  }, [allAvailableMoves]);
+  }, [
+    allAvailableMoves,
+    setCheck,
+    state.activePiece.color,
+    state.activePiece.pieceType,
+    state.tileInfo.x,
+    state.tileInfo.y,
+  ]);
 
   useEffect(() => {
     if (state.isOccupied) {
@@ -219,21 +227,13 @@ export default function Spot(props: Props) {
     }
 
     // idk why this works but don't delete it
-    // if (turn === 0) {
-    //   setAllAvailableMoves('white', null);
-    // }
-    // if (turn === 1) {
-    //   setAllAvailableMoves('black', null);
-    // }
-  }, [
-    turn,
-    getSpotDetails,
-    setAllAvailableMoves,
-    setCastling,
-    state.isOccupied,
-    state.tileInfo,
-    destination,
-  ]);
+    if (turn === 0) {
+      setAllAvailableMoves('white', null);
+    }
+    if (turn === 1) {
+      setAllAvailableMoves('black', null);
+    }
+  }, [getSpotDetails, state.isOccupied, state.tileInfo, turn]);
 
   useEffect(() => {
     setState((prev) => ({ ...prev, ...initBoard }));

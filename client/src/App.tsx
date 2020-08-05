@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import Board from 'components/Board';
 import { SpotsContext } from 'context/SpotsContext';
 import { useSpots } from 'hooks/useSpots';
+import CheckDisplay from 'components/checkDisplay'
 
 function App() {
   const spots = useSpots();
@@ -43,13 +44,13 @@ function App() {
 
   return (
     <SpotsContext.Provider value={spots}>
+      <CheckDisplay check={state.check} />
       <Board
         turn={state.turn}
         activePlayer={state.activePlayer}
         isRoundOver={state.isRoundOver}
         isGameOver={state.isGameOver}
         setTurn={setTurn}
-        check={state.check}
         setCheck={setCheck}
         setActivePlayer={setActivePlayer}
       />

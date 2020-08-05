@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import isEven from 'helpers/isEven';
 import Spot from 'components/Spot';
 import Promotion from 'helpers/promotion';
 import CheckDisplay from 'helpers/checkDisplay';
+import { SpotsContext } from 'context/SpotsContext';
 
 interface Position {
   tile: string;
@@ -24,6 +25,7 @@ interface Props {
 }
 
 export default function Board(props: Props) {
+  const { getSpotDetailsByName } = useContext(SpotsContext);
   const {
     turn,
     activePlayer,
@@ -76,6 +78,7 @@ export default function Board(props: Props) {
     },
     allAvailableMoves: { white: [{ x: 0, y: 0 }], black: [{ x: 0, y: 0 }] },
     preTurn: 0,
+    check: ''
   });
 
   function setPreTurn(value: number) {
@@ -92,7 +95,6 @@ export default function Board(props: Props) {
       // cool trick
 
       // indexOf doesn't work with objects or JSON.stringify(objects) hence I changed it
-      console.log('in setAllAvaiableMoves');
       setState((prev) => {
         let whiteCopy = prev.allAvailableMoves.white.slice();
         whiteCopy.push(...availableMove);
@@ -235,6 +237,16 @@ export default function Board(props: Props) {
   };
 
   useEffect(() => {
+    let king = getSpotDetailsByName('king', 'black');
+
+    const allWhiteAvailMoves = JSON.stringify(state.allAvailableMoves.white);
+    if (allWhiteAvailMoves.includes(JSON.stringify(king))) {
+      // setCheck('Black', true);
+      setState((prev) => ({...prev, check: 'black'}))
+    }
+  }, [getSpotDetailsByName, setCheck, state.allAvailableMoves]);
+
+  useEffect(() => {
     let board: any = [];
     const alphaPosition = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
     const numericPosition = 0;
@@ -274,14 +286,12 @@ export default function Board(props: Props) {
             setPromotion={setPromotion}
             turn={turn}
             setTurn={setTurn}
-            allAvailableMoves={state.allAvailableMoves}
             setAllAvailableMoves={setAllAvailableMoves}
             activePlayer={activePlayer}
             preTurn={state.preTurn}
             setPreTurn={setPreTurn}
             setDeleteColorMoves={setDeleteColorMoves}
             check={check}
-            setCheck={setCheck}
             setActivePlayer={setActivePlayer}
           />,
         );
@@ -303,7 +313,7 @@ export default function Board(props: Props) {
 
   return (
     <div className='viewport'>
-      <CheckDisplay check={check} />
+      <CheckDisplay check={state.check} />
       <div className='board'>{state.board}</div>
       <Promotion endPawn={state.endPawn} setPromotion={setPromotion} />
     </div>

@@ -35,8 +35,8 @@ function App() {
     setState((prev) => ({
       ...prev,
       check: {
-        colour: colour,
-        flag: flag,
+        colour,
+        flag,
       },
     }));
   }

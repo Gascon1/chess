@@ -63,14 +63,12 @@ interface Props {
   setPromotion: Function;
   turn: number;
   setTurn: Function;
-  allAvailableMoves: { white: { x: number; y: number }[]; black: { x: number; y: number }[] };
   setAllAvailableMoves: Function;
   activePlayer: string;
   preTurn: number;
   setPreTurn: Function;
   setDeleteColorMoves: Function;
   check: { colour: string; flag: boolean };
-  setCheck: Function;
   setActivePlayer: Function;
 }
 const brown = '#8a604a';
@@ -102,14 +100,12 @@ export default function Spot(props: Props) {
     setDeletePawn,
     promotion,
     setPromotion,
-    allAvailableMoves,
     setAllAvailableMoves,
     activePlayer,
     preTurn,
     setPreTurn,
     setDeleteColorMoves,
     check,
-    setCheck,
     setActivePlayer,
   } = props;
 
@@ -156,30 +152,6 @@ export default function Spot(props: Props) {
   //bug: the check only occurs when I click the piece after the turn is done
 
   useEffect(() => {
-    console.log(allAvailableMoves);
-
-    if (state.activePiece.pieceType === 'king') {
-      let king = {
-        x: state.tileInfo.x,
-        y: state.tileInfo.y,
-      };
-
-      if (
-        state.activePiece.color === 'white' &&
-        JSON.stringify(allAvailableMoves.black).includes(JSON.stringify(king))
-      ) {
-        setCheck('White', true);
-      }
-      if (
-        state.activePiece.color === 'black' &&
-        JSON.stringify(allAvailableMoves.white).includes(JSON.stringify(king))
-      ) {
-        setCheck('Black', true);
-      }
-    }
-  }, [allAvailableMoves]);
-
-  useEffect(() => {
     if (state.isOccupied) {
       let tile: Position = {
         tile: state.tileInfo.tile,
@@ -219,12 +191,12 @@ export default function Spot(props: Props) {
     }
 
     // idk why this works but don't delete it
-    // if (turn === 0) {
-    //   setAllAvailableMoves('white', null);
-    // }
-    // if (turn === 1) {
-    //   setAllAvailableMoves('black', null);
-    // }
+    if (turn === 0) {
+      setAllAvailableMoves('white', null);
+    }
+    if (turn === 1) {
+      setAllAvailableMoves('black', null);
+    }
   }, [
     turn,
     getSpotDetails,
@@ -492,6 +464,38 @@ export default function Spot(props: Props) {
       // setStartPosition({ x: 0, y: 0 }, '', '');
     }
   };
+
+  // useEffect(() => {
+  //   let king;
+  //   if (state.activePiece.pieceType === 'king') {
+  //     king = {
+  //       x: state.tileInfo.x,
+  //       y: state.tileInfo.y,
+  //     };
+  //   }
+
+  //   if (
+  //     state.activePiece.color === 'white' &&
+  //     JSON.stringify(allAvailableMoves.black).includes(JSON.stringify(king))
+  //   ) {
+  //     setCheck('White', true);
+  //   }
+  //   if (
+  //     state.activePiece.color === 'black' &&
+  //     JSON.stringify(allAvailableMoves.white).includes(JSON.stringify(king))
+  //   ) {
+  //     setCheck('Black', true);
+  //   }
+  // }, [
+  //   allAvailableMoves,
+  //   setCheck,
+  //   state.activePiece.color,
+  //   state.activePiece.pieceType,
+  //   state.tileInfo.x,
+  //   state.tileInfo.y,
+  //   turn,
+  //   flag,
+  // ]);
 
   return (
     <div

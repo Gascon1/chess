@@ -59,6 +59,19 @@ export const useSpots = () => {
     }
   };
 
+  const getSpotDetailsByName = (name: string, color: string): any => {
+    for (const spot of state.spotsContainer) {
+      if (spot.activePiece.pieceType === name && spot.activePiece.color === color) {
+
+        let returnValue = {
+          x : spot.tileInfo.x,
+          y : spot.tileInfo.y,
+        }
+        return returnValue;
+      }
+    }
+  };
+
   const spots = state.spotsContainer;
 
   return {
@@ -66,5 +79,6 @@ export const useSpots = () => {
     setSpotsContext,
     initSpotsContext,
     getSpotDetails,
+    getSpotDetailsByName,
   };
 };

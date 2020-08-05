@@ -1,10 +1,7 @@
 import React from 'react';
 
 interface Props {
-  check: {
-    colour: string;
-    flag: boolean;
-  };
+  check: string;
 }
 
 export default function checkDisplay(props: Props) {
@@ -12,9 +9,9 @@ export default function checkDisplay(props: Props) {
   return (
     <div
       className='checkDisplay'
-      style={check.flag ? { display: 'block' } : { visibility: 'hidden' }}
+      style={check ? { display: 'block' } : { visibility: 'hidden' }}
     >
-      {check.colour} is in check!
+      {check} is in check!
     </div>
   );
 }

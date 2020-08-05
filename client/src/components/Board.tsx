@@ -92,6 +92,7 @@ export default function Board(props: Props) {
       // cool trick
 
       // indexOf doesn't work with objects or JSON.stringify(objects) hence I changed it
+      console.log('in setAllAvaiableMoves');
       setState((prev) => {
         let whiteCopy = prev.allAvailableMoves.white.slice();
         whiteCopy.push(...availableMove);

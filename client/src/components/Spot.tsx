@@ -156,6 +156,8 @@ export default function Spot(props: Props) {
   //bug: the check only occurs when I click the piece after the turn is done
 
   useEffect(() => {
+    console.log(allAvailableMoves);
+
     if (state.activePiece.pieceType === 'king') {
       let king = {
         x: state.tileInfo.x,
@@ -166,34 +168,18 @@ export default function Spot(props: Props) {
         state.activePiece.color === 'white' &&
         JSON.stringify(allAvailableMoves.black).includes(JSON.stringify(king))
       ) {
-        console.log('check', state.activePiece.color);
-        setCheck('White ', true);
+        setCheck('White', true);
       }
       if (
         state.activePiece.color === 'black' &&
         JSON.stringify(allAvailableMoves.white).includes(JSON.stringify(king))
       ) {
-        console.log('check', state.activePiece.color);
         setCheck('Black', true);
       }
     }
   }, [allAvailableMoves]);
 
   useEffect(() => {
-    // if (turn === 0) {
-    //   setAllAvailableMoves('white', null);
-    // }
-    // if (turn === 1) {
-    //   setAllAvailableMoves('black', null);
-    // }
-
-    // if (turn === 0) {
-    //   setPreTurn('white');
-    // }
-    // if (turn === 1) {
-    //   setPreTurn('black');
-    // }
-
     if (state.isOccupied) {
       let tile: Position = {
         tile: state.tileInfo.tile,
@@ -232,14 +218,22 @@ export default function Spot(props: Props) {
       }
     }
 
-    // idk why this works
-    if (turn === 0) {
-      setAllAvailableMoves('white', null);
-    }
-    if (turn === 1) {
-      setAllAvailableMoves('black', null);
-    }
-  }, [turn, getSpotDetails]);
+    // idk why this works but don't delete it
+    // if (turn === 0) {
+    //   setAllAvailableMoves('white', null);
+    // }
+    // if (turn === 1) {
+    //   setAllAvailableMoves('black', null);
+    // }
+  }, [
+    turn,
+    getSpotDetails,
+    setAllAvailableMoves,
+    setCastling,
+    state.isOccupied,
+    state.tileInfo,
+    destination,
+  ]);
 
   useEffect(() => {
     setState((prev) => ({ ...prev, ...initBoard }));
@@ -387,7 +381,7 @@ export default function Spot(props: Props) {
         setCastling(false);
       }
     }
-  }, [destination, startPosition, castling]);
+  }, [destination, startPosition, castling, setCastling, setKillPosition, state.tileInfo.tile]);
 
   useEffect(() => {
     // WHITE PAWN HAS REACHED END OF BOARD-----------------------------------------

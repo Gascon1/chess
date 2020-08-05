@@ -30,6 +30,7 @@ function App() {
       activePlayer: colour,
     }));
   }
+
   function setCheck(colour: string, flag: boolean) {
     setState((prev) => ({
       ...prev,

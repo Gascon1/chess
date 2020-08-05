@@ -15,7 +15,6 @@ function App() {
     isGameOver: false,
     typeOfGameEnd: 'win',
     typeOfWin: 'checkmate',
-    check: { colour: '', flag: false },
   });
 
   function setTurn(value: number) {
@@ -31,16 +30,6 @@ function App() {
     }));
   }
 
-  function setCheck(colour: string, flag: boolean) {
-    setState((prev) => ({
-      ...prev,
-      check: {
-        colour,
-        flag,
-      },
-    }));
-  }
-
   return (
     <SpotsContext.Provider value={spots}>
       <Board
@@ -49,8 +38,6 @@ function App() {
         isRoundOver={state.isRoundOver}
         isGameOver={state.isGameOver}
         setTurn={setTurn}
-        check={state.check}
-        setCheck={setCheck}
         setActivePlayer={setActivePlayer}
       />
     </SpotsContext.Provider>

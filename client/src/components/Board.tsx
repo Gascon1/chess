@@ -19,23 +19,12 @@ interface Props {
   isRoundOver: boolean;
   isGameOver: boolean;
   setTurn: Function;
-  check: { colour: string; flag: boolean };
-  setCheck: Function;
   setActivePlayer: Function;
 }
 
 export default function Board(props: Props) {
   const { getSpotDetailsByName } = useContext(SpotsContext);
-  const {
-    turn,
-    activePlayer,
-    isRoundOver,
-    isGameOver,
-    setTurn,
-    check,
-    setCheck,
-    setActivePlayer,
-  } = props;
+  const { turn, activePlayer, isRoundOver, isGameOver, setTurn, setActivePlayer } = props;
 
   const [state, setState] = useState({
     board: [],
@@ -229,6 +218,10 @@ export default function Board(props: Props) {
     setState((prev) => ({ ...prev, availableMoves }));
   };
 
+  const setCheck = (colour: string) => {
+    setState((prev) => ({ ...prev, check: colour }));
+  };
+
   useEffect(() => {
     let blackKing = getSpotDetailsByName('king', 'black');
     let whiteKing = getSpotDetailsByName('king', 'white');
@@ -237,13 +230,13 @@ export default function Board(props: Props) {
     const allBlackAvailMoves = JSON.stringify(state.allAvailableMoves.black);
 
     if (allWhiteAvailMoves.includes(JSON.stringify(blackKing))) {
-      setState((prev) => ({ ...prev, check: 'Black' }));
+      setCheck('Black');
+    } else if (allBlackAvailMoves.includes(JSON.stringify(whiteKing))) {
+      setCheck('White');
+    } else {
+      setCheck('');
     }
-
-    if (allBlackAvailMoves.includes(JSON.stringify(whiteKing))) {
-      setState((prev) => ({ ...prev, check: 'White' }));
-    }
-  }, [getSpotDetailsByName, setCheck, state.allAvailableMoves]);
+  }, [getSpotDetailsByName, state.allAvailableMoves]);
 
   useEffect(() => {
     let board: any = [];
@@ -290,7 +283,6 @@ export default function Board(props: Props) {
             preTurn={state.preTurn}
             setPreTurn={setPreTurn}
             setDeleteColorMoves={setDeleteColorMoves}
-            check={check}
             setActivePlayer={setActivePlayer}
           />,
         );

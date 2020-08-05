@@ -66,9 +66,6 @@ interface Props {
   setTurn: Function;
   setAllAvailableMoves: Function;
   activePlayer: string;
-  preTurn: number;
-  setPreTurn: Function;
-  setDeleteColorMoves: Function;
   setActivePlayer: Function;
 }
 const brown = '#8a604a';
@@ -102,9 +99,6 @@ export default function Spot(props: Props) {
     setPromotion,
     setAllAvailableMoves,
     activePlayer,
-    preTurn,
-    setPreTurn,
-    setDeleteColorMoves,
     setActivePlayer,
   } = props;
 

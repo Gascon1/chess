@@ -66,16 +66,8 @@ export default function Board(props: Props) {
       color: '',
     },
     allAvailableMoves: { white: [{ x: 0, y: 0 }], black: [{ x: 0, y: 0 }] },
-    preTurn: 0,
     check: '',
   });
-
-  function setPreTurn(value: number) {
-    setState((prev) => ({
-      ...prev,
-      preTurn: value,
-    }));
-  }
 
   function setAllAvailableMoves(color: string, availableMove: any) {
     // WHITE CASE
@@ -123,27 +115,6 @@ export default function Board(props: Props) {
       }));
     }
     if (availableMove === null && color === 'black') {
-      setState((prev) => ({
-        ...prev,
-        allAvailableMoves: {
-          ...prev.allAvailableMoves,
-          black: [],
-        },
-      }));
-    }
-  }
-
-  function setDeleteColorMoves(color: string) {
-    if (color === 'white') {
-      setState((prev) => ({
-        ...prev,
-        allAvailableMoves: {
-          ...prev.allAvailableMoves,
-          white: [],
-        },
-      }));
-    }
-    if (color === 'black') {
       setState((prev) => ({
         ...prev,
         allAvailableMoves: {
@@ -280,9 +251,6 @@ export default function Board(props: Props) {
             setTurn={setTurn}
             setAllAvailableMoves={setAllAvailableMoves}
             activePlayer={activePlayer}
-            preTurn={state.preTurn}
-            setPreTurn={setPreTurn}
-            setDeleteColorMoves={setDeleteColorMoves}
             setActivePlayer={setActivePlayer}
           />,
         );

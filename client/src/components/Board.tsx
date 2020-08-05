@@ -16,15 +16,32 @@ interface Position {
 interface Props {
   turn: number;
   activePlayer: string;
-  isRoundOver: boolean;
+  // isRoundOver: boolean;
   isGameOver: boolean;
   setTurn: Function;
   setActivePlayer: Function;
+  setIsGameOver: Function;
+  setTypeOfWin: Function;
 }
 
 export default function Board(props: Props) {
   const { getSpotDetailsByName } = useContext(SpotsContext);
+<<<<<<< Updated upstream
   const { turn, activePlayer, isRoundOver, isGameOver, setTurn, setActivePlayer } = props;
+=======
+  const {
+    turn,
+    activePlayer,
+    // isRoundOver,
+    isGameOver,
+    setTurn,
+    check,
+    setCheck,
+    setActivePlayer,
+    setIsGameOver,
+    setTypeOfWin,
+  } = props;
+>>>>>>> Stashed changes
 
   const [state, setState] = useState({
     board: [],
@@ -196,6 +213,7 @@ export default function Board(props: Props) {
   useEffect(() => {
     let blackKing = getSpotDetailsByName('king', 'black');
     let whiteKing = getSpotDetailsByName('king', 'white');
+    console.log(blackKing);
 
     const allWhiteAvailMoves = JSON.stringify(state.allAvailableMoves.white);
     const allBlackAvailMoves = JSON.stringify(state.allAvailableMoves.black);

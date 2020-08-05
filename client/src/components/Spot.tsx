@@ -12,7 +12,8 @@ import QueenAvailableMoves from 'helpers/availableMoves/queenAvailableMoves';
 import BishopAvailableMoves from 'helpers/availableMoves/bishopAvailableMoves';
 import KnightAvailableMoves from 'helpers/availableMoves/knightAvailableMoves';
 import RookAvailableMoves from 'helpers/availableMoves/rookAvailableMoves';
-import PawnAvailableMoves from 'helpers/availableMoves/pawnAvailableMoves';
+// import PawnAvailableMoves from 'helpers/availableMoves/pawnAvailableMoves';
+import PawnAvailableKillMoves from 'helpers/availableMoves/pawnAvailableKillMoves';
 
 interface Position {
   tile: string;
@@ -168,9 +169,8 @@ export default function Spot(props: Props) {
           setAllAvailableMoves(currentPosition?.activePiece.color, moves);
           break;
         default:
-          // TODO: pawns are displaying there movement options (ie. up/down) but we need to only have it display it's diagonal kill square options
-          // moves = PawnAvailableMoves(tile, getSpotDetails);
-          // setAllAvailableMoves('white', moves);
+          moves = PawnAvailableKillMoves(tile, getSpotDetails);
+          setAllAvailableMoves(currentPosition?.activePiece.color, moves);
           break;
       }
     }

@@ -1,7 +1,6 @@
 @import 'styles/colors.scss';
 
 .promotion {
-  position: relative;
   width: 50vmin;
   height: 12.5vmin;
   //   max-width: 100px;
@@ -11,6 +10,8 @@
   flex-direction: row;
   justify-content: center;
   align-items: center;
+  margin: auto;
+  padding: 1em;
 
   .squareP {
     width: 12.5vmin;

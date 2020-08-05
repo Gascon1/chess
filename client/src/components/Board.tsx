@@ -1,7 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import isEven from 'helpers/isEven';
 import Spot from 'components/Spot';
 import Promotion from 'helpers/promotion';
+import CheckDisplay from 'helpers/checkDisplay';
+import { SpotsContext } from 'context/SpotsContext';
 
 interface Position {
   tile: string;
@@ -11,7 +13,30 @@ interface Position {
   isFriendly?: boolean;
 }
 
-export default function Board() {
+interface Props {
+  turn: number;
+  activePlayer: string;
+  isRoundOver: boolean;
+  isGameOver: boolean;
+  setTurn: Function;
+  check: { colour: string; flag: boolean };
+  setCheck: Function;
+  setActivePlayer: Function;
+}
+
+export default function Board(props: Props) {
+  const { getSpotDetailsByName } = useContext(SpotsContext);
+  const {
+    turn,
+    activePlayer,
+    isRoundOver,
+    isGameOver,
+    setTurn,
+    check,
+    setCheck,
+    setActivePlayer,
+  } = props;
+
   const [state, setState] = useState({
     board: [],
     startPosition: {
@@ -51,7 +76,98 @@ export default function Board() {
       pieceType: '',
       color: '',
     },
+    allAvailableMoves: { white: [{ x: 0, y: 0 }], black: [{ x: 0, y: 0 }] },
+    preTurn: 0,
+    check: '',
   });
+
+  function setPreTurn(value: number) {
+    setState((prev) => ({
+      ...prev,
+      preTurn: value,
+    }));
+  }
+
+  function setAllAvailableMoves(color: string, availableMove: any) {
+    // WHITE CASE
+    if (availableMove?.length > 0 && color === 'white') {
+      // moved code into setState because it can access prev directly and be more synchronous
+      // cool trick
+
+      // indexOf doesn't work with objects or JSON.stringify(objects) hence I changed it
+      setState((prev) => {
+        let whiteCopy = prev.allAvailableMoves.white.slice();
+        whiteCopy.push(...availableMove);
+        whiteCopy = whiteCopy.filter(
+          (item, index, self) => index === self.findIndex((w) => w.x === item.x && w.y === item.y),
+        );
+        return {
+          ...prev,
+          allAvailableMoves: {
+            ...prev.allAvailableMoves,
+            white: [...whiteCopy],
+          },
+        };
+      });
+    }
+    // BLACK CASE
+    if (availableMove?.length > 0 && color === 'black') {
+      setState((prev) => {
+        let blackCopy = prev.allAvailableMoves.black.slice();
+        blackCopy.push(...availableMove);
+        blackCopy = blackCopy.filter(
+          (item, index, self) => index === self.findIndex((w) => w.x === item.x && w.y === item.y),
+        );
+        return {
+          ...prev,
+          allAvailableMoves: {
+            ...prev.allAvailableMoves,
+            black: [...blackCopy],
+          },
+        };
+      });
+    }
+
+    if (availableMove === null && color === 'white') {
+      setState((prev) => ({
+        ...prev,
+        allAvailableMoves: {
+          ...prev.allAvailableMoves,
+          white: [],
+        },
+      }));
+    }
+    if (availableMove === null && color === 'black') {
+      setState((prev) => ({
+        ...prev,
+        allAvailableMoves: {
+          ...prev.allAvailableMoves,
+          black: [],
+        },
+      }));
+    }
+  }
+
+  function setDeleteColorMoves(color: string) {
+    if (color === 'white') {
+      setState((prev) => ({
+        ...prev,
+        allAvailableMoves: {
+          ...prev.allAvailableMoves,
+          white: [],
+        },
+      }));
+    }
+    if (color === 'black') {
+      setState((prev) => ({
+        ...prev,
+        allAvailableMoves: {
+          ...prev.allAvailableMoves,
+          black: [],
+        },
+      }));
+    }
+  }
 
   function setPromotion(promotion: any) {
     setState((prev) => ({
@@ -86,9 +202,6 @@ export default function Board() {
       ...prev,
       destination: { activePiece: { pieceType, color }, ...tileInfo },
     }));
-    // if (state.tileFocus !== tileInfo.tile) {
-    //   setState((prev) => ({ ...prev, killPosition: state.tileFocus }));
-    // }
   }
 
   const setKillPosition = (tileInfo: Position, castling: boolean, promotion: boolean) => {
@@ -119,6 +232,22 @@ export default function Board() {
   const setAvailableMoves = (availableMoves: any) => {
     setState((prev) => ({ ...prev, availableMoves }));
   };
+
+  useEffect(() => {
+    let blackKing = getSpotDetailsByName('king', 'black');
+    let whiteKing = getSpotDetailsByName('king', 'white');
+
+    const allWhiteAvailMoves = JSON.stringify(state.allAvailableMoves.white);
+    const allBlackAvailMoves = JSON.stringify(state.allAvailableMoves.black);
+
+    if (allWhiteAvailMoves.includes(JSON.stringify(blackKing))) {
+      setState((prev) => ({ ...prev, check: 'Black' }));
+    }
+
+    if (allBlackAvailMoves.includes(JSON.stringify(whiteKing))) {
+      setState((prev) => ({ ...prev, check: 'White' }));
+    }
+  }, [getSpotDetailsByName, setCheck, state.allAvailableMoves]);
 
   useEffect(() => {
     let board: any = [];
@@ -158,6 +287,15 @@ export default function Board() {
             setDeletePawn={setDeletePawn}
             promotion={state.promotion}
             setPromotion={setPromotion}
+            turn={turn}
+            setTurn={setTurn}
+            setAllAvailableMoves={setAllAvailableMoves}
+            activePlayer={activePlayer}
+            preTurn={state.preTurn}
+            setPreTurn={setPreTurn}
+            setDeleteColorMoves={setDeleteColorMoves}
+            check={check}
+            setActivePlayer={setActivePlayer}
           />,
         );
       });
@@ -178,6 +316,7 @@ export default function Board() {
 
   return (
     <div className='viewport'>
+      <CheckDisplay check={state.check} />
       <div className='board'>{state.board}</div>
       <Promotion endPawn={state.endPawn} setPromotion={setPromotion} />
     </div>

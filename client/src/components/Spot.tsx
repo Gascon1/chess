@@ -7,6 +7,12 @@ import Queen from 'components/pieces/Queen';
 import King from 'components/pieces/King';
 import { SpotsContext } from 'context/SpotsContext';
 import { useGenerateBoard } from 'hooks/useGenerateBoard';
+import KingAvailableMoves from 'helpers/availableMoves/kingAvailableMoves';
+import QueenAvailableMoves from 'helpers/availableMoves/queenAvailableMoves';
+import BishopAvailableMoves from 'helpers/availableMoves/bishopAvailableMoves';
+import KnightAvailableMoves from 'helpers/availableMoves/knightAvailableMoves';
+import RookAvailableMoves from 'helpers/availableMoves/rookAvailableMoves';
+import PawnAvailableMoves from 'helpers/availableMoves/pawnAvailableMoves';
 
 interface Position {
   tile: string;
@@ -55,14 +61,25 @@ interface Props {
     color: string;
   };
   setPromotion: Function;
+  turn: number;
+  setTurn: Function;
+  setAllAvailableMoves: Function;
+  activePlayer: string;
+  preTurn: number;
+  setPreTurn: Function;
+  setDeleteColorMoves: Function;
+  check: { colour: string; flag: boolean };
+  setActivePlayer: Function;
 }
 const brown = '#8a604a';
 const beige = '#e5d3ba';
 
 export default function Spot(props: Props) {
-  const { setSpotsContext, initSpotsContext } = useContext(SpotsContext);
+  const { setSpotsContext, initSpotsContext, getSpotDetails } = useContext(SpotsContext);
 
   const {
+    turn,
+    setTurn,
     tile,
     x,
     y,
@@ -83,6 +100,13 @@ export default function Spot(props: Props) {
     setDeletePawn,
     promotion,
     setPromotion,
+    setAllAvailableMoves,
+    activePlayer,
+    preTurn,
+    setPreTurn,
+    setDeleteColorMoves,
+    check,
+    setActivePlayer,
   } = props;
 
   const [state, setState] = useState({
@@ -111,6 +135,77 @@ export default function Spot(props: Props) {
   }
 
   const initBoard = useGenerateBoard(tile, x, y);
+
+  // useEffect(() => {
+  //   if (preTurn === 0) {
+  //     // setAllAvailableMoves('white', null);
+  //     setTurn(0);
+  //     setDeleteColorMoves('white');
+  //   }
+  //   if (preTurn === 1) {
+  //     // setAllAvailableMoves('black', null);
+  //     setTurn(1);
+  //     setDeleteColorMoves('black');
+  //   }
+  // }, [preTurn]);
+
+  //bug: the check only occurs when I click the piece after the turn is done
+
+  useEffect(() => {
+    if (state.isOccupied) {
+      let tile: Position = {
+        tile: state.tileInfo.tile,
+        x: state.tileInfo.x,
+        y: state.tileInfo.y,
+      };
+      let currentPosition = getSpotDetails(tile.x, tile.y);
+
+      let moves;
+      switch (currentPosition?.activePiece.pieceType) {
+        case 'king':
+          moves = KingAvailableMoves(tile, setCastling, getSpotDetails);
+          setAllAvailableMoves(currentPosition?.activePiece.color, moves);
+          break;
+        case 'queen':
+          moves = QueenAvailableMoves(tile, getSpotDetails);
+          setAllAvailableMoves(currentPosition?.activePiece.color, moves);
+          break;
+        case 'bishop':
+          moves = BishopAvailableMoves(tile, getSpotDetails);
+          setAllAvailableMoves(currentPosition?.activePiece.color, moves);
+          break;
+        case 'knight':
+          moves = KnightAvailableMoves(tile, getSpotDetails);
+          setAllAvailableMoves(currentPosition?.activePiece.color, moves);
+          break;
+        case 'rook':
+          moves = RookAvailableMoves(tile, getSpotDetails);
+          setAllAvailableMoves(currentPosition?.activePiece.color, moves);
+          break;
+        default:
+          // TODO: pawns are displaying there movement options (ie. up/down) but we need to only have it display it's diagonal kill square options
+          // moves = PawnAvailableMoves(tile, getSpotDetails);
+          // setAllAvailableMoves('white', moves);
+          break;
+      }
+    }
+
+    // idk why this works but don't delete it
+    if (turn === 0) {
+      setAllAvailableMoves('white', null);
+    }
+    if (turn === 1) {
+      setAllAvailableMoves('black', null);
+    }
+  }, [
+    turn,
+    getSpotDetails,
+    setAllAvailableMoves,
+    setCastling,
+    state.isOccupied,
+    state.tileInfo,
+    destination,
+  ]);
 
   useEffect(() => {
     setState((prev) => ({ ...prev, ...initBoard }));
@@ -176,6 +271,7 @@ export default function Spot(props: Props) {
           isOccupied: true,
           hasMoved: true,
         }));
+        setCastling(false);
       }
     }
     if (castling && startPosition.tile === 'e1' && destination.tile === 'c1') {
@@ -200,6 +296,7 @@ export default function Spot(props: Props) {
           isOccupied: true,
           hasMoved: true,
         }));
+        setCastling(false);
       }
     }
 
@@ -211,7 +308,6 @@ export default function Spot(props: Props) {
         x: 8,
         y: 8,
       };
-      console.log('here');
       setKillPosition(kingSideRookBlack, true, false);
       if (state.tileInfo.tile === 'f8') {
         setState((prev) => ({
@@ -228,8 +324,10 @@ export default function Spot(props: Props) {
           isOccupied: true,
           hasMoved: true,
         }));
+        setCastling(false);
       }
     }
+
     if (castling && startPosition.tile === 'e8' && destination.tile === 'c8') {
       let queenSideRookBlack: Position = {
         tile: 'a8',
@@ -252,9 +350,10 @@ export default function Spot(props: Props) {
           isOccupied: true,
           hasMoved: true,
         }));
+        setCastling(false);
       }
     }
-  }, [destination, startPosition, castling]);
+  }, [destination, startPosition, castling, setCastling, setKillPosition, state.tileInfo.tile]);
 
   useEffect(() => {
     // WHITE PAWN HAS REACHED END OF BOARD-----------------------------------------
@@ -347,6 +446,15 @@ export default function Spot(props: Props) {
               isOccupied: true,
               hasMoved: true,
             });
+            if (turn === 0) {
+              // setPreTurn(1);
+              setTurn(1);
+              setActivePlayer('black');
+            } else if (turn === 1) {
+              // setPreTurn(0);
+              setTurn(0);
+              setActivePlayer('white');
+            }
           }
         }
       }
@@ -356,6 +464,38 @@ export default function Spot(props: Props) {
       // setStartPosition({ x: 0, y: 0 }, '', '');
     }
   };
+
+  // useEffect(() => {
+  //   let king;
+  //   if (state.activePiece.pieceType === 'king') {
+  //     king = {
+  //       x: state.tileInfo.x,
+  //       y: state.tileInfo.y,
+  //     };
+  //   }
+
+  //   if (
+  //     state.activePiece.color === 'white' &&
+  //     JSON.stringify(allAvailableMoves.black).includes(JSON.stringify(king))
+  //   ) {
+  //     setCheck('White', true);
+  //   }
+  //   if (
+  //     state.activePiece.color === 'black' &&
+  //     JSON.stringify(allAvailableMoves.white).includes(JSON.stringify(king))
+  //   ) {
+  //     setCheck('Black', true);
+  //   }
+  // }, [
+  //   allAvailableMoves,
+  //   setCheck,
+  //   state.activePiece.color,
+  //   state.activePiece.pieceType,
+  //   state.tileInfo.x,
+  //   state.tileInfo.y,
+  //   turn,
+  //   flag,
+  // ]);
 
   return (
     <div
@@ -372,7 +512,6 @@ export default function Spot(props: Props) {
           setStartPosition={setStartPosition}
           setAvailableMoves={setAvailableMoves}
           setTileFocus={setTileFocus}
-          setCastling={setCastling}
         />
       )}
 
@@ -383,7 +522,6 @@ export default function Spot(props: Props) {
           setStartPosition={setStartPosition}
           setAvailableMoves={setAvailableMoves}
           setTileFocus={setTileFocus}
-          setCastling={setCastling}
         />
       )}
 
@@ -397,7 +535,6 @@ export default function Spot(props: Props) {
           setStartPosition={setStartPosition}
           setAvailableMoves={setAvailableMoves}
           setTileFocus={setTileFocus}
-          setCastling={setCastling}
         />
       )}
       {state.activePiece.pieceType === 'rook' && state.activePiece.color === 'white' && (
@@ -407,7 +544,6 @@ export default function Spot(props: Props) {
           setStartPosition={setStartPosition}
           setAvailableMoves={setAvailableMoves}
           setTileFocus={setTileFocus}
-          setCastling={setCastling}
         />
       )}
       {/* Rook END */}
@@ -420,7 +556,6 @@ export default function Spot(props: Props) {
           setStartPosition={setStartPosition}
           setAvailableMoves={setAvailableMoves}
           setTileFocus={setTileFocus}
-          setCastling={setCastling}
         />
       )}
       {state.activePiece.pieceType === 'knight' && state.activePiece.color === 'white' && (
@@ -430,7 +565,6 @@ export default function Spot(props: Props) {
           setStartPosition={setStartPosition}
           setAvailableMoves={setAvailableMoves}
           setTileFocus={setTileFocus}
-          setCastling={setCastling}
         />
       )}
       {/* Knight END */}
@@ -443,7 +577,6 @@ export default function Spot(props: Props) {
           setStartPosition={setStartPosition}
           setAvailableMoves={setAvailableMoves}
           setTileFocus={setTileFocus}
-          setCastling={setCastling}
         />
       )}
       {state.activePiece.pieceType === 'bishop' && state.activePiece.color === 'white' && (
@@ -453,7 +586,6 @@ export default function Spot(props: Props) {
           setStartPosition={setStartPosition}
           setAvailableMoves={setAvailableMoves}
           setTileFocus={setTileFocus}
-          setCastling={setCastling}
         />
       )}
       {/* Bishop END */}
@@ -466,7 +598,6 @@ export default function Spot(props: Props) {
           setStartPosition={setStartPosition}
           setAvailableMoves={setAvailableMoves}
           setTileFocus={setTileFocus}
-          setCastling={setCastling}
         />
       )}
       {state.activePiece.pieceType === 'queen' && state.activePiece.color === 'white' && (
@@ -476,7 +607,6 @@ export default function Spot(props: Props) {
           setStartPosition={setStartPosition}
           setAvailableMoves={setAvailableMoves}
           setTileFocus={setTileFocus}
-          setCastling={setCastling}
         />
       )}
       {/* Queen END */}

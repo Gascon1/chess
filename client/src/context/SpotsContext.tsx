@@ -63,6 +63,7 @@ export const spotsDefaultValue = {
     isCircleVisible: false,
     hasMoved: false,
   }),
+  getSpotDetailsByName: (name: string, color: string): any => ({ x: 0, y: 0 }),
 };
 
 export const SpotsContext = createContext(spotsDefaultValue);

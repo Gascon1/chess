@@ -2,16 +2,23 @@ import React from 'react';
 
 interface Props {
   check: string;
+  isGameOver: boolean;
+  typeOfWin: string;
 }
 
 export default function checkDisplay(props: Props) {
-  const { check } = props;
+  const { check, isGameOver, typeOfWin } = props;
+  let message;
+  if (typeOfWin === 'checkmate') {
+    message = 'CheckMate!';
+  }
+
   return (
     <div
       className='checkDisplay'
-      style={check ? { display: 'block' } : { visibility: 'hidden' }}
+      style={check || isGameOver ? { display: 'block' } : { visibility: 'hidden' }}
     >
-      {check} is in check!
+      {isGameOver ? `${message}` : ` ${check} is in check!`}
     </div>
   );
 }

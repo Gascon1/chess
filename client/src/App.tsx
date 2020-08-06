@@ -11,10 +11,9 @@ function App() {
     player2Name: '',
     turn: 0,
     activePlayer: 'white',
-    isRoundOver: false,
     isGameOver: false,
     typeOfGameEnd: 'win',
-    typeOfWin: 'checkmate',
+    typeOfWin: '',
   });
 
   function setTurn(value: number) {
@@ -35,8 +34,6 @@ function App() {
       <Board
         turn={state.turn}
         activePlayer={state.activePlayer}
-        isRoundOver={state.isRoundOver}
-        isGameOver={state.isGameOver}
         setTurn={setTurn}
         setActivePlayer={setActivePlayer}
       />

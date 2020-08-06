@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useEffect, useState, useContext, useRef } from 'react';
 import isEven from 'helpers/isEven';
 import Spot from 'components/Spot';
 import Promotion from 'helpers/promotion';
@@ -16,15 +16,13 @@ interface Position {
 interface Props {
   turn: number;
   activePlayer: string;
-  isRoundOver: boolean;
-  isGameOver: boolean;
   setTurn: Function;
   setActivePlayer: Function;
 }
 
 export default function Board(props: Props) {
   const { getSpotDetailsByName } = useContext(SpotsContext);
-  const { turn, activePlayer, isRoundOver, isGameOver, setTurn, setActivePlayer } = props;
+  const { turn, activePlayer, setTurn, setActivePlayer } = props;
 
   const [state, setState] = useState({
     board: [],
@@ -67,6 +65,8 @@ export default function Board(props: Props) {
     },
     allAvailableMoves: { white: [{ x: 0, y: 0 }], black: [{ x: 0, y: 0 }] },
     check: '',
+    isGameOver: false,
+    typeOfWin: '',
   });
 
   function setAllAvailableMoves(color: string, availableMove: any) {
@@ -193,6 +193,20 @@ export default function Board(props: Props) {
     setState((prev) => ({ ...prev, check: colour }));
   };
 
+  function setIsGameOver(flag: boolean) {
+    setState((prev) => ({
+      ...prev,
+      isGameOver: flag,
+    }));
+  }
+
+  function setTypeOfWin(condition: string) {
+    setState((prev) => ({
+      ...prev,
+      typeOfWin: condition,
+    }));
+  }
+
   useEffect(() => {
     let blackKing = getSpotDetailsByName('king', 'black');
     let whiteKing = getSpotDetailsByName('king', 'white');
@@ -208,6 +222,24 @@ export default function Board(props: Props) {
       setCheck('');
     }
   }, [getSpotDetailsByName, state.allAvailableMoves]);
+
+  // skips initial render bug and only updates after initial render
+  const didMountRef = useRef(false);
+  useEffect(() => {
+    if (didMountRef.current) {
+      let blackKing = getSpotDetailsByName('king', 'black');
+      let whiteKing = getSpotDetailsByName('king', 'white');
+      if (!blackKing || !whiteKing) {
+        setIsGameOver(true);
+        setTypeOfWin('checkmate');
+      } else {
+        setIsGameOver(false);
+        setTypeOfWin('');
+      }
+    } else {
+      didMountRef.current = true;
+    }
+  }, [getSpotDetailsByName]);
 
   useEffect(() => {
     let board: any = [];
@@ -272,7 +304,7 @@ export default function Board(props: Props) {
 
   return (
     <div className='viewport'>
-      <CheckDisplay check={state.check} />
+      <CheckDisplay check={state.check} isGameOver={state.isGameOver} typeOfWin={state.typeOfWin} />
       <div className='board'>{state.board}</div>
       <Promotion endPawn={state.endPawn} setPromotion={setPromotion} />
     </div>

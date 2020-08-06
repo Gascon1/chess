@@ -305,7 +305,7 @@ export default function Board(props: Props) {
 
   return (
     <div className='viewport'>
-      <Timer />
+      <Timer turn={turn} />
       <CheckDisplay check={state.check} isGameOver={state.isGameOver} typeOfWin={state.typeOfWin} />
       <div className='board'>{state.board}</div>
       <Promotion endPawn={state.endPawn} setPromotion={setPromotion} />

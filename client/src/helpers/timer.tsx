@@ -2,10 +2,11 @@ import React, { useState, useEffect } from 'react';
 
 interface Props {
   turn: number;
+  colour: string;
 }
 
 export default function Timer(props: Props) {
-  const { turn } = props;
+  const { turn, colour } = props;
   const [state, setState] = useState({
     minutes: 10,
     seconds: 0,
@@ -16,27 +17,56 @@ export default function Timer(props: Props) {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      if (!turn) {
-        if (seconds > 0) {
-          setState((prev) => ({
-            ...prev,
-            seconds: seconds - 1,
-          }));
-        }
-
-        if (seconds === 0) {
-          if (minutes === 0) {
-            clearInterval(interval);
-          } else {
-            setState((prev) => ({
-              ...prev,
-              minutes: minutes - 1,
-              seconds: 59,
-            }));
+      switch (turn) {
+        case 0:
+          if (colour === 'white') {
+            if (seconds > 0) {
+              setState((prev) => ({
+                ...prev,
+                seconds: seconds - 1,
+              }));
+            }
+            if (seconds === 0) {
+              if (minutes === 0) {
+                clearInterval(interval);
+              } else {
+                setState((prev) => ({
+                  ...prev,
+                  minutes: minutes - 1,
+                  seconds: 59,
+                }));
+              }
+            }
           }
-        }
-      } else {
-        clearInterval(interval);
+          if (colour === 'black') {
+            clearInterval(interval);
+          }
+
+          break;
+        default:
+          if (colour === 'black') {
+            if (seconds > 0) {
+              setState((prev) => ({
+                ...prev,
+                seconds: seconds - 1,
+              }));
+            }
+            if (seconds === 0) {
+              if (minutes === 0) {
+                clearInterval(interval);
+              } else {
+                setState((prev) => ({
+                  ...prev,
+                  minutes: minutes - 1,
+                  seconds: 59,
+                }));
+              }
+            }
+          }
+          if (colour === 'white') {
+            clearInterval(interval);
+          }
+          break;
       }
     }, 1000);
     return () => clearInterval(interval);
@@ -48,7 +78,7 @@ export default function Timer(props: Props) {
         `Time is Out!`
       ) : (
         <div>
-          {minutes}:{seconds < 10 ? `0${seconds}` : seconds}
+          {colour} timer : {minutes}:{seconds < 10 ? `0${seconds}` : seconds}
         </div>
       )}
     </div>

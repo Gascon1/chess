@@ -4,6 +4,19 @@
   width: 100vw;
 }
 
+.board-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+.board-with-addons {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
 .board {
   display: grid;
   grid-template-columns: repeat(8, 12.5%);
@@ -12,7 +25,6 @@
   // height: 100vmin;
   max-width: 800px;
   max-height: 800px;
-  margin: auto;
 
   .square {
     position: relative;

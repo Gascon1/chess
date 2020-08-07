@@ -22,7 +22,7 @@ export default function checkDisplay(props: Props) {
   return (
     <div
       className='checkDisplay'
-      style={check || isGameOver ? { display: 'block' } : { display: 'none' }}
+      style={check || isGameOver ? { display: 'block' } : { visibility: 'hidden' }}
     >
       {isGameOver ? `${message}` : ` ${check} is in check!`}
     </div>

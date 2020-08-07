@@ -1,7 +1,14 @@
 @import 'styles/colors.scss';
 
+.timer-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
 .timer {
-  display: inline-flex;
+  padding-right: 1vw;
+  text-align: right;
   color: white;
   font-size: 2em;
   &.focus {

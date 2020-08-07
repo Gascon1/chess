@@ -1,0 +1,10 @@
+@import 'styles/colors.scss';
+
+.timer {
+  display: inline-flex;
+  color: white;
+  font-size: 2em;
+  &.focus {
+    background-color: rgba(255, 255, 255, 0.123);
+  }
+}

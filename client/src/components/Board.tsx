@@ -4,6 +4,7 @@ import Spot from 'components/Spot';
 import Promotion from 'helpers/promotion';
 import CheckDisplay from 'helpers/checkDisplay';
 import { SpotsContext } from 'context/SpotsContext';
+import Timer from 'helpers/timer';
 
 interface Position {
   tile: string;
@@ -304,9 +305,21 @@ export default function Board(props: Props) {
 
   return (
     <div className='viewport'>
+      <Timer
+        turn={turn}
+        colour={'black'}
+        setIsGameOver={setIsGameOver}
+        setTypeOfWin={setTypeOfWin}
+      />
       <CheckDisplay check={state.check} isGameOver={state.isGameOver} typeOfWin={state.typeOfWin} />
       <div className='board'>{state.board}</div>
       <Promotion endPawn={state.endPawn} setPromotion={setPromotion} />
+      <Timer
+        turn={turn}
+        colour={'white'}
+        setIsGameOver={setIsGameOver}
+        setTypeOfWin={setTypeOfWin}
+      />
     </div>
   );
 }

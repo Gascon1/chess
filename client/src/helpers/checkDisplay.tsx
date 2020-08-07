@@ -12,11 +12,17 @@ export default function checkDisplay(props: Props) {
   if (typeOfWin === 'checkmate') {
     message = 'CheckMate!';
   }
-
+  if (typeOfWin === 'timeout white') {
+    message = 'Black Wins!';
+  }
+  if (typeOfWin === 'timeout black') {
+    message = 'White Wins!';
+  }
+  // visibility: 'hidden'
   return (
     <div
       className='checkDisplay'
-      style={check || isGameOver ? { display: 'block' } : { visibility: 'hidden' }}
+      style={check || isGameOver ? { display: 'block' } : { display: 'none' }}
     >
       {isGameOver ? `${message}` : ` ${check} is in check!`}
     </div>

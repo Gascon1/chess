@@ -10,7 +10,7 @@ interface Props {
 export default function Timer(props: Props) {
   const { turn, colour, setIsGameOver, setTypeOfWin } = props;
   const [state, setState] = useState({
-    minutes: 1,
+    minutes: 10,
     seconds: 0,
     condition: '',
   });
@@ -79,7 +79,11 @@ export default function Timer(props: Props) {
   }, [state, minutes, seconds, turn, colour, setIsGameOver, setTypeOfWin]);
 
   return (
-    <div className='timer'>
+    <div
+      className={`timer ${
+        (colour === 'white' && !turn) || (colour === 'black' && turn) ? 'focus' : ''
+      }`}
+    >
       {minutes === 0 && seconds === 0 ? (
         `${colour} : Time is Out!`
       ) : (

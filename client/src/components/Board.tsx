@@ -307,12 +307,6 @@ export default function Board(props: Props) {
     <div className='viewport'>
       <Timer
         turn={turn}
-        colour={'white'}
-        setIsGameOver={setIsGameOver}
-        setTypeOfWin={setTypeOfWin}
-      />
-      <Timer
-        turn={turn}
         colour={'black'}
         setIsGameOver={setIsGameOver}
         setTypeOfWin={setTypeOfWin}
@@ -320,6 +314,12 @@ export default function Board(props: Props) {
       <CheckDisplay check={state.check} isGameOver={state.isGameOver} typeOfWin={state.typeOfWin} />
       <div className='board'>{state.board}</div>
       <Promotion endPawn={state.endPawn} setPromotion={setPromotion} />
+      <Timer
+        turn={turn}
+        colour={'white'}
+        setIsGameOver={setIsGameOver}
+        setTypeOfWin={setTypeOfWin}
+      />
     </div>
   );
 }

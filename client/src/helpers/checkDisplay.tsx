@@ -12,6 +12,12 @@ export default function checkDisplay(props: Props) {
   if (typeOfWin === 'checkmate') {
     message = 'CheckMate!';
   }
+  if (typeOfWin === 'timeout white') {
+    message = 'Black Wins!';
+  }
+  if (typeOfWin === 'timeout black') {
+    message = 'White Wins!';
+  }
 
   return (
     <div

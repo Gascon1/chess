@@ -3,12 +3,14 @@ import React, { useState, useEffect } from 'react';
 interface Props {
   turn: number;
   colour: string;
+  setIsGameOver: Function;
+  setTypeOfWin: Function;
 }
 
 export default function Timer(props: Props) {
-  const { turn, colour } = props;
+  const { turn, colour, setIsGameOver, setTypeOfWin } = props;
   const [state, setState] = useState({
-    minutes: 10,
+    minutes: 1,
     seconds: 0,
     condition: '',
   });
@@ -29,6 +31,8 @@ export default function Timer(props: Props) {
             if (seconds === 0) {
               if (minutes === 0) {
                 clearInterval(interval);
+                setIsGameOver(true);
+                setTypeOfWin('timeout white');
               } else {
                 setState((prev) => ({
                   ...prev,
@@ -54,6 +58,8 @@ export default function Timer(props: Props) {
             if (seconds === 0) {
               if (minutes === 0) {
                 clearInterval(interval);
+                setIsGameOver(true);
+                setTypeOfWin('timeout black');
               } else {
                 setState((prev) => ({
                   ...prev,
@@ -70,15 +76,15 @@ export default function Timer(props: Props) {
       }
     }, 1000);
     return () => clearInterval(interval);
-  }, [state, minutes, seconds, turn]);
+  }, [state, minutes, seconds, turn, colour, setIsGameOver, setTypeOfWin]);
 
   return (
     <div className='timer'>
       {minutes === 0 && seconds === 0 ? (
-        `Time is Out!`
+        `${colour} : Time is Out!`
       ) : (
         <div>
-          {colour} timer : {minutes}:{seconds < 10 ? `0${seconds}` : seconds}
+          {colour} : {minutes}:{seconds < 10 ? `0${seconds}` : seconds}
         </div>
       )}
     </div>

@@ -6,7 +6,7 @@ interface Props {
   typeOfWin: string;
 }
 
-export default function checkDisplay(props: Props) {
+export default function CheckDisplay(props: Props) {
   const { check, isGameOver, typeOfWin } = props;
   let message;
   if (typeOfWin === 'checkmate') {

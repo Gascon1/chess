@@ -1,10 +1,11 @@
-import React, { useEffect, useState, useContext, useRef } from 'react';
+import React, { useEffect, useState, useContext, useRef, useLayoutEffect } from 'react';
 import isEven from 'helpers/isEven';
 import Spot from 'components/Spot';
-import Promotion from 'helpers/promotion';
-import CheckDisplay from 'helpers/checkDisplay';
+import Promotion from 'components/Promotion';
+import CheckDisplay from 'components/CheckDisplay';
 import { SpotsContext } from 'context/SpotsContext';
-import Timer from 'helpers/timer';
+import Timer from 'components/Timer';
+import { renderIntoDocument } from 'react-dom/test-utils';
 
 interface Position {
   tile: string;
@@ -19,11 +20,22 @@ interface Props {
   activePlayer: string;
   setTurn: Function;
   setActivePlayer: Function;
+  setIsGameOver: Function;
+  setTypeOfWin: Function;
+  setCheck: Function;
 }
 
 export default function Board(props: Props) {
   const { getSpotDetailsByName } = useContext(SpotsContext);
-  const { turn, activePlayer, setTurn, setActivePlayer } = props;
+  const {
+    turn,
+    activePlayer,
+    setTurn,
+    setActivePlayer,
+    setIsGameOver,
+    setTypeOfWin,
+    setCheck,
+  } = props;
 
   const [state, setState] = useState({
     board: [],
@@ -65,10 +77,9 @@ export default function Board(props: Props) {
       color: '',
     },
     allAvailableMoves: { white: [{ x: 0, y: 0 }], black: [{ x: 0, y: 0 }] },
-    check: '',
-    isGameOver: false,
-    typeOfWin: '',
   });
+
+  let board: any = [];
 
   function setAllAvailableMoves(color: string, availableMove: any) {
     // WHITE CASE
@@ -190,136 +201,158 @@ export default function Board(props: Props) {
     setState((prev) => ({ ...prev, availableMoves }));
   };
 
-  const setCheck = (colour: string) => {
-    setState((prev) => ({ ...prev, check: colour }));
-  };
+  // useEffect(() => {
+  //   let blackKing = getSpotDetailsByName('king', 'black');
+  //   let whiteKing = getSpotDetailsByName('king', 'white');
 
-  function setIsGameOver(flag: boolean) {
-    setState((prev) => ({
-      ...prev,
-      isGameOver: flag,
-    }));
-  }
+  //   const allWhiteAvailMoves = JSON.stringify(state.allAvailableMoves.white);
+  //   const allBlackAvailMoves = JSON.stringify(state.allAvailableMoves.black);
 
-  function setTypeOfWin(condition: string) {
-    setState((prev) => ({
-      ...prev,
-      typeOfWin: condition,
-    }));
-  }
+  //   if (allWhiteAvailMoves.includes(JSON.stringify(blackKing))) {
+  //     setCheck('Black');
+  //   } else if (allBlackAvailMoves.includes(JSON.stringify(whiteKing))) {
+  //     setCheck('White');
+  //   } else {
+  //     setCheck('');
+  //   }
+  // }, [getSpotDetailsByName, state.allAvailableMoves]);
 
-  useEffect(() => {
-    let blackKing = getSpotDetailsByName('king', 'black');
-    let whiteKing = getSpotDetailsByName('king', 'white');
+  // // skips initial render bug and only updates after initial render
+  // const didMountRef = useRef(false);
+  // useEffect(() => {
+  //   if (didMountRef.current) {
+  //     let blackKing = getSpotDetailsByName('king', 'black');
+  //     let whiteKing = getSpotDetailsByName('king', 'white');
+  //     if (!blackKing || !whiteKing) {
+  //       setIsGameOver(true);
+  //       setTypeOfWin('checkmate');
+  //     } else {
+  //       setIsGameOver(false);
+  //       setTypeOfWin('');
+  //     }
+  //   } else {
+  //     didMountRef.current = true;
+  //   }
+  // }, [getSpotDetailsByName]);
 
-    const allWhiteAvailMoves = JSON.stringify(state.allAvailableMoves.white);
-    const allBlackAvailMoves = JSON.stringify(state.allAvailableMoves.black);
+  const alphaPosition = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
+  const numericPosition = [1, 2, 3, 4, 5, 6, 7, 8];
+  const renderBoard = numericPosition.map((number, i) => {
+    let result = [];
+    alphaPosition.map((letter, j) => {
+      let spotColor;
 
-    if (allWhiteAvailMoves.includes(JSON.stringify(blackKing))) {
-      setCheck('Black');
-    } else if (allBlackAvailMoves.includes(JSON.stringify(whiteKing))) {
-      setCheck('White');
-    } else {
-      setCheck('');
-    }
-  }, [getSpotDetailsByName, state.allAvailableMoves]);
-
-  // skips initial render bug and only updates after initial render
-  const didMountRef = useRef(false);
-  useEffect(() => {
-    if (didMountRef.current) {
-      let blackKing = getSpotDetailsByName('king', 'black');
-      let whiteKing = getSpotDetailsByName('king', 'white');
-      if (!blackKing || !whiteKing) {
-        setIsGameOver(true);
-        setTypeOfWin('checkmate');
+      if ((isEven(i) && isEven(j)) || (!isEven(i) && !isEven(j))) {
+        spotColor = 'beige';
       } else {
-        setIsGameOver(false);
-        setTypeOfWin('');
+        spotColor = 'brown';
       }
-    } else {
-      didMountRef.current = true;
-    }
-  }, [getSpotDetailsByName]);
+      return (
+        <Spot
+          key={letter + j}
+          color={spotColor}
+          tile={letter + j}
+          x={i + 1}
+          y={j}
+          setDestination={setDestination}
+          destination={state.destination}
+          setStartPosition={setStartPosition}
+          startPosition={state.startPosition}
+          tileFocus={state.tileFocus}
+          setTileFocus={setTileFocus}
+          availableMoves={state.availableMoves}
+          setAvailableMoves={setAvailableMoves}
+          killPosition={state.killPosition}
+          setKillPosition={setKillPosition}
+          castling={state.castling}
+          setCastling={setCastling}
+          endPawn={state.endPawn}
+          setEndPawn={setEndPawn}
+          deletePawn={state.deletePawn}
+          setDeletePawn={setDeletePawn}
+          promotion={state.promotion}
+          setPromotion={setPromotion}
+          turn={turn}
+          setTurn={setTurn}
+          setAllAvailableMoves={setAllAvailableMoves}
+          activePlayer={activePlayer}
+          setActivePlayer={setActivePlayer}
+        />
+      );
+    });
+  });
 
-  useEffect(() => {
-    let board: any = [];
-    const alphaPosition = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
-    const numericPosition = 0;
-    for (let j = 8; j > numericPosition; j--) {
-      alphaPosition.forEach((value, i) => {
-        let spotColor;
-        if ((isEven(i) && isEven(j)) || (!isEven(i) && !isEven(j))) {
-          spotColor = 'beige';
-        } else {
-          spotColor = 'brown';
-        }
+  // useEffect(() => {
+  //   const alphaPosition = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
+  //   const numericPosition = 0;
+  //   for (let j = 8; j > numericPosition; j--) {
+  //     alphaPosition.forEach((value, i) => {
+  //       let spotColor;
+  //       if ((isEven(i) && isEven(j)) || (!isEven(i) && !isEven(j))) {
+  //         spotColor = 'beige';
+  //       } else {
+  //         spotColor = 'brown';
+  //       }
 
-        board.push(
-          <Spot
-            key={value + j}
-            color={spotColor}
-            tile={value + j}
-            x={i + 1}
-            y={j}
-            setDestination={setDestination}
-            destination={state.destination}
-            setStartPosition={setStartPosition}
-            startPosition={state.startPosition}
-            tileFocus={state.tileFocus}
-            setTileFocus={setTileFocus}
-            availableMoves={state.availableMoves}
-            setAvailableMoves={setAvailableMoves}
-            killPosition={state.killPosition}
-            setKillPosition={setKillPosition}
-            castling={state.castling}
-            setCastling={setCastling}
-            endPawn={state.endPawn}
-            setEndPawn={setEndPawn}
-            deletePawn={state.deletePawn}
-            setDeletePawn={setDeletePawn}
-            promotion={state.promotion}
-            setPromotion={setPromotion}
-            turn={turn}
-            setTurn={setTurn}
-            setAllAvailableMoves={setAllAvailableMoves}
-            activePlayer={activePlayer}
-            setActivePlayer={setActivePlayer}
-          />,
-        );
-      });
-    }
-    setState((prev) => ({ ...prev, board }));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [
-    state.destination,
-    state.startPosition,
-    state.availableMoves,
-    state.killPosition,
-    state.tileFocus,
-    state.castling,
-    state.endPawn,
-    state.deletePawn,
-    state.promotion,
-  ]);
+  //       board.push(
+  //         <Spot
+  //           key={value + j}
+  //           color={spotColor}
+  //           tile={value + j}
+  //           x={i + 1}
+  //           y={j}
+  //           setDestination={setDestination}
+  //           destination={state.destination}
+  //           setStartPosition={setStartPosition}
+  //           startPosition={state.startPosition}
+  //           tileFocus={state.tileFocus}
+  //           setTileFocus={setTileFocus}
+  //           availableMoves={state.availableMoves}
+  //           setAvailableMoves={setAvailableMoves}
+  //           killPosition={state.killPosition}
+  //           setKillPosition={setKillPosition}
+  //           castling={state.castling}
+  //           setCastling={setCastling}
+  //           endPawn={state.endPawn}
+  //           setEndPawn={setEndPawn}
+  //           deletePawn={state.deletePawn}
+  //           setDeletePawn={setDeletePawn}
+  //           promotion={state.promotion}
+  //           setPromotion={setPromotion}
+  //           turn={turn}
+  //           setTurn={setTurn}
+  //           setAllAvailableMoves={setAllAvailableMoves}
+  //           activePlayer={activePlayer}
+  //           setActivePlayer={setActivePlayer}
+  //         />,
+  //       );
+  //       console.log(board);
+  //     });
+  //   }
+  // }, [
+  //   activePlayer,
+  //   board,
+  //   setActivePlayer,
+  //   setKillPosition,
+  //   setTurn,
+  //   state.availableMoves,
+  //   state.castling,
+  //   state.deletePawn,
+  //   state.destination,
+  //   state.endPawn,
+  //   state.killPosition,
+  //   state.promotion,
+  //   state.startPosition,
+  //   state.tileFocus,
+  //   turn,
+  // ]);
 
   return (
-    <div className='viewport'>
-      <Timer
-        turn={turn}
-        colour={'black'}
-        setIsGameOver={setIsGameOver}
-        setTypeOfWin={setTypeOfWin}
-      />
-      <CheckDisplay check={state.check} isGameOver={state.isGameOver} typeOfWin={state.typeOfWin} />
-      <div className='board'>{state.board}</div>
-      <Promotion endPawn={state.endPawn} setPromotion={setPromotion} />
-      <Timer
-        turn={turn}
-        colour={'white'}
-        setIsGameOver={setIsGameOver}
-        setTypeOfWin={setTypeOfWin}
-      />
-    </div>
+    <>
+      {/* <div>
+        <Promotion endPawn={state.endPawn} setPromotion={setPromotion} />
+      </div> */}
+      <div className='board'>{renderBoard}</div>
+    </>
   );
 }

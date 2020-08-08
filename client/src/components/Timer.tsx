@@ -76,7 +76,7 @@ export default function Timer(props: Props) {
       }
     }, 1000);
     return () => clearInterval(interval);
-  }, [state, minutes, seconds, turn, colour, setIsGameOver, setTypeOfWin]);
+  }, [minutes, seconds, turn, colour, setIsGameOver, setTypeOfWin]);
 
   return (
     <div

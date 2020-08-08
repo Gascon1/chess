@@ -129,60 +129,60 @@ export default function Spot(props: Props) {
 
   const initBoard = useGenerateBoard(tile, x, y);
 
-  useEffect(() => {
-    if (state.isOccupied) {
-      let tile: Position = {
-        tile: state.tileInfo.tile,
-        x: state.tileInfo.x,
-        y: state.tileInfo.y,
-      };
-      let currentPosition = getSpotDetails(tile.x, tile.y);
+  // useEffect(() => {
+  //   if (state.isOccupied) {
+  //     let tile: Position = {
+  //       tile: state.tileInfo.tile,
+  //       x: state.tileInfo.x,
+  //       y: state.tileInfo.y,
+  //     };
+  //     let currentPosition = getSpotDetails(tile.x, tile.y);
 
-      let moves;
-      switch (currentPosition?.activePiece.pieceType) {
-        case 'king':
-          moves = KingAvailableMoves(tile, setCastling, getSpotDetails);
-          setAllAvailableMoves(currentPosition?.activePiece.color, moves);
-          break;
-        case 'queen':
-          moves = QueenAvailableMoves(tile, getSpotDetails);
-          setAllAvailableMoves(currentPosition?.activePiece.color, moves);
-          break;
-        case 'bishop':
-          moves = BishopAvailableMoves(tile, getSpotDetails);
-          setAllAvailableMoves(currentPosition?.activePiece.color, moves);
-          break;
-        case 'knight':
-          moves = KnightAvailableMoves(tile, getSpotDetails);
-          setAllAvailableMoves(currentPosition?.activePiece.color, moves);
-          break;
-        case 'rook':
-          moves = RookAvailableMoves(tile, getSpotDetails);
-          setAllAvailableMoves(currentPosition?.activePiece.color, moves);
-          break;
-        default:
-          moves = PawnAvailableKillMoves(tile, getSpotDetails);
-          setAllAvailableMoves(currentPosition?.activePiece.color, moves);
-          break;
-      }
-    }
+  //     let moves;
+  //     switch (currentPosition?.activePiece.pieceType) {
+  //       case 'king':
+  //         moves = KingAvailableMoves(tile, setCastling, getSpotDetails);
+  //         setAllAvailableMoves(currentPosition?.activePiece.color, moves);
+  //         break;
+  //       case 'queen':
+  //         moves = QueenAvailableMoves(tile, getSpotDetails);
+  //         setAllAvailableMoves(currentPosition?.activePiece.color, moves);
+  //         break;
+  //       case 'bishop':
+  //         moves = BishopAvailableMoves(tile, getSpotDetails);
+  //         setAllAvailableMoves(currentPosition?.activePiece.color, moves);
+  //         break;
+  //       case 'knight':
+  //         moves = KnightAvailableMoves(tile, getSpotDetails);
+  //         setAllAvailableMoves(currentPosition?.activePiece.color, moves);
+  //         break;
+  //       case 'rook':
+  //         moves = RookAvailableMoves(tile, getSpotDetails);
+  //         setAllAvailableMoves(currentPosition?.activePiece.color, moves);
+  //         break;
+  //       default:
+  //         moves = PawnAvailableKillMoves(tile, getSpotDetails);
+  //         setAllAvailableMoves(currentPosition?.activePiece.color, moves);
+  //         break;
+  //     }
+  //   }
 
-    // idk why this works but don't delete it
-    if (turn === 0) {
-      setAllAvailableMoves('white', null);
-    }
-    if (turn === 1) {
-      setAllAvailableMoves('black', null);
-    }
-  }, [
-    turn,
-    getSpotDetails,
-    setAllAvailableMoves,
-    setCastling,
-    state.isOccupied,
-    state.tileInfo,
-    destination,
-  ]);
+  //   // idk why this works but don't delete it
+  //   if (turn === 0) {
+  //     setAllAvailableMoves('white', null);
+  //   }
+  //   if (turn === 1) {
+  //     setAllAvailableMoves('black', null);
+  //   }
+  // }, [
+  //   turn,
+  //   getSpotDetails,
+  //   setAllAvailableMoves,
+  //   setCastling,
+  //   state.isOccupied,
+  //   state.tileInfo,
+  //   destination,
+  // ]);
 
   useEffect(() => {
     setState((prev) => ({ ...prev, ...initBoard }));

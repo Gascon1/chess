@@ -12,7 +12,7 @@ interface Props {
   setPromotion: Function;
 }
 
-export default function promotion(props: Props) {
+export default function Promotion(props: Props) {
   const { endPawn, setPromotion } = props;
   return (
     <div className='promotion' style={endPawn.flag ? { display: 'flex' } : { display: 'none' }}>

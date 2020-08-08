@@ -2,10 +2,7 @@ import React, { useEffect, useState, useContext, useRef, useLayoutEffect } from 
 import isEven from 'helpers/isEven';
 import Spot from 'components/Spot';
 import Promotion from 'components/Promotion';
-import CheckDisplay from 'components/CheckDisplay';
 import { SpotsContext } from 'context/SpotsContext';
-import Timer from 'components/Timer';
-import { renderIntoDocument } from 'react-dom/test-utils';
 
 interface Position {
   tile: string;
@@ -78,8 +75,6 @@ export default function Board(props: Props) {
     },
     allAvailableMoves: { white: [{ x: 0, y: 0 }], black: [{ x: 0, y: 0 }] },
   });
-
-  let board: any = [];
 
   function setAllAvailableMoves(color: string, availableMove: any) {
     // WHITE CASE
@@ -201,21 +196,24 @@ export default function Board(props: Props) {
     setState((prev) => ({ ...prev, availableMoves }));
   };
 
-  // useEffect(() => {
-  //   let blackKing = getSpotDetailsByName('king', 'black');
-  //   let whiteKing = getSpotDetailsByName('king', 'white');
+  useLayoutEffect(() => {
+    let blackKing = getSpotDetailsByName('king', 'black');
+    let whiteKing = getSpotDetailsByName('king', 'white');
 
-  //   const allWhiteAvailMoves = JSON.stringify(state.allAvailableMoves.white);
-  //   const allBlackAvailMoves = JSON.stringify(state.allAvailableMoves.black);
+    const allWhiteAvailMoves = JSON.stringify(state.allAvailableMoves.white);
+    const allBlackAvailMoves = JSON.stringify(state.allAvailableMoves.black);
 
-  //   if (allWhiteAvailMoves.includes(JSON.stringify(blackKing))) {
-  //     setCheck('Black');
-  //   } else if (allBlackAvailMoves.includes(JSON.stringify(whiteKing))) {
-  //     setCheck('White');
-  //   } else {
-  //     setCheck('');
-  //   }
-  // }, [getSpotDetailsByName, state.allAvailableMoves]);
+    if (allWhiteAvailMoves.includes(JSON.stringify(blackKing))) {
+      // setCheck('Black');
+      console.log('black');
+    } else if (allBlackAvailMoves.includes(JSON.stringify(whiteKing))) {
+      console.log('white');
+      // setCheck('White');
+    } else {
+      // setCheck('');
+      console.log('');
+    }
+  }, [getSpotDetailsByName, state.allAvailableMoves]);
 
   // // skips initial render bug and only updates after initial render
   // const didMountRef = useRef(false);
@@ -236,24 +234,23 @@ export default function Board(props: Props) {
   // }, [getSpotDetailsByName]);
 
   const alphaPosition = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
-  const numericPosition = [1, 2, 3, 4, 5, 6, 7, 8];
-  const renderBoard = numericPosition.map((number, i) => {
-    let result = [];
-    alphaPosition.map((letter, j) => {
+  const numericPosition = [8, 7, 6, 5, 4, 3, 2, 1];
+  const renderBoard = numericPosition.map((number) => {
+    return alphaPosition.map((letter, index) => {
       let spotColor;
 
-      if ((isEven(i) && isEven(j)) || (!isEven(i) && !isEven(j))) {
+      if ((isEven(index) && isEven(number)) || (!isEven(index) && !isEven(number))) {
         spotColor = 'beige';
       } else {
         spotColor = 'brown';
       }
       return (
         <Spot
-          key={letter + j}
+          key={letter + number}
           color={spotColor}
-          tile={letter + j}
-          x={i + 1}
-          y={j}
+          tile={letter + number}
+          x={index + 1}
+          y={number}
           setDestination={setDestination}
           destination={state.destination}
           setStartPosition={setStartPosition}
@@ -281,77 +278,11 @@ export default function Board(props: Props) {
       );
     });
   });
-
-  // useEffect(() => {
-  //   const alphaPosition = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
-  //   const numericPosition = 0;
-  //   for (let j = 8; j > numericPosition; j--) {
-  //     alphaPosition.forEach((value, i) => {
-  //       let spotColor;
-  //       if ((isEven(i) && isEven(j)) || (!isEven(i) && !isEven(j))) {
-  //         spotColor = 'beige';
-  //       } else {
-  //         spotColor = 'brown';
-  //       }
-
-  //       board.push(
-  //         <Spot
-  //           key={value + j}
-  //           color={spotColor}
-  //           tile={value + j}
-  //           x={i + 1}
-  //           y={j}
-  //           setDestination={setDestination}
-  //           destination={state.destination}
-  //           setStartPosition={setStartPosition}
-  //           startPosition={state.startPosition}
-  //           tileFocus={state.tileFocus}
-  //           setTileFocus={setTileFocus}
-  //           availableMoves={state.availableMoves}
-  //           setAvailableMoves={setAvailableMoves}
-  //           killPosition={state.killPosition}
-  //           setKillPosition={setKillPosition}
-  //           castling={state.castling}
-  //           setCastling={setCastling}
-  //           endPawn={state.endPawn}
-  //           setEndPawn={setEndPawn}
-  //           deletePawn={state.deletePawn}
-  //           setDeletePawn={setDeletePawn}
-  //           promotion={state.promotion}
-  //           setPromotion={setPromotion}
-  //           turn={turn}
-  //           setTurn={setTurn}
-  //           setAllAvailableMoves={setAllAvailableMoves}
-  //           activePlayer={activePlayer}
-  //           setActivePlayer={setActivePlayer}
-  //         />,
-  //       );
-  //       console.log(board);
-  //     });
-  //   }
-  // }, [
-  //   activePlayer,
-  //   board,
-  //   setActivePlayer,
-  //   setKillPosition,
-  //   setTurn,
-  //   state.availableMoves,
-  //   state.castling,
-  //   state.deletePawn,
-  //   state.destination,
-  //   state.endPawn,
-  //   state.killPosition,
-  //   state.promotion,
-  //   state.startPosition,
-  //   state.tileFocus,
-  //   turn,
-  // ]);
-
   return (
     <>
-      {/* <div>
+      <div>
         <Promotion endPawn={state.endPawn} setPromotion={setPromotion} />
-      </div> */}
+      </div>
       <div className='board'>{renderBoard}</div>
     </>
   );

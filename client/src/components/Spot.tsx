@@ -14,8 +14,9 @@ import KnightAvailableMoves from 'helpers/availableMoves/knightAvailableMoves';
 import RookAvailableMoves from 'helpers/availableMoves/rookAvailableMoves';
 // import PawnAvailableMoves from 'helpers/availableMoves/pawnAvailableMoves';
 import PawnAvailableKillMoves from 'helpers/availableMoves/pawnAvailableKillMoves';
+import { getTileXY } from 'helpers/getTileXY';
 
-interface Position {
+export interface Position {
   tile: string;
   x: number;
   y: number;
@@ -129,66 +130,75 @@ export default function Spot(props: Props) {
 
   const initBoard = useGenerateBoard(tile, x, y);
 
-  // useEffect(() => {
-  //   if (state.isOccupied) {
-  //     let tile: Position = {
-  //       tile: state.tileInfo.tile,
-  //       x: state.tileInfo.x,
-  //       y: state.tileInfo.y,
-  //     };
-  //     let currentPosition = getSpotDetails(tile.x, tile.y);
-
-  //     let moves;
-  //     switch (currentPosition?.activePiece.pieceType) {
-  //       case 'king':
-  //         moves = KingAvailableMoves(tile, setCastling, getSpotDetails);
-  //         setAllAvailableMoves(currentPosition?.activePiece.color, moves);
-  //         break;
-  //       case 'queen':
-  //         moves = QueenAvailableMoves(tile, getSpotDetails);
-  //         setAllAvailableMoves(currentPosition?.activePiece.color, moves);
-  //         break;
-  //       case 'bishop':
-  //         moves = BishopAvailableMoves(tile, getSpotDetails);
-  //         setAllAvailableMoves(currentPosition?.activePiece.color, moves);
-  //         break;
-  //       case 'knight':
-  //         moves = KnightAvailableMoves(tile, getSpotDetails);
-  //         setAllAvailableMoves(currentPosition?.activePiece.color, moves);
-  //         break;
-  //       case 'rook':
-  //         moves = RookAvailableMoves(tile, getSpotDetails);
-  //         setAllAvailableMoves(currentPosition?.activePiece.color, moves);
-  //         break;
-  //       default:
-  //         moves = PawnAvailableKillMoves(tile, getSpotDetails);
-  //         setAllAvailableMoves(currentPosition?.activePiece.color, moves);
-  //         break;
-  //     }
-  //   }
-
-  //   // idk why this works but don't delete it
-  //   if (turn === 0) {
-  //     setAllAvailableMoves('white', null);
-  //   }
-  //   if (turn === 1) {
-  //     setAllAvailableMoves('black', null);
-  //   }
-  // }, [
-  //   turn,
-  //   getSpotDetails,
-  //   setAllAvailableMoves,
-  //   setCastling,
-  //   state.isOccupied,
-  //   state.tileInfo,
-  //   destination,
-  // ]);
-
+  // initializes the board
   useEffect(() => {
     setState((prev) => ({ ...prev, ...initBoard }));
   }, [initBoard]);
 
-  useLayoutEffect(() => {
+  // initializes the context with all the spot details
+  useEffect(() => {
+    if (state.hasUpdated) {
+      initSpotsContext(state);
+    }
+    // very important not to add state in the dependancy array
+    // we only want to trigger this once, not everytime the state updates.
+  }, [state.hasUpdated, initSpotsContext]);
+
+  useEffect(() => {
+    if (state.isOccupied) {
+      let tile: Position = {
+        tile: state.tileInfo.tile,
+        x: state.tileInfo.x,
+        y: state.tileInfo.y,
+      };
+      let currentPosition = getSpotDetails(tile.x, tile.y);
+
+      let moves;
+      switch (currentPosition?.activePiece.pieceType) {
+        case 'king':
+          moves = KingAvailableMoves(tile, setCastling, getSpotDetails);
+          setAllAvailableMoves(currentPosition?.activePiece.color, moves);
+          break;
+        case 'queen':
+          moves = QueenAvailableMoves(tile, getSpotDetails);
+          setAllAvailableMoves(currentPosition?.activePiece.color, moves);
+          break;
+        case 'bishop':
+          moves = BishopAvailableMoves(tile, getSpotDetails);
+          setAllAvailableMoves(currentPosition?.activePiece.color, moves);
+          break;
+        case 'knight':
+          moves = KnightAvailableMoves(tile, getSpotDetails);
+          setAllAvailableMoves(currentPosition?.activePiece.color, moves);
+          break;
+        case 'rook':
+          moves = RookAvailableMoves(tile, getSpotDetails);
+          setAllAvailableMoves(currentPosition?.activePiece.color, moves);
+          break;
+        default:
+          moves = PawnAvailableKillMoves(tile, getSpotDetails);
+          setAllAvailableMoves(currentPosition?.activePiece.color, moves);
+          break;
+      }
+    }
+
+    // idk why this works but don't delete it
+    if (turn === 0) {
+      setAllAvailableMoves('white', null);
+    }
+    if (turn === 1) {
+      setAllAvailableMoves('black', null);
+    }
+  }, [
+    getSpotDetails,
+    state.isOccupied,
+    state.tileInfo.tile,
+    state.tileInfo.x,
+    state.tileInfo.y,
+    turn,
+  ]);
+
+  useEffect(() => {
     if (state.tileInfo.tile === killPosition) {
       setState((prev) => ({
         ...prev,
@@ -199,7 +209,7 @@ export default function Spot(props: Props) {
     }
   }, [killPosition, state.tileInfo.tile]);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (JSON.stringify(availableMoves).includes(JSON.stringify(getTileXY(state.tileInfo)))) {
       setState((prev) => ({ ...prev, isCircleVisible: true }));
     } else {
@@ -207,18 +217,6 @@ export default function Spot(props: Props) {
     }
   }, [availableMoves, state.tileInfo]);
 
-  const getTileXY = (tileInfo: Position) => {
-    return {
-      x: tileInfo.x,
-      y: tileInfo.y,
-    };
-  };
-
-  useEffect(() => {
-    if (state.hasUpdated) {
-      initSpotsContext(state);
-    }
-  }, [state.hasUpdated, initSpotsContext]);
 
   useEffect(() => {
     setSpotsContext(state);

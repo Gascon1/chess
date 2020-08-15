@@ -230,16 +230,39 @@ export default function Board(props: Props) {
   useEffect(() => {
     let blackKing = getSpotDetailsByName('king', 'black');
     let whiteKing = getSpotDetailsByName('king', 'white');
+    let acc = 0;
 
-    const allWhiteAvailMoves = JSON.stringify(state.allAvailableMoves.white);
-    const allBlackAvailMoves = JSON.stringify(state.allAvailableMoves.black);
-
-    if (allWhiteAvailMoves.includes(JSON.stringify(blackKing))) {
-      setCheck('Black');
-    } else if (allBlackAvailMoves.includes(JSON.stringify(whiteKing))) {
-      setCheck('White');
-    } else {
-      setCheck('');
+    // const allWhiteAvailMoves = JSON.stringify(state.allAvailableMoves.white);
+    // const allBlackAvailMoves = JSON.stringify(state.allAvailableMoves.black);
+    // if (allWhiteAvailMoves.includes(JSON.stringify(blackKing))) {
+    //   setCheck('Black');
+    // } else if (allBlackAvailMoves.includes(JSON.stringify(whiteKing))) {
+    //   setCheck('White');
+    // } else {
+    //   setCheck('');
+    // }
+    if (blackKing && whiteKing && state.allAvailableMoves) {
+      for (let move in state.allAvailableMoves.white) {
+        if (
+          blackKing.x === state.allAvailableMoves.white[move].x &&
+          blackKing.y === state.allAvailableMoves.white[move].y
+        ) {
+          acc++;
+          setCheck('Black');
+        }
+      }
+      for (let move in state.allAvailableMoves.black) {
+        if (
+          whiteKing.x === state.allAvailableMoves.black[move].x &&
+          whiteKing.y === state.allAvailableMoves.black[move].y
+        ) {
+          acc++;
+          setCheck('White');
+        }
+      }
+      if (acc === 0) {
+        setCheck('');
+      }
     }
   }, [getSpotDetailsByName, state.allAvailableMoves]);
 

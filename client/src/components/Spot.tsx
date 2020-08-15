@@ -194,7 +194,7 @@ export default function Spot(props: Props) {
           break;
 
         default:
-          console.log('switch error');
+          break;
       }
     }
 

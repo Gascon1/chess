@@ -241,6 +241,7 @@ export default function Board(props: Props) {
     // } else {
     //   setCheck('');
     // }
+
     if (blackKing && whiteKing && state.allAvailableMoves) {
       for (let move in state.allAvailableMoves.white) {
         if (

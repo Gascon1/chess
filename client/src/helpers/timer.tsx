@@ -10,8 +10,8 @@ interface Props {
 export default function Timer(props: Props) {
   const { turn, colour, setIsGameOver, setTypeOfWin } = props;
   const [state, setState] = useState({
-    minutes: 1,
-    seconds: 0,
+    minutes: 0,
+    seconds: 10,
     condition: '',
   });
 
@@ -76,7 +76,7 @@ export default function Timer(props: Props) {
       }
     }, 1000);
     return () => clearInterval(interval);
-  }, [state, minutes, seconds, turn, colour, setIsGameOver, setTypeOfWin]);
+  }, [minutes, seconds, turn, colour]);
 
   return (
     <div

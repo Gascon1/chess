@@ -19,6 +19,10 @@ interface Props {
   setTileFocus: Function;
   setCastling: Function;
   turn: number;
+  endPawn: {
+    flag: boolean;
+    color: string;
+  };
 }
 
 export default function King(props: Props) {
@@ -31,6 +35,7 @@ export default function King(props: Props) {
     setTileFocus,
     setCastling,
     turn,
+    endPawn,
   } = props;
   const [state, setState] = useState({
     hasUsedFirstMoved: false,
@@ -62,10 +67,12 @@ export default function King(props: Props) {
     <KingImage
       className={`piece ${props.white ? 'white' : 'black'}`}
       onClick={(e) => {
-        if (!turn && props.white) {
-          onMoveStart(state.currentPosition, e);
-        } else if (turn && !props.white) {
-          onMoveStart(state.currentPosition, e);
+        if (!endPawn.flag) {
+          if (!turn && props.white) {
+            onMoveStart(state.currentPosition, e);
+          } else if (turn && !props.white) {
+            onMoveStart(state.currentPosition, e);
+          }
         }
       }}
     />

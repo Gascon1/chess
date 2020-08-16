@@ -18,11 +18,23 @@ interface Props {
   setAvailableMoves: Function;
   setTileFocus: Function;
   turn: number;
+  endPawn: {
+    flag: boolean;
+    color: string;
+  };
 }
 
 export default function Queen(props: Props) {
   const { getSpotDetails } = useContext(SpotsContext);
-  const { tileInfo, white, setStartPosition, setAvailableMoves, setTileFocus, turn } = props;
+  const {
+    tileInfo,
+    white,
+    setStartPosition,
+    setAvailableMoves,
+    setTileFocus,
+    turn,
+    endPawn,
+  } = props;
   const [state, setState] = useState({
     hasUsedFirstMoved: false,
     isWhite: true,
@@ -53,10 +65,12 @@ export default function Queen(props: Props) {
     <QueenImage
       className={`piece ${props.white ? 'white' : 'black'}`}
       onClick={(e) => {
-        if (!turn && props.white) {
-          onMoveStart(state.currentPosition, e);
-        } else if (turn && !props.white) {
-          onMoveStart(state.currentPosition, e);
+        if (!endPawn.flag) {
+          if (!turn && props.white) {
+            onMoveStart(state.currentPosition, e);
+          } else if (turn && !props.white) {
+            onMoveStart(state.currentPosition, e);
+          }
         }
       }}
     />

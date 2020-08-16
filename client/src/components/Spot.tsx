@@ -369,7 +369,10 @@ export default function Spot(props: Props) {
     if (
       destination.activePiece.pieceType === 'pawn' &&
       destination.activePiece.color === 'white' &&
-      destination.y === 8
+      destination.y === 8 &&
+      startPosition.activePiece.pieceType === 'pawn' &&
+      startPosition.y === 7 &&
+      deletePawn.tile === ''
     ) {
       let deletePawnWhite: Position = {
         tile: destination.tile,
@@ -385,7 +388,10 @@ export default function Spot(props: Props) {
     if (
       destination.activePiece.pieceType === 'pawn' &&
       destination.activePiece.color === 'black' &&
-      destination.y === 1
+      destination.y === 1 &&
+      startPosition.activePiece.pieceType === 'pawn' &&
+      startPosition.y === 2 &&
+      deletePawn.tile === ''
     ) {
       let deletePawnBlack: Position = {
         tile: destination.tile,
@@ -420,8 +426,15 @@ export default function Spot(props: Props) {
         pieceType: '',
         color: '',
       };
+
+      let emptyDeletePawn = {
+        tile: '',
+        x: 0,
+        y: 0,
+      };
       setPromotion(emptyPromotion);
       setEndPawn('', false);
+      setDeletePawn(emptyDeletePawn);
     }
   }, [promotion]);
 
@@ -487,6 +500,7 @@ export default function Spot(props: Props) {
           setAvailableMoves={setAvailableMoves}
           setTileFocus={setTileFocus}
           turn={turn}
+          endPawn={endPawn}
         />
       )}
 
@@ -498,6 +512,7 @@ export default function Spot(props: Props) {
           setAvailableMoves={setAvailableMoves}
           setTileFocus={setTileFocus}
           turn={turn}
+          endPawn={endPawn}
         />
       )}
 
@@ -512,6 +527,7 @@ export default function Spot(props: Props) {
           setAvailableMoves={setAvailableMoves}
           setTileFocus={setTileFocus}
           turn={turn}
+          endPawn={endPawn}
         />
       )}
       {state.activePiece.pieceType === 'rook' && state.activePiece.color === 'white' && (
@@ -522,6 +538,7 @@ export default function Spot(props: Props) {
           setAvailableMoves={setAvailableMoves}
           setTileFocus={setTileFocus}
           turn={turn}
+          endPawn={endPawn}
         />
       )}
       {/* Rook END */}
@@ -535,6 +552,7 @@ export default function Spot(props: Props) {
           setAvailableMoves={setAvailableMoves}
           setTileFocus={setTileFocus}
           turn={turn}
+          endPawn={endPawn}
         />
       )}
       {state.activePiece.pieceType === 'knight' && state.activePiece.color === 'white' && (
@@ -545,6 +563,7 @@ export default function Spot(props: Props) {
           setAvailableMoves={setAvailableMoves}
           setTileFocus={setTileFocus}
           turn={turn}
+          endPawn={endPawn}
         />
       )}
       {/* Knight END */}
@@ -558,6 +577,7 @@ export default function Spot(props: Props) {
           setAvailableMoves={setAvailableMoves}
           setTileFocus={setTileFocus}
           turn={turn}
+          endPawn={endPawn}
         />
       )}
       {state.activePiece.pieceType === 'bishop' && state.activePiece.color === 'white' && (
@@ -568,6 +588,7 @@ export default function Spot(props: Props) {
           setAvailableMoves={setAvailableMoves}
           setTileFocus={setTileFocus}
           turn={turn}
+          endPawn={endPawn}
         />
       )}
       {/* Bishop END */}
@@ -581,6 +602,7 @@ export default function Spot(props: Props) {
           setAvailableMoves={setAvailableMoves}
           setTileFocus={setTileFocus}
           turn={turn}
+          endPawn={endPawn}
         />
       )}
       {state.activePiece.pieceType === 'queen' && state.activePiece.color === 'white' && (
@@ -591,6 +613,7 @@ export default function Spot(props: Props) {
           setAvailableMoves={setAvailableMoves}
           setTileFocus={setTileFocus}
           turn={turn}
+          endPawn={endPawn}
         />
       )}
       {/* Queen END */}
@@ -605,6 +628,7 @@ export default function Spot(props: Props) {
           setTileFocus={setTileFocus}
           setCastling={setCastling}
           turn={turn}
+          endPawn={endPawn}
         />
       )}
       {state.activePiece.pieceType === 'king' && state.activePiece.color === 'white' && (
@@ -616,6 +640,7 @@ export default function Spot(props: Props) {
           setTileFocus={setTileFocus}
           setCastling={setCastling}
           turn={turn}
+          endPawn={endPawn}
         />
       )}
       {/* King END */}

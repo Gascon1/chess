@@ -363,8 +363,6 @@ export default function Spot(props: Props) {
     }
   }, [destination, startPosition, castling, setCastling, setKillPosition, state.tileInfo.tile]);
 
-  // need to figure out how to remove destination as a parameter when doing pawn promotion,
-  // save position of pawn and then send it to the other use effect
   useEffect(() => {
     // WHITE PAWN HAS REACHED END OF BOARD-----------------------------------------
 

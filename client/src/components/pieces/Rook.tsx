@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { ReactComponent as RookImage } from 'images/rook.svg';
 import { SpotsContext } from 'context/SpotsContext';
-import RookAvailableMoves from 'helpers/availableMoves/rookAvailableMoves';
+import RookAvailableMoves from 'components/availableMoves/rookAvailableMoves';
 
 // export default function Rook() {
 //   return <RookImage className="piece" />;

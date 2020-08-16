@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { ReactComponent as KnightImage } from 'images/knight.svg';
 import { SpotsContext } from 'context/SpotsContext';
-import KnightAvailableMoves from 'helpers/availableMoves/knightAvailableMoves';
+import KnightAvailableMoves from 'components/availableMoves/knightAvailableMoves';
 
 // export default function Knight() {
 //   return <KnightImage className="piece" />;

@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { ReactComponent as QueenImage } from 'images/queen.svg';
 import { SpotsContext } from 'context/SpotsContext';
-import QueenAvailableMoves from 'helpers/availableMoves/queenAvailableMoves';
+import QueenAvailableMoves from 'components/availableMoves/queenAvailableMoves';
 
 interface Position {
   tile: string;

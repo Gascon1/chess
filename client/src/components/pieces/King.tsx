@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { ReactComponent as KingImage } from 'images/king.svg';
 import { SpotsContext } from 'context/SpotsContext';
-import KingAvailableMoves from 'helpers/availableMoves/kingAvailableMoves';
+import KingAvailableMoves from 'components/availableMoves/kingAvailableMoves';
 
 interface Position {
   tile: string;

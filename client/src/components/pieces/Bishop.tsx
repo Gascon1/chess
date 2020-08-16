@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { ReactComponent as BishopImage } from 'images/bishop.svg';
 import { SpotsContext } from 'context/SpotsContext';
-import BishopAvailableMoves from 'helpers/availableMoves/bishopAvailableMoves';
+import BishopAvailableMoves from 'components/availableMoves/bishopAvailableMoves';
 
 // export default function Bishop() {
 //   return <BishopImage className="piece" />;

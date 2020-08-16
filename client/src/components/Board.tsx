@@ -1,10 +1,10 @@
 import React, { useEffect, useState, useContext, useRef } from 'react';
 import isEven from 'helpers/isEven';
 import Spot from 'components/Spot';
-import Promotion from 'helpers/promotion';
-import CheckDisplay from 'helpers/checkDisplay';
+import Promotion from 'components/promotion';
+import CheckDisplay from 'components/checkDisplay';
 import { SpotsContext } from 'context/SpotsContext';
-import Timer from 'helpers/timer';
+import Timer from 'components/timer';
 
 interface Position {
   tile: string;

@@ -7,13 +7,13 @@ import Queen from 'components/pieces/Queen';
 import King from 'components/pieces/King';
 import { SpotsContext } from 'context/SpotsContext';
 import { useGenerateBoard } from 'hooks/useGenerateBoard';
-import KingAvailableMoves from 'helpers/availableMoves/kingAvailableMoves';
-import QueenAvailableMoves from 'helpers/availableMoves/queenAvailableMoves';
-import BishopAvailableMoves from 'helpers/availableMoves/bishopAvailableMoves';
-import KnightAvailableMoves from 'helpers/availableMoves/knightAvailableMoves';
-import RookAvailableMoves from 'helpers/availableMoves/rookAvailableMoves';
+import KingAvailableMoves from 'components/availableMoves/kingAvailableMoves';
+import QueenAvailableMoves from 'components/availableMoves/queenAvailableMoves';
+import BishopAvailableMoves from 'components/availableMoves/bishopAvailableMoves';
+import KnightAvailableMoves from 'components/availableMoves/knightAvailableMoves';
+import RookAvailableMoves from 'components/availableMoves/rookAvailableMoves';
 // import PawnAvailableMoves from 'helpers/availableMoves/pawnAvailableMoves';
-import PawnAvailableKillMoves from 'helpers/availableMoves/pawnAvailableKillMoves';
+import PawnAvailableKillMoves from 'components/availableMoves/pawnAvailableKillMoves';
 
 interface Position {
   tile: string;

@@ -249,7 +249,27 @@ export default function Board(props: Props) {
           blackKing.y === state.allAvailableMoves.white[move].y
         ) {
           acc++;
-          setCheck('Black');
+          let blackKingMoves = state.allAvailableMoves.black.filter((kingMove) =>
+            JSON.stringify(kingMove.pieceType).includes('king'),
+          );
+          let allowableMove = false;
+          for (let kingMove of blackKingMoves) {
+            let coveredMove = false;
+            for (let stateMove of state.allAvailableMoves.white) {
+              if (kingMove.x === stateMove.x && kingMove.y === stateMove.y) {
+                coveredMove = true;
+              }
+            }
+            if (!coveredMove) {
+              allowableMove = true;
+            }
+          }
+          if (allowableMove) {
+            setCheck('Black');
+          } else {
+            setIsGameOver(true);
+            setTypeOfWin('checkmate');
+          }
         }
       }
       for (let move in state.allAvailableMoves.black) {

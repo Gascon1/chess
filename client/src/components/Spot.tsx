@@ -130,50 +130,81 @@ export default function Spot(props: Props) {
   const initBoard = useGenerateBoard(tile, x, y);
 
   useEffect(() => {
+    if (state.tileInfo.tile === 'a8') {
+      setAllAvailableMoves('white', null, null);
+      setAllAvailableMoves('black', null, null);
+    }
     if (state.isOccupied) {
       let tile: Position = {
         tile: state.tileInfo.tile,
         x: state.tileInfo.x,
         y: state.tileInfo.y,
       };
-      let currentPosition = getSpotDetails(tile.x, tile.y);
 
+      let currentPosition = getSpotDetails(tile.x, tile.y);
       let moves;
       switch (currentPosition?.activePiece.pieceType) {
         case 'king':
           moves = KingAvailableMoves(tile, setCastling, getSpotDetails);
-          setAllAvailableMoves(currentPosition?.activePiece.color, moves);
+          setAllAvailableMoves(
+            currentPosition?.activePiece.color,
+            `king ${currentPosition.tileInfo.tile} `,
+            moves,
+          );
           break;
         case 'queen':
           moves = QueenAvailableMoves(tile, getSpotDetails);
-          setAllAvailableMoves(currentPosition?.activePiece.color, moves);
+          setAllAvailableMoves(
+            currentPosition?.activePiece.color,
+            `queen ${currentPosition.tileInfo.tile}`,
+            moves,
+          );
           break;
         case 'bishop':
           moves = BishopAvailableMoves(tile, getSpotDetails);
-          setAllAvailableMoves(currentPosition?.activePiece.color, moves);
+          setAllAvailableMoves(
+            currentPosition?.activePiece.color,
+            `bishop ${currentPosition.tileInfo.tile}`,
+            moves,
+          );
           break;
         case 'knight':
           moves = KnightAvailableMoves(tile, getSpotDetails);
-          setAllAvailableMoves(currentPosition?.activePiece.color, moves);
+          setAllAvailableMoves(
+            currentPosition?.activePiece.color,
+            `knight ${currentPosition.tileInfo.tile}`,
+            moves,
+          );
           break;
         case 'rook':
           moves = RookAvailableMoves(tile, getSpotDetails);
-          setAllAvailableMoves(currentPosition?.activePiece.color, moves);
+          setAllAvailableMoves(
+            currentPosition?.activePiece.color,
+            `rook ${currentPosition.tileInfo.tile}`,
+            moves,
+          );
           break;
-        default:
+        case 'pawn':
           moves = PawnAvailableKillMoves(tile, getSpotDetails);
-          setAllAvailableMoves(currentPosition?.activePiece.color, moves);
+          setAllAvailableMoves(
+            currentPosition?.activePiece.color,
+            `pawn ${currentPosition.tileInfo.tile}`,
+            moves,
+          );
+          break;
+
+        default:
           break;
       }
     }
 
     // idk why this works but don't delete it
-    if (turn === 0) {
-      setAllAvailableMoves('white', null);
-    }
-    if (turn === 1) {
-      setAllAvailableMoves('black', null);
-    }
+    // if (turn === 0) {
+    //   setAllAvailableMoves('white', null, null);
+    // }
+    // if (turn === 1) {
+    //   setAllAvailableMoves('black', null, null);
+    // }
   }, [
     turn,
     getSpotDetails,

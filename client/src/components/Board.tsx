@@ -64,21 +64,32 @@ export default function Board(props: Props) {
       pieceType: '',
       color: '',
     },
-    allAvailableMoves: { white: [{ x: 0, y: 0 }], black: [{ x: 0, y: 0 }] },
+    allAvailableMoves: {
+      white: [{ pieceType: '', x: 0, y: 0 }],
+      black: [{ pieceType: '', x: 0, y: 0 }],
+    },
     check: '',
     isGameOver: false,
     typeOfWin: '',
   });
 
-  function setAllAvailableMoves(color: string, availableMove: any) {
+  function setAllAvailableMoves(color: string, pieceType: string, availableMove: any) {
     // WHITE CASE
     if (availableMove?.length > 0 && color === 'white') {
       setState((prev) => {
         let whiteCopy = prev.allAvailableMoves.white.slice();
-        whiteCopy.push(...availableMove);
-        whiteCopy = whiteCopy.filter(
-          (item, index, self) => index === self.findIndex((w) => w.x === item.x && w.y === item.y),
-        );
+        // whiteCopy.push(...availableMove);
+        for (let whiteMove of availableMove) {
+          let whiteObj = {
+            pieceType: pieceType,
+            x: whiteMove.x,
+            y: whiteMove.y,
+          };
+          whiteCopy.push(whiteObj);
+        }
+        // whiteCopy = whiteCopy.filter(
+        //   (item, index, self) => index === self.findIndex((w) => w.x === item.x && w.y === item.y),
+        // );
         return {
           ...prev,
           allAvailableMoves: {
@@ -92,10 +103,18 @@ export default function Board(props: Props) {
     if (availableMove?.length > 0 && color === 'black') {
       setState((prev) => {
         let blackCopy = prev.allAvailableMoves.black.slice();
-        blackCopy.push(...availableMove);
-        blackCopy = blackCopy.filter(
-          (item, index, self) => index === self.findIndex((w) => w.x === item.x && w.y === item.y),
-        );
+        // blackCopy.push(...availableMove);
+        for (let blackMove of availableMove) {
+          let blackObj = {
+            pieceType: pieceType,
+            x: blackMove.x,
+            y: blackMove.y,
+          };
+          blackCopy.push(blackObj);
+        }
+        // blackCopy = blackCopy.filter(
+        //   (item, index, self) => index === self.findIndex((w) => w.x === item.x && w.y === item.y),
+        // );
         return {
           ...prev,
           allAvailableMoves: {
@@ -211,16 +230,61 @@ export default function Board(props: Props) {
   useEffect(() => {
     let blackKing = getSpotDetailsByName('king', 'black');
     let whiteKing = getSpotDetailsByName('king', 'white');
+    let acc = 0;
 
-    const allWhiteAvailMoves = JSON.stringify(state.allAvailableMoves.white);
-    const allBlackAvailMoves = JSON.stringify(state.allAvailableMoves.black);
+    // const allWhiteAvailMoves = JSON.stringify(state.allAvailableMoves.white);
+    // const allBlackAvailMoves = JSON.stringify(state.allAvailableMoves.black);
+    // if (allWhiteAvailMoves.includes(JSON.stringify(blackKing))) {
+    //   setCheck('Black');
+    // } else if (allBlackAvailMoves.includes(JSON.stringify(whiteKing))) {
+    //   setCheck('White');
+    // } else {
+    //   setCheck('');
+    // }
 
-    if (allWhiteAvailMoves.includes(JSON.stringify(blackKing))) {
-      setCheck('Black');
-    } else if (allBlackAvailMoves.includes(JSON.stringify(whiteKing))) {
-      setCheck('White');
-    } else {
-      setCheck('');
+    if (blackKing && whiteKing && state.allAvailableMoves) {
+      for (let move in state.allAvailableMoves.white) {
+        if (
+          blackKing.x === state.allAvailableMoves.white[move].x &&
+          blackKing.y === state.allAvailableMoves.white[move].y
+        ) {
+          acc++;
+          setCheck('Black');
+          // let blackKingMoves = state.allAvailableMoves.black.filter((kingMove) =>
+          //   JSON.stringify(kingMove.pieceType).includes('king'),
+          // );
+          // let allowableMove = false;
+          // for (let kingMove of blackKingMoves) {
+          //   let coveredMove = false;
+          //   for (let stateMove of state.allAvailableMoves.white) {
+          //     if (kingMove.x === stateMove.x && kingMove.y === stateMove.y) {
+          //       coveredMove = true;
+          //     }
+          //   }
+          //   if (!coveredMove) {
+          //     allowableMove = true;
+          //   }
+          // }
+          // if (allowableMove) {
+          //   setCheck('Black');
+          // } else {
+          //   setIsGameOver(true);
+          //   setTypeOfWin('checkmate');
+          // }
+        }
+      }
+      for (let move in state.allAvailableMoves.black) {
+        if (
+          whiteKing.x === state.allAvailableMoves.black[move].x &&
+          whiteKing.y === state.allAvailableMoves.black[move].y
+        ) {
+          acc++;
+          setCheck('White');
+        }
+      }
+      if (acc === 0) {
+        setCheck('');
+      }
     }
   }, [getSpotDetailsByName, state.allAvailableMoves]);
 

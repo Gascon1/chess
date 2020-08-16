@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { ReactComponent as KingImage } from 'images/king.svg';
 import { SpotsContext } from 'context/SpotsContext';
-import KingAvailableMoves from 'helpers/availableMoves/kingAvailableMoves';
+import KingAvailableMoves from 'components/availableMoves/kingAvailableMoves';
 
 interface Position {
   tile: string;
@@ -18,11 +18,20 @@ interface Props {
   setAvailableMoves: Function;
   setTileFocus: Function;
   setCastling: Function;
+  turn: number;
 }
 
 export default function King(props: Props) {
   const { getSpotDetails } = useContext(SpotsContext);
-  const { tileInfo, white, setStartPosition, setAvailableMoves, setTileFocus, setCastling } = props;
+  const {
+    tileInfo,
+    white,
+    setStartPosition,
+    setAvailableMoves,
+    setTileFocus,
+    setCastling,
+    turn,
+  } = props;
   const [state, setState] = useState({
     hasUsedFirstMoved: false,
     isWhite: true,
@@ -53,7 +62,11 @@ export default function King(props: Props) {
     <KingImage
       className={`piece ${props.white ? 'white' : 'black'}`}
       onClick={(e) => {
-        onMoveStart(state.currentPosition, e);
+        if (!turn && props.white) {
+          onMoveStart(state.currentPosition, e);
+        } else if (turn && !props.white) {
+          onMoveStart(state.currentPosition, e);
+        }
       }}
     />
   );

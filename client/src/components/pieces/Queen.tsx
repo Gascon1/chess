@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { ReactComponent as QueenImage } from 'images/queen.svg';
 import { SpotsContext } from 'context/SpotsContext';
-import QueenAvailableMoves from 'helpers/availableMoves/queenAvailableMoves';
+import QueenAvailableMoves from 'components/availableMoves/queenAvailableMoves';
 
 interface Position {
   tile: string;
@@ -17,11 +17,12 @@ interface Props {
   setStartPosition: Function;
   setAvailableMoves: Function;
   setTileFocus: Function;
+  turn: number;
 }
 
 export default function Queen(props: Props) {
   const { getSpotDetails } = useContext(SpotsContext);
-  const { tileInfo, white, setStartPosition, setAvailableMoves, setTileFocus } = props;
+  const { tileInfo, white, setStartPosition, setAvailableMoves, setTileFocus, turn } = props;
   const [state, setState] = useState({
     hasUsedFirstMoved: false,
     isWhite: true,
@@ -52,7 +53,11 @@ export default function Queen(props: Props) {
     <QueenImage
       className={`piece ${props.white ? 'white' : 'black'}`}
       onClick={(e) => {
-        onMoveStart(state.currentPosition, e);
+        if (!turn && props.white) {
+          onMoveStart(state.currentPosition, e);
+        } else if (turn && !props.white) {
+          onMoveStart(state.currentPosition, e);
+        }
       }}
     />
   );

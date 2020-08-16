@@ -373,7 +373,8 @@ export default function Spot(props: Props) {
       destination.activePiece.color === 'white' &&
       destination.y === 8 &&
       startPosition.activePiece.pieceType === 'pawn' &&
-      startPosition.y === 7
+      startPosition.y === 7 &&
+      deletePawn.tile === ''
     ) {
       let deletePawnWhite: Position = {
         tile: destination.tile,

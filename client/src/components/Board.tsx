@@ -5,14 +5,7 @@ import Promotion from 'components/promotion';
 import CheckDisplay from 'components/checkDisplay';
 import { SpotsContext } from 'context/SpotsContext';
 import Timer from 'components/timer';
-
-interface Position {
-  tile: string;
-  x: number;
-  y: number;
-  isOccupied?: boolean;
-  isFriendly?: boolean;
-}
+import Position from 'components/interfaces/position';
 
 interface Props {
   turn: number;
@@ -347,7 +340,6 @@ export default function Board(props: Props) {
             turn={turn}
             setTurn={setTurn}
             setAllAvailableMoves={setAllAvailableMoves}
-            activePlayer={activePlayer}
             setActivePlayer={setActivePlayer}
           />,
         );

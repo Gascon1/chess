@@ -12,23 +12,9 @@ import QueenAvailableMoves from 'components/availableMoves/queenAvailableMoves';
 import BishopAvailableMoves from 'components/availableMoves/bishopAvailableMoves';
 import KnightAvailableMoves from 'components/availableMoves/knightAvailableMoves';
 import RookAvailableMoves from 'components/availableMoves/rookAvailableMoves';
-// import PawnAvailableMoves from 'helpers/availableMoves/pawnAvailableMoves';
 import PawnAvailableKillMoves from 'components/availableMoves/pawnAvailableKillMoves';
-
-interface Position {
-  tile: string;
-  x: number;
-  y: number;
-  isOccupied?: boolean;
-  isFriendly?: boolean;
-}
-
-interface StartPosition extends Position {
-  activePiece: {
-    pieceType: string;
-    color: string;
-  };
-}
+import Position from 'components/interfaces/position';
+import StartPosition from 'components/interfaces/startPosition';
 
 interface Props {
   color: string;
@@ -65,7 +51,6 @@ interface Props {
   turn: number;
   setTurn: Function;
   setAllAvailableMoves: Function;
-  activePlayer: string;
   setActivePlayer: Function;
 }
 const brown = '#8a604a';
@@ -98,7 +83,7 @@ export default function Spot(props: Props) {
     promotion,
     setPromotion,
     setAllAvailableMoves,
-    activePlayer,
+
     setActivePlayer,
   } = props;
 
@@ -130,6 +115,7 @@ export default function Spot(props: Props) {
   const initBoard = useGenerateBoard(tile, x, y);
 
   useEffect(() => {
+    // need to reload the allAvailableMove black/white arrays every turn
     if (state.tileInfo.tile === 'a8') {
       setAllAvailableMoves('white', null, null);
       setAllAvailableMoves('black', null, null);
@@ -197,14 +183,6 @@ export default function Spot(props: Props) {
           break;
       }
     }
-
-    // idk why this works but don't delete it
-    // if (turn === 0) {
-    //   setAllAvailableMoves('white', null, null);
-    // }
-    // if (turn === 1) {
-    //   setAllAvailableMoves('black', null, null);
-    // }
   }, [
     turn,
     getSpotDetails,
@@ -404,7 +382,7 @@ export default function Spot(props: Props) {
   }, [destination]);
 
   useEffect(() => {
-    // cannot merge this useEffect and the useEffect above cuz smooth brained.
+    // TODO merge this useEffect with the useEffect above
     if (
       promotion.pieceType !== '' &&
       endPawn &&

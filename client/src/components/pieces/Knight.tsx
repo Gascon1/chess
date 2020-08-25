@@ -2,18 +2,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import { ReactComponent as KnightImage } from 'images/knight.svg';
 import { SpotsContext } from 'context/SpotsContext';
 import KnightAvailableMoves from 'components/availableMoves/knightAvailableMoves';
-
-// export default function Knight() {
-//   return <KnightImage className="piece" />;
-// }
-
-interface Position {
-  tile: string;
-  x: number;
-  y: number;
-  isOccupied?: boolean;
-  isFriendly?: boolean;
-}
+import Position from 'components/interfaces/position';
 
 interface Props {
   white: boolean;

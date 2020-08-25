@@ -2,18 +2,11 @@ import React, { useState, useEffect, useContext } from 'react';
 import { ReactComponent as BishopImage } from 'images/bishop.svg';
 import { SpotsContext } from 'context/SpotsContext';
 import BishopAvailableMoves from 'components/availableMoves/bishopAvailableMoves';
+import Position from 'components/interfaces/position';
 
 // export default function Bishop() {
 //   return <BishopImage className="piece" />;
 // }
-
-interface Position {
-  tile: string;
-  x: number;
-  y: number;
-  isOccupied?: boolean;
-  isFriendly?: boolean;
-}
 
 interface Props {
   white: boolean;

@@ -2,18 +2,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import { ReactComponent as RookImage } from 'images/rook.svg';
 import { SpotsContext } from 'context/SpotsContext';
 import RookAvailableMoves from 'components/availableMoves/rookAvailableMoves';
-
-// export default function Rook() {
-//   return <RookImage className="piece" />;
-// }
-
-interface Position {
-  tile: string;
-  x: number;
-  y: number;
-  isOccupied?: boolean;
-  isFriendly?: boolean;
-}
+import Position from 'components/interfaces/position';
 
 interface Props {
   white: boolean;

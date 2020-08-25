@@ -2,15 +2,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import { ReactComponent as KingImage } from 'images/king.svg';
 import { SpotsContext } from 'context/SpotsContext';
 import KingAvailableMoves from 'components/availableMoves/kingAvailableMoves';
-
-interface Position {
-  tile: string;
-  x: number;
-  y: number;
-  isOccupied?: boolean;
-  isFriendly?: boolean;
-}
-
+import Position from 'components/interfaces/position';
 interface Props {
   white: boolean;
   tileInfo: Position;

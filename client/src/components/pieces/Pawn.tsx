@@ -2,14 +2,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import { ReactComponent as PawnImage } from 'images/pawn.svg';
 import { SpotsContext } from 'context/SpotsContext';
 import PawnAvailableMoves from 'components/availableMoves/pawnAvailableMoves';
-
-interface Position {
-  tile: string;
-  x: number;
-  y: number;
-  isOccupied?: boolean;
-  isFriendly?: boolean;
-}
+import Position from 'components/interfaces/position';
 
 interface Props {
   white: boolean;

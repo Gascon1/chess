@@ -30,6 +30,11 @@ interface Props {
   startPosition: StartPosition;
   tileFocus: string;
   setTileFocus: Function;
+  availableMoves: {
+    x: number;
+    y: number;
+  }[];
+  setAvailableMoves: Function;
 }
 
 export default function Board(props: Props) {
@@ -53,6 +58,8 @@ export default function Board(props: Props) {
     setStartPosition,
     tileFocus,
     setTileFocus,
+    availableMoves,
+    setAvailableMoves,
   } = props;
 
   const [state, setState] = useState({
@@ -76,12 +83,12 @@ export default function Board(props: Props) {
     //   y: 0,
     // },
     // tileFocus: '',
-    availableMoves: [
-      {
-        x: 0,
-        y: 0,
-      },
-    ],
+    // availableMoves: [
+    //   {
+    //     x: 0,
+    //     y: 0,
+    //   },
+    // ],
     killPosition: '',
     castling: false,
     // endPawn: { color: '', flag: false },
@@ -235,9 +242,9 @@ export default function Board(props: Props) {
   //   setState((prev) => ({ ...prev, tileFocus: tilePosition }));
   // };
 
-  const setAvailableMoves = (availableMoves: any) => {
-    setState((prev) => ({ ...prev, availableMoves }));
-  };
+  // const setAvailableMoves = (availableMoves: any) => {
+  //   setState((prev) => ({ ...prev, availableMoves }));
+  // };
 
   const setCheck = (colour: string) => {
     setState((prev) => ({ ...prev, check: colour }));
@@ -362,7 +369,7 @@ export default function Board(props: Props) {
             startPosition={startPosition}
             tileFocus={tileFocus}
             setTileFocus={setTileFocus}
-            availableMoves={state.availableMoves}
+            availableMoves={availableMoves}
             setAvailableMoves={setAvailableMoves}
             killPosition={state.killPosition}
             setKillPosition={setKillPosition}
@@ -387,7 +394,7 @@ export default function Board(props: Props) {
   }, [
     destination,
     startPosition,
-    state.availableMoves,
+    availableMoves,
     state.killPosition,
     tileFocus,
     state.castling,

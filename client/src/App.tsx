@@ -45,7 +45,12 @@ function App() {
       y: 0,
     },
     tileFocus: '',
-
+    availableMoves: [
+      {
+        x: 0,
+        y: 0,
+      },
+    ],
     // castling: false,
   });
 
@@ -82,6 +87,10 @@ function App() {
       endPawn: { flag, color },
     }));
   }
+
+  const setAvailableMoves = (availableMoves: any) => {
+    setState((prev) => ({ ...prev, availableMoves }));
+  };
 
   // function setCastling(boolean: boolean) {
   //   setState((prev) => ({
@@ -129,6 +138,8 @@ function App() {
         setStartPosition={setStartPosition}
         tileFocus={state.tileFocus}
         setTileFocus={setTileFocus}
+        availableMoves={state.availableMoves}
+        setAvailableMoves={setAvailableMoves}
       />
     </SpotsContext.Provider>
   );

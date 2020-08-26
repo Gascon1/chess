@@ -44,6 +44,7 @@ function App() {
       x: 0,
       y: 0,
     },
+    tileFocus: '',
 
     // castling: false,
   });
@@ -103,6 +104,10 @@ function App() {
     }));
   }
 
+  const setTileFocus = (tilePosition: string) => {
+    setState((prev) => ({ ...prev, tileFocus: tilePosition }));
+  };
+
   return (
     <SpotsContext.Provider value={spots}>
       <Board
@@ -122,6 +127,8 @@ function App() {
         setDestination={setDestination}
         startPosition={state.startPosition}
         setStartPosition={setStartPosition}
+        tileFocus={state.tileFocus}
+        setTileFocus={setTileFocus}
       />
     </SpotsContext.Provider>
   );

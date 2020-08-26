@@ -28,6 +28,8 @@ interface Props {
   destination: StartPosition;
   setStartPosition: Function;
   startPosition: StartPosition;
+  tileFocus: string;
+  setTileFocus: Function;
 }
 
 export default function Board(props: Props) {
@@ -49,6 +51,8 @@ export default function Board(props: Props) {
     setDestination,
     startPosition,
     setStartPosition,
+    tileFocus,
+    setTileFocus,
   } = props;
 
   const [state, setState] = useState({
@@ -71,7 +75,7 @@ export default function Board(props: Props) {
     //   x: 0,
     //   y: 0,
     // },
-    tileFocus: '',
+    // tileFocus: '',
     availableMoves: [
       {
         x: 0,
@@ -207,8 +211,8 @@ export default function Board(props: Props) {
   // }
 
   const setKillPosition = (tileInfo: Position, castling: boolean, promotion: boolean) => {
-    if (state.tileFocus !== tileInfo.tile) {
-      setState((prev) => ({ ...prev, killPosition: state.tileFocus }));
+    if (tileFocus !== tileInfo.tile) {
+      setState((prev) => ({ ...prev, killPosition: tileFocus }));
     }
     // promotion case
     else if (promotion) {
@@ -227,9 +231,9 @@ export default function Board(props: Props) {
   //   }));
   // }
 
-  const setTileFocus = (tilePosition: string) => {
-    setState((prev) => ({ ...prev, tileFocus: tilePosition }));
-  };
+  // const setTileFocus = (tilePosition: string) => {
+  //   setState((prev) => ({ ...prev, tileFocus: tilePosition }));
+  // };
 
   const setAvailableMoves = (availableMoves: any) => {
     setState((prev) => ({ ...prev, availableMoves }));
@@ -356,7 +360,7 @@ export default function Board(props: Props) {
             destination={destination}
             setStartPosition={setStartPosition}
             startPosition={startPosition}
-            tileFocus={state.tileFocus}
+            tileFocus={tileFocus}
             setTileFocus={setTileFocus}
             availableMoves={state.availableMoves}
             setAvailableMoves={setAvailableMoves}
@@ -385,7 +389,7 @@ export default function Board(props: Props) {
     startPosition,
     state.availableMoves,
     state.killPosition,
-    state.tileFocus,
+    tileFocus,
     state.castling,
     endPawn,
     deletePawn,

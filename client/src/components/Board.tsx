@@ -6,6 +6,7 @@ import CheckDisplay from 'components/checkDisplay';
 import { SpotsContext } from 'context/SpotsContext';
 import Timer from 'components/timer';
 import Position from 'components/interfaces/position';
+import StartPosition from 'components/interfaces/startPosition';
 
 interface Props {
   turn: number;
@@ -23,13 +24,10 @@ interface Props {
   setEndPawn: Function;
   // castling: boolean;
   // setCastling: Function;
-  destination: {
-    activePiece: { pieceType: string; color: string };
-    tile: string;
-    x: number;
-    y: number;
-  };
   setDestination: Function;
+  destination: StartPosition;
+  setStartPosition: Function;
+  startPosition: StartPosition;
 }
 
 export default function Board(props: Props) {
@@ -49,19 +47,21 @@ export default function Board(props: Props) {
     // setCastling,
     destination,
     setDestination,
+    startPosition,
+    setStartPosition,
   } = props;
 
   const [state, setState] = useState({
     board: [],
-    startPosition: {
-      activePiece: {
-        pieceType: '',
-        color: '',
-      },
-      tile: '',
-      x: 0,
-      y: 0,
-    },
+    // startPosition: {
+    //   activePiece: {
+    //     pieceType: '',
+    //     color: '',
+    //   },
+    //   tile: '',
+    //   x: 0,
+    //   y: 0,
+    // },
     // destination: {
     //   activePiece: {
     //     pieceType: '',
@@ -220,12 +220,12 @@ export default function Board(props: Props) {
     }
   };
 
-  function setStartPosition(tileInfo: Position, pieceType: string, color: string) {
-    setState((prev) => ({
-      ...prev,
-      startPosition: { activePiece: { pieceType, color }, ...tileInfo },
-    }));
-  }
+  // function setStartPosition(tileInfo: Position, pieceType: string, color: string) {
+  //   setState((prev) => ({
+  //     ...prev,
+  //     startPosition: { activePiece: { pieceType, color }, ...tileInfo },
+  //   }));
+  // }
 
   const setTileFocus = (tilePosition: string) => {
     setState((prev) => ({ ...prev, tileFocus: tilePosition }));
@@ -355,7 +355,7 @@ export default function Board(props: Props) {
             setDestination={setDestination}
             destination={destination}
             setStartPosition={setStartPosition}
-            startPosition={state.startPosition}
+            startPosition={startPosition}
             tileFocus={state.tileFocus}
             setTileFocus={setTileFocus}
             availableMoves={state.availableMoves}
@@ -382,7 +382,7 @@ export default function Board(props: Props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     destination,
-    state.startPosition,
+    startPosition,
     state.availableMoves,
     state.killPosition,
     state.tileFocus,

@@ -26,6 +26,15 @@ function App() {
       y: 0,
     },
     endPawn: { color: '', flag: false },
+    startPosition: {
+      activePiece: {
+        pieceType: '',
+        color: '',
+      },
+      tile: '',
+      x: 0,
+      y: 0,
+    },
     destination: {
       activePiece: {
         pieceType: '',
@@ -35,6 +44,7 @@ function App() {
       x: 0,
       y: 0,
     },
+
     // castling: false,
   });
 
@@ -86,6 +96,13 @@ function App() {
     }));
   }
 
+  function setStartPosition(tileInfo: Position, pieceType: string, color: string) {
+    setState((prev) => ({
+      ...prev,
+      startPosition: { activePiece: { pieceType, color }, ...tileInfo },
+    }));
+  }
+
   return (
     <SpotsContext.Provider value={spots}>
       <Board
@@ -103,6 +120,8 @@ function App() {
         // setCastling={setCastling}
         destination={state.destination}
         setDestination={setDestination}
+        startPosition={state.startPosition}
+        setStartPosition={setStartPosition}
       />
     </SpotsContext.Provider>
   );

@@ -339,7 +339,7 @@ export default function Spot(props: Props) {
         setCastling(false);
       }
     }
-  }, [destination, startPosition, castling, setCastling, setKillPosition, state.tileInfo.tile]);
+  }, [destination]);
 
   useEffect(() => {
     // WHITE PAWN HAS REACHED END OF BOARD-----------------------------------------

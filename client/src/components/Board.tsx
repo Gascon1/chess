@@ -35,6 +35,8 @@ interface Props {
     y: number;
   }[];
   setAvailableMoves: Function;
+  // check: string;
+  // setCheck: Function;
 }
 
 export default function Board(props: Props) {
@@ -60,6 +62,8 @@ export default function Board(props: Props) {
     setTileFocus,
     availableMoves,
     setAvailableMoves,
+    // check,
+    // setCheck,
   } = props;
 
   const [state, setState] = useState({
@@ -182,40 +186,12 @@ export default function Board(props: Props) {
     }
   }
 
-  // function setPromotion(promotion: any) {
-  //   setState((prev) => ({
-  //     ...prev,
-  //     promotion: promotion,
-  //   }));
-  // }
-
-  // function setDeletePawn(deletePawn: Position) {
-  //   setState((prev) => ({
-  //     ...prev,
-  //     deletePawn,
-  //   }));
-  // }
-
-  // function setEndPawn(color: string, flag: boolean) {
-  //   setState((prev) => ({
-  //     ...prev,
-  //     endPawn: { flag, color },
-  //   }));
-  // }
-
   function setCastling(boolean: boolean) {
     setState((prev) => ({
       ...prev,
       castling: boolean,
     }));
   }
-
-  // function setDestination(tileInfo: Position, pieceType: string, color: string) {
-  //   setState((prev) => ({
-  //     ...prev,
-  //     destination: { activePiece: { pieceType, color }, ...tileInfo },
-  //   }));
-  // }
 
   const setKillPosition = (tileInfo: Position, castling: boolean, promotion: boolean) => {
     if (tileFocus !== tileInfo.tile) {
@@ -230,21 +206,6 @@ export default function Board(props: Props) {
       setState((prev) => ({ ...prev, killPosition: tileInfo.tile }));
     }
   };
-
-  // function setStartPosition(tileInfo: Position, pieceType: string, color: string) {
-  //   setState((prev) => ({
-  //     ...prev,
-  //     startPosition: { activePiece: { pieceType, color }, ...tileInfo },
-  //   }));
-  // }
-
-  // const setTileFocus = (tilePosition: string) => {
-  //   setState((prev) => ({ ...prev, tileFocus: tilePosition }));
-  // };
-
-  // const setAvailableMoves = (availableMoves: any) => {
-  //   setState((prev) => ({ ...prev, availableMoves }));
-  // };
 
   const setCheck = (colour: string) => {
     setState((prev) => ({ ...prev, check: colour }));

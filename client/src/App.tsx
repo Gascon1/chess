@@ -51,6 +51,7 @@ function App() {
         y: 0,
       },
     ],
+    check: '',
     // castling: false,
   });
 
@@ -117,6 +118,10 @@ function App() {
     setState((prev) => ({ ...prev, tileFocus: tilePosition }));
   };
 
+  // const setCheck = (colour: string) => {
+  //   setState((prev) => ({ ...prev, check: colour }));
+  // };
+
   return (
     <SpotsContext.Provider value={spots}>
       <Board
@@ -140,6 +145,8 @@ function App() {
         setTileFocus={setTileFocus}
         availableMoves={state.availableMoves}
         setAvailableMoves={setAvailableMoves}
+        // check={state.check}
+        // setCheck={setCheck}
       />
     </SpotsContext.Provider>
   );

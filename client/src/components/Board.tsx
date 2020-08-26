@@ -12,11 +12,35 @@ interface Props {
   activePlayer: string;
   setTurn: Function;
   setActivePlayer: Function;
+  promotion: { pieceType: string; color: string };
+  setPromotion: Function;
+  deletePawn: Position;
+  setDeletePawn: Function;
+  endPawn: {
+    flag: boolean;
+    color: string;
+  };
+  setEndPawn: Function;
+  // castling: boolean;
+  // setCastling: Function;
 }
 
 export default function Board(props: Props) {
   const { getSpotDetailsByName } = useContext(SpotsContext);
-  const { turn, activePlayer, setTurn, setActivePlayer } = props;
+  const {
+    turn,
+    activePlayer,
+    setTurn,
+    setActivePlayer,
+    promotion,
+    setPromotion,
+    deletePawn,
+    setDeletePawn,
+    endPawn,
+    setEndPawn,
+    // castling,
+    // setCastling,
+  } = props;
 
   const [state, setState] = useState({
     board: [],
@@ -47,16 +71,16 @@ export default function Board(props: Props) {
     ],
     killPosition: '',
     castling: false,
-    endPawn: { color: '', flag: false },
-    deletePawn: {
-      tile: '',
-      x: 0,
-      y: 0,
-    },
-    promotion: {
-      pieceType: '',
-      color: '',
-    },
+    // endPawn: { color: '', flag: false },
+    // deletePawn: {
+    //   tile: '',
+    //   x: 0,
+    //   y: 0,
+    // },
+    // promotion: {
+    //   pieceType: '',
+    //   color: '',
+    // },
     allAvailableMoves: {
       white: [{ pieceType: '', x: 0, y: 0 }],
       black: [{ pieceType: '', x: 0, y: 0 }],
@@ -138,26 +162,26 @@ export default function Board(props: Props) {
     }
   }
 
-  function setPromotion(promotion: any) {
-    setState((prev) => ({
-      ...prev,
-      promotion: promotion,
-    }));
-  }
+  // function setPromotion(promotion: any) {
+  //   setState((prev) => ({
+  //     ...prev,
+  //     promotion: promotion,
+  //   }));
+  // }
 
-  function setDeletePawn(deletePawn: Position) {
-    setState((prev) => ({
-      ...prev,
-      deletePawn,
-    }));
-  }
+  // function setDeletePawn(deletePawn: Position) {
+  //   setState((prev) => ({
+  //     ...prev,
+  //     deletePawn,
+  //   }));
+  // }
 
-  function setEndPawn(color: string, flag: boolean) {
-    setState((prev) => ({
-      ...prev,
-      endPawn: { flag, color },
-    }));
-  }
+  // function setEndPawn(color: string, flag: boolean) {
+  //   setState((prev) => ({
+  //     ...prev,
+  //     endPawn: { flag, color },
+  //   }));
+  // }
 
   function setCastling(boolean: boolean) {
     setState((prev) => ({
@@ -331,11 +355,11 @@ export default function Board(props: Props) {
             setKillPosition={setKillPosition}
             castling={state.castling}
             setCastling={setCastling}
-            endPawn={state.endPawn}
+            endPawn={endPawn}
             setEndPawn={setEndPawn}
-            deletePawn={state.deletePawn}
+            deletePawn={deletePawn}
             setDeletePawn={setDeletePawn}
-            promotion={state.promotion}
+            promotion={promotion}
             setPromotion={setPromotion}
             turn={turn}
             setTurn={setTurn}
@@ -354,9 +378,9 @@ export default function Board(props: Props) {
     state.killPosition,
     state.tileFocus,
     state.castling,
-    state.endPawn,
-    state.deletePawn,
-    state.promotion,
+    endPawn,
+    deletePawn,
+    promotion,
   ]);
 
   return (
@@ -384,7 +408,7 @@ export default function Board(props: Props) {
               typeOfWin={state.typeOfWin}
             />
             <div className='board'>{state.board}</div>
-            <Promotion endPawn={state.endPawn} setPromotion={setPromotion} />
+            <Promotion endPawn={endPawn} setPromotion={setPromotion} />
           </div>
         </div>
       </div>

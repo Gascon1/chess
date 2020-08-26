@@ -23,6 +23,13 @@ interface Props {
   setEndPawn: Function;
   // castling: boolean;
   // setCastling: Function;
+  destination: {
+    activePiece: { pieceType: string; color: string };
+    tile: string;
+    x: number;
+    y: number;
+  };
+  setDestination: Function;
 }
 
 export default function Board(props: Props) {
@@ -40,6 +47,8 @@ export default function Board(props: Props) {
     setEndPawn,
     // castling,
     // setCastling,
+    destination,
+    setDestination,
   } = props;
 
   const [state, setState] = useState({
@@ -53,15 +62,15 @@ export default function Board(props: Props) {
       x: 0,
       y: 0,
     },
-    destination: {
-      activePiece: {
-        pieceType: '',
-        color: '',
-      },
-      tile: '',
-      x: 0,
-      y: 0,
-    },
+    // destination: {
+    //   activePiece: {
+    //     pieceType: '',
+    //     color: '',
+    //   },
+    //   tile: '',
+    //   x: 0,
+    //   y: 0,
+    // },
     tileFocus: '',
     availableMoves: [
       {
@@ -190,12 +199,12 @@ export default function Board(props: Props) {
     }));
   }
 
-  function setDestination(tileInfo: Position, pieceType: string, color: string) {
-    setState((prev) => ({
-      ...prev,
-      destination: { activePiece: { pieceType, color }, ...tileInfo },
-    }));
-  }
+  // function setDestination(tileInfo: Position, pieceType: string, color: string) {
+  //   setState((prev) => ({
+  //     ...prev,
+  //     destination: { activePiece: { pieceType, color }, ...tileInfo },
+  //   }));
+  // }
 
   const setKillPosition = (tileInfo: Position, castling: boolean, promotion: boolean) => {
     if (state.tileFocus !== tileInfo.tile) {
@@ -344,7 +353,7 @@ export default function Board(props: Props) {
             x={i + 1}
             y={j}
             setDestination={setDestination}
-            destination={state.destination}
+            destination={destination}
             setStartPosition={setStartPosition}
             startPosition={state.startPosition}
             tileFocus={state.tileFocus}
@@ -372,7 +381,7 @@ export default function Board(props: Props) {
     setState((prev) => ({ ...prev, board }));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
-    state.destination,
+    destination,
     state.startPosition,
     state.availableMoves,
     state.killPosition,

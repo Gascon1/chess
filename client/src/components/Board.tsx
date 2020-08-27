@@ -35,8 +35,6 @@ interface Props {
     y: number;
   }[];
   setAvailableMoves: Function;
-  // check: string;
-  // setCheck: Function;
 }
 
 export default function Board(props: Props) {
@@ -62,49 +60,12 @@ export default function Board(props: Props) {
     setTileFocus,
     availableMoves,
     setAvailableMoves,
-    // check,
-    // setCheck,
   } = props;
 
   const [state, setState] = useState({
     board: [],
-    // startPosition: {
-    //   activePiece: {
-    //     pieceType: '',
-    //     color: '',
-    //   },
-    //   tile: '',
-    //   x: 0,
-    //   y: 0,
-    // },
-    // destination: {
-    //   activePiece: {
-    //     pieceType: '',
-    //     color: '',
-    //   },
-    //   tile: '',
-    //   x: 0,
-    //   y: 0,
-    // },
-    // tileFocus: '',
-    // availableMoves: [
-    //   {
-    //     x: 0,
-    //     y: 0,
-    //   },
-    // ],
     killPosition: '',
     castling: false,
-    // endPawn: { color: '', flag: false },
-    // deletePawn: {
-    //   tile: '',
-    //   x: 0,
-    //   y: 0,
-    // },
-    // promotion: {
-    //   pieceType: '',
-    //   color: '',
-    // },
     allAvailableMoves: {
       white: [{ pieceType: '', x: 0, y: 0 }],
       black: [{ pieceType: '', x: 0, y: 0 }],

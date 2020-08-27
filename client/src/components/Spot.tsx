@@ -50,7 +50,7 @@ interface Props {
   setPromotion: Function;
   turn: number;
   setTurn: Function;
-  setAllAvailableMoves: Function;
+  setAllAvailableKillMoves: Function;
   setActivePlayer: Function;
 }
 const brown = '#8a604a';
@@ -82,7 +82,7 @@ export default function Spot(props: Props) {
     setDeletePawn,
     promotion,
     setPromotion,
-    setAllAvailableMoves,
+    setAllAvailableKillMoves,
 
     setActivePlayer,
   } = props;
@@ -114,11 +114,11 @@ export default function Spot(props: Props) {
 
   const initBoard = useGenerateBoard(tile, x, y);
 
+  // responsible for creating allAvailableKillMoves array
   useEffect(() => {
-    // need to reload the allAvailableMove black/white arrays every turn
     if (state.tileInfo.tile === 'a8') {
-      setAllAvailableMoves('white', null, null);
-      setAllAvailableMoves('black', null, null);
+      setAllAvailableKillMoves('white', null, null);
+      setAllAvailableKillMoves('black', null, null);
     }
     if (state.isOccupied) {
       let tile: Position = {
@@ -132,7 +132,7 @@ export default function Spot(props: Props) {
       switch (currentPosition?.activePiece.pieceType) {
         case 'king':
           moves = KingAvailableMoves(tile, setCastling, getSpotDetails);
-          setAllAvailableMoves(
+          setAllAvailableKillMoves(
             currentPosition?.activePiece.color,
             `king ${currentPosition.tileInfo.tile} `,
             moves,
@@ -140,7 +140,7 @@ export default function Spot(props: Props) {
           break;
         case 'queen':
           moves = QueenAvailableMoves(tile, getSpotDetails);
-          setAllAvailableMoves(
+          setAllAvailableKillMoves(
             currentPosition?.activePiece.color,
             `queen ${currentPosition.tileInfo.tile}`,
             moves,
@@ -148,7 +148,7 @@ export default function Spot(props: Props) {
           break;
         case 'bishop':
           moves = BishopAvailableMoves(tile, getSpotDetails);
-          setAllAvailableMoves(
+          setAllAvailableKillMoves(
             currentPosition?.activePiece.color,
             `bishop ${currentPosition.tileInfo.tile}`,
             moves,
@@ -156,7 +156,7 @@ export default function Spot(props: Props) {
           break;
         case 'knight':
           moves = KnightAvailableMoves(tile, getSpotDetails);
-          setAllAvailableMoves(
+          setAllAvailableKillMoves(
             currentPosition?.activePiece.color,
             `knight ${currentPosition.tileInfo.tile}`,
             moves,
@@ -164,7 +164,7 @@ export default function Spot(props: Props) {
           break;
         case 'rook':
           moves = RookAvailableMoves(tile, getSpotDetails);
-          setAllAvailableMoves(
+          setAllAvailableKillMoves(
             currentPosition?.activePiece.color,
             `rook ${currentPosition.tileInfo.tile}`,
             moves,
@@ -172,7 +172,7 @@ export default function Spot(props: Props) {
           break;
         case 'pawn':
           moves = PawnAvailableKillMoves(tile, getSpotDetails);
-          setAllAvailableMoves(
+          setAllAvailableKillMoves(
             currentPosition?.activePiece.color,
             `pawn ${currentPosition.tileInfo.tile}`,
             moves,
@@ -186,7 +186,7 @@ export default function Spot(props: Props) {
   }, [
     turn,
     getSpotDetails,
-    setAllAvailableMoves,
+    setAllAvailableKillMoves,
     setCastling,
     state.isOccupied,
     state.tileInfo,
@@ -233,6 +233,7 @@ export default function Spot(props: Props) {
     setSpotsContext(state);
   }, [setSpotsContext, state]);
 
+  // responsible for castling
   useEffect(() => {
     //WHITE CASTLING -----------------------------------------------------------------------
     if (castling && startPosition.tile === 'e1' && destination.tile === 'g1') {
@@ -381,6 +382,7 @@ export default function Spot(props: Props) {
     }
   }, [destination]);
 
+  // responsible for promotion
   useEffect(() => {
     // TODO merge this useEffect with the useEffect above
     if (

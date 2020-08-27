@@ -52,7 +52,6 @@ function App() {
       },
     ],
     check: '',
-    // castling: false,
   });
 
   function setTurn(value: number) {
@@ -93,13 +92,6 @@ function App() {
     setState((prev) => ({ ...prev, availableMoves }));
   };
 
-  // function setCastling(boolean: boolean) {
-  //   setState((prev) => ({
-  //     ...prev,
-  //     castling: boolean,
-  //   }));
-  // }
-
   function setDestination(tileInfo: Position, pieceType: string, color: string) {
     setState((prev) => ({
       ...prev,
@@ -117,10 +109,6 @@ function App() {
   const setTileFocus = (tilePosition: string) => {
     setState((prev) => ({ ...prev, tileFocus: tilePosition }));
   };
-
-  // const setCheck = (colour: string) => {
-  //   setState((prev) => ({ ...prev, check: colour }));
-  // };
 
   return (
     <SpotsContext.Provider value={spots}>
@@ -145,8 +133,6 @@ function App() {
         setTileFocus={setTileFocus}
         availableMoves={state.availableMoves}
         setAvailableMoves={setAvailableMoves}
-        // check={state.check}
-        // setCheck={setCheck}
       />
     </SpotsContext.Provider>
   );

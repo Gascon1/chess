@@ -1,12 +1,5 @@
 import { Spots } from 'context/SpotsContext';
-
-interface Position {
-  tile: string;
-  x: number;
-  y: number;
-  isOccupied?: boolean;
-  isFriendly?: boolean;
-}
+import Position from 'components/interfaces/position';
 
 export default function KingAvailableMoves(
   currentPosition: Position,

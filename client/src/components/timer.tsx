@@ -19,60 +19,56 @@ export default function Timer(props: Props) {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      switch (turn) {
-        case 0:
-          if (colour === 'white') {
-            if (seconds > 0) {
+      if (turn === 0) {
+        if (colour === 'white') {
+          if (seconds > 0) {
+            setState((prev) => ({
+              ...prev,
+              seconds: seconds - 1,
+            }));
+          }
+          if (seconds === 0) {
+            if (minutes === 0) {
+              clearInterval(interval);
+              setIsGameOver(true);
+              setTypeOfWin('timeout white');
+            } else {
               setState((prev) => ({
                 ...prev,
-                seconds: seconds - 1,
+                minutes: minutes - 1,
+                seconds: 59,
               }));
             }
-            if (seconds === 0) {
-              if (minutes === 0) {
-                clearInterval(interval);
-                setIsGameOver(true);
-                setTypeOfWin('timeout white');
-              } else {
-                setState((prev) => ({
-                  ...prev,
-                  minutes: minutes - 1,
-                  seconds: 59,
-                }));
-              }
-            }
           }
-          if (colour === 'black') {
-            clearInterval(interval);
+        }
+        if (colour === 'black') {
+          clearInterval(interval);
+        }
+      } else if (turn === 1) {
+        if (colour === 'black') {
+          if (seconds > 0) {
+            setState((prev) => ({
+              ...prev,
+              seconds: seconds - 1,
+            }));
           }
-
-          break;
-        default:
-          if (colour === 'black') {
-            if (seconds > 0) {
+          if (seconds === 0) {
+            if (minutes === 0) {
+              clearInterval(interval);
+              setIsGameOver(true);
+              setTypeOfWin('timeout black');
+            } else {
               setState((prev) => ({
                 ...prev,
-                seconds: seconds - 1,
+                minutes: minutes - 1,
+                seconds: 59,
               }));
             }
-            if (seconds === 0) {
-              if (minutes === 0) {
-                clearInterval(interval);
-                setIsGameOver(true);
-                setTypeOfWin('timeout black');
-              } else {
-                setState((prev) => ({
-                  ...prev,
-                  minutes: minutes - 1,
-                  seconds: 59,
-                }));
-              }
-            }
           }
-          if (colour === 'white') {
-            clearInterval(interval);
-          }
-          break;
+        }
+        if (colour === 'white') {
+          clearInterval(interval);
+        }
       }
     }, 1000);
     return () => clearInterval(interval);
